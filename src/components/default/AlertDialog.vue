@@ -1,17 +1,15 @@
 <template>
   <v-dialog
-    v-model="alertDialog"
+    :model-value="alertDialog"
     persistent
     :max-width="maxWidth"
     scrollable
   >
-    <v-card>
-      <v-card-item>
-        <v-card-title>
-          {{ title }}
-        </v-card-title>
-      </v-card-item>
-
+    <v-card
+      flat
+      rounded
+      :title="title"
+    >
       <v-card-text>
         {{ body }}
       </v-card-text>

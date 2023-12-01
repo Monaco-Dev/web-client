@@ -1,0 +1,54 @@
+<template>
+  <v-bottom-navigation
+    color="primary"
+    grow
+    app
+    :mandatory="true"
+    elevation="0"
+  >
+    <v-btn
+      to="/"
+      exact
+      value="home"
+    >
+      <v-icon>mdi-home</v-icon>
+      Home
+    </v-btn>
+
+    <v-btn
+      to="/networks"
+      exact
+      value="networks"
+    >
+      <v-icon>mdi-account-group</v-icon>
+      Networks
+    </v-btn>
+
+    <v-btn
+      to="/posts"
+      exact
+      value="posts"
+    >
+      <v-icon>mdi-store</v-icon>
+      Posts
+    </v-btn>
+
+    <v-btn
+      to="/pins"
+      exact
+      value="pins"
+    >
+      <v-icon>mdi-pin</v-icon>
+      Pins
+    </v-btn>
+
+    <v-btn
+      to="/menu"
+      exact
+      value="menu"
+    >
+      <v-icon>mdi-menu</v-icon>
+      Menu
+    </v-btn>
+  </v-bottom-navigation>
+</template>

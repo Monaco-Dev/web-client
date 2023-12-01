@@ -1,4 +1,5 @@
 import AuthService from '@/composables/auth'
+import User from '@/api/auth/user'
 
 /**
  * =======================================
@@ -13,6 +14,9 @@ export default {
    * @return next
    */
   async authorized (next) {
+    let unauthenticated = false
+    let unverified = false
+
     // Proceed to login page if the user is unauthenticated
     if (!AuthService.isAuthenticated()) {
       AuthService.flush()
@@ -23,25 +27,33 @@ export default {
     if (AuthService.isAccessTokenExpired()) {
       await AuthService.refreshToken()
         .then(({ data }) => AuthService.setAuth(data))
-        .catch(() => {
-          AuthService.flush()
-          return next({ name: 'Login' })
-        })
+        .catch(() => { unauthenticated = true })
+
+      if (unauthenticated) {
+        AuthService.flush()
+        return next({ name: 'Login' })
+      }
     }
 
     // If user is authenticated, verify the access token
-    AuthService.verifyAccessToken()
+    await AuthService.verifyAccessToken()
       .then(async ({ data }) => {
         AuthService.setUser(data)
 
-        if (!AuthService.getUser().is_email_verified) return next({ name: 'VerifyEmail' })
+        if (!AuthService.getUser().is_email_verified) {
+          unverified = true
+        }
+      })
+      .catch(() => { unauthenticated = true })
 
-        return next()
-      })
-      .catch(() => {
-        AuthService.flush()
-        return next({ name: 'Login' })
-      })
+    if (unverified) return next({ name: 'VerifyEmail' })
+
+    if (unauthenticated) {
+      AuthService.flush()
+      return next({ name: 'Login' })
+    }
+
+    return next()
   },
 
   /**
@@ -50,7 +62,10 @@ export default {
    * @param next
    * @return next
    */
-  async unauthorized (from, next) {
+  async unauthorized (to, from, next) {
+    let unauthenticated = false
+    let verified = false
+
     // Proceed to login page if the user is unauthenticated
     if (!AuthService.isAuthenticated()) {
       AuthService.flush()
@@ -61,25 +76,44 @@ export default {
     if (AuthService.isAccessTokenExpired()) {
       await AuthService.refreshToken()
         .then(({ data }) => AuthService.setAuth(data))
-        .catch(() => {
-          AuthService.flush()
-          return next({ name: 'Login' })
-        })
+        .catch(() => { unauthenticated = true })
+
+      if (unauthenticated) {
+        AuthService.flush()
+        return next({ name: 'Login' })
+      }
     }
 
     // If user is authenticated, verify the access token
-    AuthService.verifyAccessToken()
+    await AuthService.verifyAccessToken()
       .then(async ({ data }) => {
         AuthService.setUser(data)
 
-        if (AuthService.getUser().is_email_verified) return next(from.path)
+        if (AuthService.getUser().is_email_verified) {
+          verified = true
+        }
+      })
+      .catch(() => { unauthenticated = true })
 
-        return next()
-      })
-      .catch(() => {
-        AuthService.flush()
-        return next({ name: 'Login' })
-      })
+    if (verified) return next(from.path)
+
+    if (unauthenticated) {
+      AuthService.flush()
+      return next({ name: 'Login' })
+    }
+
+    const path = to.query.path
+    const expires = to.query.expires
+    const signature = to.query.signature
+
+    if (!path || !expires || !signature) return next()
+
+    await User.verifyEmail(path, { expires, signature })
+      .then(() => { verified = true })
+
+    if (verified) return next({ name: 'Home' })
+
+    return next()
   },
 
   /**
@@ -98,6 +132,23 @@ export default {
     }
 
     AuthService.flush()
+    return next()
+  },
+
+  /**
+   * Route Guard for reset password endpoint
+   *
+   * @param {*} to
+   * @param {*} from
+   * @param {*} next
+   * @return next
+   */
+  async resetPassword (to, from, next) {
+    const email = to.query.email
+    const token = to.query.token
+
+    if (!token || !email) return next(from.path)
+
     return next()
   }
 }

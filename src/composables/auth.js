@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { DateTime } from 'luxon'
+import { getActivePinia } from 'pinia'
 
 import Config from '@/config/app'
 
@@ -87,6 +88,7 @@ export default {
     localStorage.removeItem('auth')
     localStorage.removeItem('user')
     sessionStorage.clear()
+    getActivePinia()._s.forEach(store => store.$reset())
   },
   /**
    * Checks if token is expired.

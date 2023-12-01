@@ -18,11 +18,7 @@
         </v-btn>
       </div>
 
-      <v-row justify="center">
-        <v-col md="6">
-          <router-view />
-        </v-col>
-      </v-row>
+      <router-view />
     </v-container>
   </v-main>
 </template>

@@ -2,11 +2,16 @@
   <v-form @submit.prevent="submit">
     <v-card
       flat
+      rounded
       :loading="loading"
       :disabled="loading"
     >
       <v-card-text>
         <v-row>
+          <v-col cols="12">
+            Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
+          </v-col>
+
           <v-col cols="12">
             <v-text-field-primary
               v-model="form.email"
@@ -15,6 +20,7 @@
               :max-errors="formErrors.email.length"
               :error-messages="formErrors.email"
               @blur="v$.form.email.$touch()"
+              autofocus
             />
           </v-col>
         </v-row>
@@ -22,7 +28,7 @@
 
       <v-card-actions>
         <v-btn-primary type="submit">
-          Reset Password
+          Email password reset link
         </v-btn-primary>
       </v-card-actions>
 
@@ -31,7 +37,10 @@
         color="grey"
       />
 
-      <v-card-actions class="justify-center">
+      <v-card-actions
+        class="justify-center"
+        v-if="!isAuthenticated"
+      >
         <small class="text-caption text-decoration-none">
           Don't have account yet?
           <a
@@ -47,19 +56,20 @@
 </template>
 
 <script>
-import { useDialogStore } from '@/store/dialog'
+import { useSnackbarStore } from '@/store/snackbar'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
 import httpException from '@/composables/http-exception'
+import AuthService from '@/composables/auth'
 import Auth from '@/api/auth/auth'
 
 export default {
-  name: 'LoginForm',
+  name: 'ForgotPasswordForm',
   setup () {
     return {
       v$: useVuelidate(),
       httpException,
-      dialogStore: useDialogStore()
+      snackbarStore: useSnackbarStore()
     }
   },
   data () {
@@ -74,6 +84,9 @@ export default {
     }
   },
   computed: {
+    isAuthenticated () {
+      return AuthService.isAuthenticated()
+    },
     formErrors () {
       return {
         email: this.v$.form.email.$errors.map(v => v.$message).concat(this.apiErrors.email).filter(Boolean)
@@ -108,10 +121,9 @@ export default {
       return Auth.forgotPassword(this.form)
         .then(() => {
           this.reset()
-          this.$router.push({ name: 'Login' }).catch(() => {})
-          this.dialogStore.openAlertDialog({
-            title: 'Password reset has been sent!',
-            body: 'Check your email to proceed.'
+          this.snackbarStore.open({
+            text: 'We have emailed your password reset link.',
+            color: 'success'
           })
         })
         .catch(({ response }) => {

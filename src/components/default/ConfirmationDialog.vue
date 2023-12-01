@@ -1,18 +1,21 @@
 <template>
   <v-dialog
-    v-model="confirmationDialog"
+    :model-value="confirmationDialog"
     persistent
     max-width="500"
     scrollable
   >
-    <v-card>
-      <v-card-item>
-        <v-card-title class="justify-center pt-10">
+    <v-card
+      flat
+      rounded
+    >
+      <template #title>
+        <div class="justify-center text-center">
           {{ title }}
-        </v-card-title>
-      </v-card-item>
+        </div>
+      </template>
 
-      <v-card-text class="text-center">
+      <v-card-text class="justify-center text-center">
         <p
           v-for="(text, index) in content"
           :key="index"

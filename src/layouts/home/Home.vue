@@ -1,8 +1,6 @@
 <template>
-  <v-app>
-    <mobile-view v-if="this.$vuetify.display.mobile" />
-    <desktop-view v-else />
-  </v-app>
+  <DesktopView v-if="$vuetify.display.mdAndUp" />
+  <MobileView v-else />
 </template>
 
 <script setup>

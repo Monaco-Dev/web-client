@@ -2,6 +2,7 @@
   <v-form @submit.prevent="submit">
     <v-card
       flat
+      rounded
       :loading="loading"
       :disabled="loading"
     >

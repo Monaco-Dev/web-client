@@ -1,0 +1,27 @@
+<template>
+  <v-list
+    density="compact"
+    nav
+  >
+    <v-list-subheader>Settings</v-list-subheader>
+
+    <v-list-item
+      prepend-icon="mdi-account-circle"
+      title="Profile"
+      to="/settings/profile"
+      link
+      nav
+      exact
+      value="profile"
+    />
+    <v-list-item
+      prepend-icon="mdi-lock"
+      title="Account"
+      to="/settings/account"
+      link
+      nav
+      exact
+      value="account"
+    />
+  </v-list>
+</template>

@@ -18,7 +18,8 @@ export default createVuetify({
     VTextFieldPrimary: VTextField,
     VCheckboxPrimary: VCheckbox,
     VBtnSubmit: VBtn,
-    VBtnPrimary: VBtn
+    VBtnPrimary: VBtn,
+    VBtnError: VBtn
   },
   defaults: {
     VTextFieldPrimary: {
@@ -40,6 +41,12 @@ export default createVuetify({
     VBtnPrimary: {
       block: true,
       color: 'primary',
+      density: 'default',
+      variant: 'flat'
+    },
+    VBtnError: {
+      block: true,
+      color: 'error',
       density: 'default',
       variant: 'flat'
     }

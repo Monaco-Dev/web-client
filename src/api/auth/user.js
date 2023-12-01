@@ -45,9 +45,30 @@ export default {
   /**
    * Deactivate account
    *
+   * @param {*} params
    * @return {*} http
    */
-  deactivate () {
-    return this.http(this.baseUrl).post('auth/deactivate')
+  deactivate (params) {
+    return this.http(this.baseUrl).post('auth/deactivate', params)
+  },
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param {*} params
+   * @return {*} http
+   */
+  destroy (params) {
+    return this.http(this.baseUrl).post('auth/delete', params)
+  },
+
+  /**
+   * Update password
+   *
+   * @param {*} params
+   * @return {*} http
+   */
+  updatePassword (params) {
+    return this.http(this.baseUrl).post('auth/update-password', params)
   }
 }

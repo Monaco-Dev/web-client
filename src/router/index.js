@@ -6,12 +6,48 @@ const routes = [
   {
     path: '/',
     component: () => import('@/layouts/home/Home.vue'),
-    beforeEach: (to, from, next) => GuardService.authorized(next),
     children: [
       {
         path: '',
         name: 'Home',
-        component: () => import('@/views/Home.vue')
+        component: () => import('@/views/Home.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'posts/:uuid',
+        name: 'PostView',
+        component: () => import('@/views/PostView.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'profile/:slug',
+        name: 'Profile',
+        component: () => import('@/views/Profile.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'menu',
+        name: 'Menu',
+        component: () => import('@/views/Menu.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'settings',
+        name: 'Settings',
+        component: () => import('@/views/settings/Index.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'settings/profile',
+        name: 'SettingsProfile',
+        component: () => import('@/views/settings/Profile.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'settings/account',
+        name: 'SettingsAccount',
+        component: () => import('@/views/settings/Account.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
       }
     ]
   },
@@ -34,19 +70,20 @@ const routes = [
       {
         path: '/forgot-password',
         name: 'ForgotPassword',
-        component: () => import('@/views/ForgotPassword.vue'),
-        beforeEnter: (to, from, next) => GuardService.registration(from, next)
+        component: () => import('@/views/ForgotPassword.vue')
+      },
+      {
+        path: '/reset-password',
+        name: 'ResetPassword',
+        component: () => import('@/views/ResetPassword.vue'),
+        beforeEnter: (to, from, next) => GuardService.resetPassword(to, from, next)
+      },
+      {
+        path: '/verify-email',
+        name: 'VerifyEmail',
+        component: () => import('@/views/VerifyEmail.vue'),
+        beforeEnter: (to, from, next) => GuardService.unauthorized(to, from, next)
       }
-      // {
-      //   path: '/reset-password',
-      //   name: 'ResetPassword',
-      //   component: () => import('@/views/ResetPassword.vue')
-      // },
-      // {
-      //   path: '/verify-email',
-      //   name: 'VerifyEmail',
-      //   component: () => import('@/views/VerifyEmail.vue')
-      // }
     ]
   },
   {
