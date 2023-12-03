@@ -150,21 +150,6 @@ export default {
           }
         })
         .finally(() => this.profileStore.setLoading(false))
-    },
-    connect () {
-      //
-    },
-    disconnect () {
-      //
-    },
-    follow () {
-      //
-    },
-    unfollow () {
-      //
-    },
-    accept () {
-      //
     }
   }
 }

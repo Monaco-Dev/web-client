@@ -9,12 +9,15 @@
   </div>
 
   <div v-else>
-    <PostItem
+    <div
       v-for="(post) in posts"
       :key="post.id"
-      :post="post"
-      class="my-3"
-    />
+    >
+      <PostItem
+        :post="post"
+        class="my-3"
+      />
+    </div>
   </div>
 </template>
 
@@ -32,7 +35,7 @@ export default {
     },
     loading: {
       type: Boolean,
-      default: Boolean,
+      default: false,
       required: false
     }
   }

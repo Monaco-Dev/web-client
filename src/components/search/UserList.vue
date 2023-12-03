@@ -46,7 +46,7 @@ export default {
     },
     loading: {
       type: Boolean,
-      default: Boolean,
+      default: false,
       required: false
     }
   }

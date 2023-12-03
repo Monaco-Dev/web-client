@@ -63,7 +63,7 @@ export default {
       })
     },
     async load ({ done }) {
-      if (!AuthService.isAuthenticated() || !this.users.data.length) return done('error')
+      if (!AuthService.isAuthenticated() || !this.users.data.length) return done('empty')
 
       await this.onSearchUsers().then(({ data }) => {
         if (!data.data.length) return done('empty')

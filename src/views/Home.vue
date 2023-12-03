@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     load ({ done }) {
-      if (!AuthService.isAuthenticated()) return done('error')
+      if (!AuthService.isAuthenticated()) return done('empty')
 
       if (!this.postStore.posts.length) this.postStore.setLoading(true)
 

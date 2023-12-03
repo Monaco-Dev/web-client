@@ -134,6 +134,7 @@ export const useProfileStore = defineStore('profile', {
           })
         }
 
+        post.content.content.original_body = post.content.content.body
         post.content.content.body = post.content.content.body.replace(/\n/g, '<br/>')
 
         const bodyTags = post.content.content.body.match(/#\w+/g) ?? []
@@ -158,6 +159,7 @@ export const useProfileStore = defineStore('profile', {
           })
         }
 
+        post.content.original_body = post.content.body
         post.content.body = post.content.body.replace(/\n/g, '<br/>')
 
         const bodyTags = post.content.body.match(/#\w+/g) ?? []

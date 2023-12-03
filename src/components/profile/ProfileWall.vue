@@ -2,6 +2,7 @@
   <AppGrid @load:center="load">
     <template #center>
       <PostForm v-if="auth" />
+
       <PostList
         :class="{'mt-2': auth}"
         :posts="posts.data"
@@ -43,16 +44,45 @@ export default {
       loading
     }
   },
+  mounted () {
+    this.init()
+  },
   computed: {
     auth () {
       return AuthService.getUser().slug === this.profile.slug
     }
   },
+  watch: {
+    profile () {
+      this.init()
+    }
+  },
   methods: {
-    load ({ done }) {
-      if (!Object.keys(this.profile).length) return done('error')
+    init () {
+      if (
+        !AuthService.isAuthenticated() ||
+        !Object.keys(this.profile).length ||
+        this.posts.data.length
+      ) return
 
-      if (!this.posts.data.length) this.profileStore.setLoading(true)
+      this.profileStore.setLoading(true)
+
+      return Post.searchWall(this.profile.id, { page: this.posts.meta.current_page })
+        .then(({ data }) => {
+          if (!data.data.length) return
+
+          const posts = data
+
+          posts.data = data.data.map((v) => new Proxy(v, {}))
+
+          this.profileStore.setPosts(posts)
+          this.profileStore.setPostPage(data.meta.current_page + 1)
+        })
+        .catch(({ response }) => this.httpException(response))
+        .finally(() => this.profileStore.setLoading(false))
+    },
+    load ({ done }) {
+      if (!AuthService.isAuthenticated() || !Object.keys(this.profile).length) return done('empty')
 
       return Post.searchWall(this.profile.id, { page: this.posts.meta.current_page })
         .then(({ data }) => {
@@ -68,7 +98,6 @@ export default {
           return done('ok')
         })
         .catch(({ response }) => this.httpException(response))
-        .finally(() => this.profileStore.setLoading(false))
     }
   }
 }

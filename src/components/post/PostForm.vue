@@ -262,7 +262,7 @@ export default {
         .finally(() => this.postStore.setLoading(false))
     },
     onEdit () {
-      this.form.content = this.post.content.body
+      this.form.content = this.post.content.original_body
       this.form.type = this.post.content.type
       this.dialog = true
     },

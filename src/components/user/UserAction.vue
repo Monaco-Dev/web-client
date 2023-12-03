@@ -1,111 +1,123 @@
 <template>
-  <v-row no-gutters>
-    <v-col
-      class="pa-1"
-      v-if="!user.is_connection && !user.is_incoming_invite && !user.is_outgoing_invite"
-    >
-      <v-btn
-        color="primary"
-        variant="tonal"
-        density="compact"
-        flat
-        block
-        @click.stop="connect"
+  <div>
+    <v-row no-gutters>
+      <v-col
+        class="pa-1"
+        v-if="!item.is_connection && !item.is_incoming_invite && !item.is_outgoing_invite"
       >
-        Connect
-      </v-btn>
-    </v-col>
+        <v-btn
+          color="primary"
+          variant="tonal"
+          density="compact"
+          flat
+          block
+          @click.prevent="connect"
+          :loading="item.connect_loading"
+        >
+          Connect
+        </v-btn>
+      </v-col>
 
-    <v-col
-      class="pa-1"
-      v-else-if="user.is_outgoing_invite"
-    >
-      <v-btn
-        color="primary"
-        variant="tonal"
-        density="compact"
-        flat
-        block
-        disabled
+      <v-col
+        class="pa-1"
+        v-else-if="item.is_outgoing_invite"
       >
-        Pending invite
-      </v-btn>
-    </v-col>
+        <v-btn
+          color="primary"
+          variant="tonal"
+          density="compact"
+          flat
+          block
+          disabled
+        >
+          Pending invite
+        </v-btn>
+      </v-col>
 
-    <v-col
-      class="pa-1"
-      v-if="user.is_connection"
-    >
-      <v-btn
-        color="error"
-        variant="tonal"
-        density="compact"
-        flat
-        block
-        @click.stop="disconnect"
+      <v-col
+        class="pa-1"
+        v-if="item.is_connection"
       >
-        Disconnect
-      </v-btn>
-    </v-col>
+        <v-btn
+          color="error"
+          variant="tonal"
+          density="compact"
+          flat
+          block
+          @click.prevent="disconnect"
+          :loading="item.disconnect_loading"
+        >
+          Disconnect
+        </v-btn>
+      </v-col>
 
-    <v-col
-      class="pa-1"
-      v-if="!user.is_following"
-    >
-      <v-btn
-        color="warning"
-        variant="tonal"
-        density="compact"
-        flat
-        block
-        @click.stop="follow"
+      <v-col
+        class="pa-1"
+        v-if="!item.is_following"
       >
-        Follow
-      </v-btn>
-    </v-col>
+        <v-btn
+          color="warning"
+          variant="tonal"
+          density="compact"
+          flat
+          block
+          @click.prevent="follow"
+          :loading="item.follow_loading"
+        >
+          Follow
+        </v-btn>
+      </v-col>
 
-    <v-col
-      class="pa-1"
-      v-if="user.is_following"
-    >
-      <v-btn
-        variant="tonal"
-        density="compact"
-        flat
-        block
-        @click.stop="unfollow"
+      <v-col
+        class="pa-1"
+        v-if="item.is_following"
       >
-        Unfollow
-      </v-btn>
-    </v-col>
+        <v-btn
+          variant="tonal"
+          density="compact"
+          flat
+          block
+          @click.prevent="unfollow"
+          :loading="item.unfollow_loading"
+        >
+          Unfollow
+        </v-btn>
+      </v-col>
 
-    <v-col
-      class="pa-1"
-      v-if="user.is_incoming_invite"
-    >
-      <v-btn
-        color="success"
-        variant="tonal"
-        density="compact"
-        flat
-        block
-        @click.stop="accept"
+      <v-col
+        class="pa-1"
+        v-if="item.is_incoming_invite"
       >
-        Accept
-      </v-btn>
-    </v-col>
-  </v-row>
+        <v-btn
+          color="success"
+          variant="tonal"
+          density="compact"
+          flat
+          block
+          @click.prevent="accept"
+          :loading="item.accept_loading"
+        >
+          Accept
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <SendInvitationDialog ref="sendInvitationDialog" />
+  </div>
 </template>
 
 <script>
+import { ref } from 'vue'
 import { useSnackbarStore } from '@/store/snackbar'
 import ConnectionInvitation from '@/api/auth/connection-invitation'
 import Connection from '@/api/auth/connection'
 import Follow from '@/api/auth/follow'
 import httpException from '@/composables/http-exception'
+import SendInvitationDialog from '@/components/user/SendInvitationDialog.vue'
 
 export default {
   name: 'UserAction',
+  components: { SendInvitationDialog },
   props: {
     user: {
       type: Object,
@@ -116,49 +128,122 @@ export default {
   setup () {
     return {
       httpException,
-      snackbarStore: useSnackbarStore()
+      snackbarStore: useSnackbarStore(),
+      sendInvitationDialog: ref(null)
     }
   },
+  data () {
+    return {
+      item: {}
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  watch: {
+    user () {
+      this.init()
+    }
+  },
+  created () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.item = { ...JSON.parse(JSON.stringify(this.user)) }
+    },
+    setLoading (status, action) {
+      this.item[`${action}_loading`] = status
+    },
     connect () {
-      return ConnectionInvitation.send(this.user.id)
-        .then(() => this.snackbarStore.open({
-          text: 'Your invite has been sent successfully.',
-          color: 'success'
-        }))
+      this.setLoading(true, 'connect')
+
+      return ConnectionInvitation.send(this.item.id)
+        .then(({ data }) => {
+          this.snackbarStore.open({
+            text: 'Your invite has been sent successfully.',
+            color: 'success'
+          })
+
+          this.item = {
+            ...this.item,
+            ...data
+          }
+        })
         .catch(({ response }) => this.httpException(response))
+        .finally(() => this.setLoading(false, 'connect'))
     },
     disconnect () {
-      return Connection.disconnect(this.user.id)
-        .then(() => this.snackbarStore.open({
-          text: 'You disconnected a user successfully.',
-          color: 'success'
-        }))
+      this.setLoading(true, 'disconnect')
+
+      return Connection.disconnect(this.item.id)
+        .then(({ data }) => {
+          this.snackbarStore.open({
+            text: 'You disconnected a user successfully.',
+            color: 'success'
+          })
+
+          this.item = {
+            ...this.item,
+            ...data
+          }
+        })
         .catch(({ response }) => this.httpException(response))
+        .finally(() => this.setLoading(false, 'disconnect'))
     },
     follow () {
-      return Follow.follow(this.user.id)
-        .then(() => this.snackbarStore.open({
-          text: 'You followed a user successfully.',
-          color: 'success'
-        }))
+      this.setLoading(true, 'follow')
+
+      return Follow.follow(this.item.id)
+        .then(({ data }) => {
+          this.snackbarStore.open({
+            text: 'You followed a user successfully.',
+            color: 'success'
+          })
+
+          this.item = {
+            ...this.item,
+            ...data
+          }
+        })
         .catch(({ response }) => this.httpException(response))
+        .finally(() => this.setLoading(false, 'follow'))
     },
     unfollow () {
-      return Follow.unfollow(this.user.id)
-        .then(() => this.snackbarStore.open({
-          text: 'You unfollowed a user successfully.',
-          color: 'success'
-        }))
+      this.setLoading(true, 'unfollow')
+
+      return Follow.unfollow(this.item.id)
+        .then(({ data }) => {
+          this.snackbarStore.open({
+            text: 'You unfollowed a user successfully.',
+            color: 'success'
+          })
+
+          this.item = {
+            ...this.item,
+            ...data
+          }
+        })
         .catch(({ response }) => this.httpException(response))
+        .finally(() => this.setLoading(false, 'unfollow'))
     },
     accept () {
-      return Connection.connect(this.user.id)
-        .then(() => this.snackbarStore.open({
-          text: 'You accepted an invited successfully.',
-          color: 'success'
-        }))
+      this.setLoading(true, 'accept')
+
+      return Connection.connect(this.item.id)
+        .then(({ data }) => {
+          this.snackbarStore.open({
+            text: 'You accepted an invited successfully.',
+            color: 'success'
+          })
+
+          this.item = {
+            ...this.item,
+            ...data
+          }
+        })
         .catch(({ response }) => this.httpException(response))
+        .finally(() => this.setLoading(false, 'accept'))
     }
   }
 }

@@ -263,7 +263,7 @@ export default {
       this.item.loading = status
     },
     share () {
-      this.item.loading = true
+      this.setLoading(true)
 
       return Post.share(this.post.id)
         .then(({ data }) => {
@@ -275,9 +275,7 @@ export default {
           })
         })
         .catch(({ response }) => this.httpException(response))
-        .finally(() => {
-          this.item.loading = false
-        })
+        .finally(() => this.setLoading(false))
     },
     viewPost (uuid) {
       this.searchStore.closeDialog()

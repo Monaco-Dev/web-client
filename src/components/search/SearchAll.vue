@@ -111,7 +111,7 @@ export default {
       })
     },
     async load ({ done }) {
-      if (!AuthService.isAuthenticated()) return done('error')
+      if (!AuthService.isAuthenticated()) return done('empty')
 
       await this.onSearchPosts().then(({ data }) => {
         if (!data.data.length) return done('empty')

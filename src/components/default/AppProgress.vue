@@ -4,17 +4,27 @@
       <v-container fluid>
         <v-row justify="center">
           <v-col
-            cols="1"
+            cols="3"
+            sm="2"
+            md="1"
             align-self="center"
+            class="d-flex align-center justify-center"
           >
             <v-img
               src="@/assets/logo-with-text.png"
               contain
               width="100"
             />
+          </v-col>
+        </v-row>
 
-            <br>
-
+        <v-row justify="center">
+          <v-col
+            cols="3"
+            sm="2"
+            md="1"
+            align-self="center"
+          >
             <v-progress-linear
               indeterminate
               rounded
