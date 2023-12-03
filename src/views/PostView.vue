@@ -104,6 +104,8 @@ export default {
 
       return Post.searchMatches(this.post.id, { page: this.matches.meta.current_page })
         .then(({ data }) => {
+          if (!data.data.length) return done('empty')
+
           const posts = data
 
           posts.meta.current_page = posts.meta.current_page + 1
