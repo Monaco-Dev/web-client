@@ -11,7 +11,7 @@
           density="compact"
           flat
           block
-          @click.prevent="connect"
+          @click.prevent="$refs.sendInvitationDialog.dialog=true"
           :loading="item.connect_loading"
         >
           Connect
@@ -102,7 +102,11 @@
       </v-col>
     </v-row>
 
-    <SendInvitationDialog ref="sendInvitationDialog" />
+    <SendInvitationDialog
+      ref="sendInvitationDialog"
+      @connect="connect"
+      :user="user"
+    />
   </div>
 </template>
 
@@ -155,10 +159,10 @@ export default {
     setLoading (status, action) {
       this.item[`${action}_loading`] = status
     },
-    connect () {
+    connect (form) {
       this.setLoading(true, 'connect')
 
-      return ConnectionInvitation.send(this.item.id)
+      return ConnectionInvitation.send(this.item.id, form)
         .then(({ data }) => {
           this.snackbarStore.open({
             text: 'Your invite has been sent successfully.',

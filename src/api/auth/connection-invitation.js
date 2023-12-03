@@ -21,9 +21,9 @@ export default {
    * Store a newly created resource in storage.
    *
    */
-  send (id) {
+  send (id, payload) {
     return this.http(this.baseUrl)
-      .post(`${this.url}/${id}/send`)
+      .post(`${this.url}/${id}/send`, payload)
   },
 
   /**
