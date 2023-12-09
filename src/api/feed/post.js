@@ -35,6 +35,11 @@ export default {
       .post(`${this.url}/search/${id}/matches`, payload)
   },
 
+  searchPins (payload) {
+    return this.http(this.baseUrl)
+      .post(`${this.url}/search/pins`, payload)
+  },
+
   share (id) {
     return this.http(this.baseUrl)
       .post(`${this.url}/${id}/share`)

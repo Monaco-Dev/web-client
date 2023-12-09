@@ -1,32 +1,54 @@
 <template>
-  <AppGrid @load:center="load">
-    <template #center>
-      <UserList
-        :users="users.data"
-        :loading="loading"
-      />
-    </template>
-  </AppGrid>
+  <div>
+    <v-navigation-drawer :permanent="$vuetify.display.mdAndUp">
+      <Navigation />
+    </v-navigation-drawer>
+
+    <v-container fluid>
+      <v-card
+        flat
+        rounded
+        title="Incoming Invites"
+      >
+        <template #prepend>
+          <v-btn
+            v-if="$vuetify.display.smAndDown"
+            icon="mdi-chevron-left"
+            variant="text"
+            to="/networks"
+          />
+        </template>
+
+        <v-card-text>
+          <AppGrid @load:center="load">
+            <template #center>
+              <UserList
+                :users="users.data"
+                :loading="loading"
+              />
+            </template>
+          </AppGrid>
+        </v-card-text>
+      </v-card>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useSearchStore } from '@/store/search'
-import UserList from '../user/UserList.vue'
+import Navigation from '@/components/networks/Navigation.vue'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
+import UserList from '@/components/user/UserList.vue'
 import AuthService from '@/composables/auth'
 import httpException from '@/composables/http-exception'
-import User from '@/api/auth/user'
+import ConnectionInvitation from '@/api/auth/connection-invitation'
+import { computed } from 'vue'
+import { useSearchStore } from '@/store/search'
 
 export default {
-  name: 'SearchUsers',
-  components: { UserList, AppGrid },
-  props: {
-    search: {
-      type: [String, null],
-      default: String,
-      required: true
-    }
+  components: {
+    Navigation,
+    AppGrid,
+    UserList
   },
   setup () {
     const searchStore = useSearchStore()
@@ -41,9 +63,12 @@ export default {
       httpException
     }
   },
+  mounted () {
+    this.applySearch()
+  },
   methods: {
     onSearchUsers () {
-      return User.search({ search: this.search, page: this.users.meta.current_page })
+      return ConnectionInvitation.searchIncoming({ search: this.search, page: this.users.meta.current_page })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.searchStore.setLoading(false))
     },

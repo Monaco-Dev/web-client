@@ -1,10 +1,11 @@
 <template>
-  <v-container fluid>
+  <v-container
+    fluid
+    class="px-0"
+  >
     <AppGrid @load:center="load">
       <template #center>
-        <PostForm />
         <PostList
-          class="mt-2"
           :posts="posts"
           :loading="loading"
         />
@@ -17,17 +18,15 @@
 import { computed } from 'vue'
 import { usePostStore } from '@/store/post'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
-import PostForm from '@/components/post/PostForm.vue'
 import PostList from '@/components/post/PostList.vue'
 import Post from '@/api/feed/post'
 import httpException from '@/composables/http-exception'
 import AuthService from '@/composables/auth'
 
 export default {
-  name: 'AppHome',
+  name: 'PinsView',
   components: {
     AppGrid,
-    PostForm,
     PostList
   },
   setup () {
@@ -52,7 +51,7 @@ export default {
 
       if (!this.postStore.posts.length) this.postStore.setLoading(true)
 
-      return Post.search({ page: this.postStore.page })
+      return Post.searchPins({ page: this.postStore.page })
         .then(({ data }) => {
           if (!data.data.length) return done('empty')
 

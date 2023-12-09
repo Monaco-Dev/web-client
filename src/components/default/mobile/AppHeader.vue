@@ -38,23 +38,6 @@
         icon
         variant="tonal"
         size="small"
-        class="mx-3"
-      >
-        <v-badge
-          bordered
-          content="5"
-          color="red"
-        >
-          <v-icon size="x-large">
-            mdi-bell
-          </v-icon>
-        </v-badge>
-      </v-btn>
-
-      <v-btn
-        icon
-        variant="tonal"
-        size="small"
         :to="`/profile/${user.slug}`"
       >
         <v-img

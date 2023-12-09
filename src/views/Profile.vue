@@ -5,9 +5,9 @@
       :class="{'px-0': $vuetify.display.smAndDown}"
     >
       <ProfileInformation />
-    </v-container>
 
-    <ProfileWall />
+      <ProfileWall class="mt-3" />
+    </v-container>
   </div>
 </template>
 
