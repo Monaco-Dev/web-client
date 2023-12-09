@@ -14,6 +14,48 @@ const routes = [
         beforeEnter: (to, from, next) => GuardService.authorized(next)
       },
       {
+        path: 'networks',
+        name: 'Networks',
+        component: () => import('@/views/networks/Index.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'networks/incoming-invites',
+        name: 'NetworksIncomingInvites',
+        component: () => import('@/views/networks/IncomingInvites.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'networks/outgoing-invites',
+        name: 'NetworksOutgoingInvites',
+        component: () => import('@/views/networks/OutgoingInvites.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'networks/connections',
+        name: 'NetworksConnections',
+        component: () => import('@/views/networks/Connections.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'networks/followers',
+        name: 'NetworksFollowers',
+        component: () => import('@/views/networks/Followers.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'networks/following',
+        name: 'NetworksFollowing',
+        component: () => import('@/views/networks/Following.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
+        path: 'pins',
+        name: 'Pins',
+        component: () => import('@/views/Pins.vue'),
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
+      },
+      {
         path: 'posts/:uuid',
         name: 'PostView',
         component: () => import('@/views/PostView.vue'),

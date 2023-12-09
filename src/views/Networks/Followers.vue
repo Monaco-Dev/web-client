@@ -1,32 +1,55 @@
 <template>
-  <AppGrid @load:center="load">
-    <template #center>
-      <UserList
-        :users="users.data"
-        :loading="loading"
-      />
-    </template>
-  </AppGrid>
+  <div>
+    <v-navigation-drawer :permanent="$vuetify.display.mdAndUp">
+      <Navigation />
+    </v-navigation-drawer>
+
+    <v-container fluid>
+      <v-card
+        flat
+        rounded
+        title="Followers"
+      >
+        <template #prepend>
+          <v-btn
+            v-if="$vuetify.display.smAndDown"
+            icon="mdi-chevron-left"
+            variant="text"
+            to="/networks"
+          />
+        </template>
+
+        <v-card-text>
+          <AppGrid @load:center="load">
+            <template #center>
+              <UserList
+                :users="users.data"
+                :loading="false"
+              />
+            </template>
+          </AppGrid>
+        </v-card-text>
+      </v-card>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useSearchStore } from '@/store/search'
-import UserList from '../user/UserList.vue'
+import Navigation from '@/components/networks/Navigation.vue'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
+import UserList from '@/components/user/UserList.vue'
 import AuthService from '@/composables/auth'
 import httpException from '@/composables/http-exception'
 import User from '@/api/auth/user'
+import { computed } from 'vue'
+import { useSearchStore } from '@/store/search'
 
 export default {
-  name: 'SearchUsers',
-  components: { UserList, AppGrid },
-  props: {
-    search: {
-      type: [String, null],
-      default: String,
-      required: true
-    }
+  name: 'NetworkFollowers',
+  components: {
+    Navigation,
+    AppGrid,
+    UserList
   },
   setup () {
     const searchStore = useSearchStore()
@@ -40,6 +63,9 @@ export default {
       users,
       httpException
     }
+  },
+  mounted () {
+    this.applySearch()
   },
   methods: {
     onSearchUsers () {

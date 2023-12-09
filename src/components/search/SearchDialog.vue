@@ -137,10 +137,14 @@ export default {
     dialog () {
       if (this.dialog) {
         this.search = this.searchStore.search
+
         document.documentElement.style.setProperty('--root-bg', 'blur(10px)')
+
+        this.searchStore.reset()
         this.applySearch()
       } else {
         document.documentElement.style.setProperty('--root-bg', 'blur(0px)')
+
         this.searchStore.reset()
       }
     }

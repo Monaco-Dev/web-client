@@ -4,7 +4,7 @@
     nav
     prepend-avatar="@/assets/default-avatar.png"
     :title="user.full_name"
-    :subtitle="`${user.connections_count} Connections | ${user.mutuals_count} Mutuals`"
+    :subtitle="subtitle"
     :href="`/profile/${user.slug}`"
   >
     <v-list-item-action v-if="!auth">
@@ -28,6 +28,10 @@ export default {
     }
   },
   computed: {
+    subtitle () {
+      const a = `${this.user.connections_count} Connections`
+      return this.auth ? a : `${a} | ${this.user.mutuals_count} Mutuals`
+    },
     auth () {
       return AuthService.getUser().id === this.user.id
     }

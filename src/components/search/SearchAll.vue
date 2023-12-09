@@ -38,7 +38,7 @@ import AuthService from '@/composables/auth'
 import Post from '@/api/feed/post'
 import User from '@/api/auth/user'
 import httpException from '@/composables/http-exception'
-import UserList from './UserList.vue'
+import UserList from '../user/UserList.vue'
 import PostList from '@/components/post/PostList.vue'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
 

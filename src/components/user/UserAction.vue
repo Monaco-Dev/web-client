@@ -53,6 +53,23 @@
 
       <v-col
         class="pa-1"
+        v-if="item.is_incoming_invite"
+      >
+        <v-btn
+          color="success"
+          variant="tonal"
+          density="compact"
+          flat
+          block
+          @click.prevent="accept"
+          :loading="item.accept_loading"
+        >
+          Accept
+        </v-btn>
+      </v-col>
+
+      <v-col
+        class="pa-1"
         v-if="!item.is_following"
       >
         <v-btn
@@ -81,23 +98,6 @@
           :loading="item.unfollow_loading"
         >
           Unfollow
-        </v-btn>
-      </v-col>
-
-      <v-col
-        class="pa-1"
-        v-if="item.is_incoming_invite"
-      >
-        <v-btn
-          color="success"
-          variant="tonal"
-          density="compact"
-          flat
-          block
-          @click.prevent="accept"
-          :loading="item.accept_loading"
-        >
-          Accept
         </v-btn>
       </v-col>
     </v-row>
