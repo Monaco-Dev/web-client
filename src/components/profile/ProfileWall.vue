@@ -1,12 +1,15 @@
 <template>
-  <AppGrid @load:center="load">
+  <AppGrid>
     <template #center>
-      <PostForm v-if="auth" />
+      <PostForm
+        v-if="auth"
+        :class="{'mb-2': auth}"
+      />
 
       <PostList
-        :class="{'mt-2': auth}"
         :posts="posts.data"
         :loading="loading"
+        @load="load"
       />
     </template>
   </AppGrid>
@@ -58,7 +61,12 @@ export default {
     }
   },
   methods: {
-    init () {
+    onSearch () {
+      return Post.searchWall(this.profile.id, { page: this.posts.meta.current_page })
+        .catch(({ response }) => this.httpException(response))
+        .finally(() => this.profileStore.setLoading(false))
+    },
+    async init () {
       if (
         !AuthService.isAuthenticated() ||
         !Object.keys(this.profile).length ||
@@ -67,37 +75,32 @@ export default {
 
       this.profileStore.setLoading(true)
 
-      return Post.searchWall(this.profile.id, { page: this.posts.meta.current_page })
-        .then(({ data }) => {
-          if (!data.data.length) return
+      await this.onSearch().then(({ data }) => {
+        if (!data.data.length) return
 
-          const posts = data
+        const posts = data
 
-          posts.data = data.data.map((v) => new Proxy(v, {}))
+        posts.data = data.data.map((v) => new Proxy(v, {}))
 
-          this.profileStore.setPosts(posts)
-          this.profileStore.setPostPage(data.meta.current_page + 1)
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.profileStore.setLoading(false))
+        this.profileStore.setPosts(posts)
+        this.profileStore.setPostPage(data.meta.current_page + 1)
+      })
     },
-    load ({ done }) {
+    async load ({ done }) {
       if (!AuthService.isAuthenticated() || !Object.keys(this.profile).length) return done('empty')
 
-      return Post.searchWall(this.profile.id, { page: this.posts.meta.current_page })
-        .then(({ data }) => {
-          if (!data.data.length) return done('empty')
+      await this.onSearch().then(({ data }) => {
+        if (!data.data.length) return done('empty')
 
-          const posts = data
+        const posts = data
 
-          posts.data = [...this.posts.data, ...data.data.map((v) => new Proxy(v, {}))]
+        posts.data = [...this.posts.data, ...data.data.map((v) => new Proxy(v, {}))]
 
-          this.profileStore.setPosts(posts)
-          this.profileStore.setPostPage(data.meta.current_page + 1)
+        this.profileStore.setPosts(posts)
+        this.profileStore.setPostPage(data.meta.current_page + 1)
 
-          return done('ok')
-        })
-        .catch(({ response }) => this.httpException(response))
+        return done('ok')
+      })
     }
   }
 }

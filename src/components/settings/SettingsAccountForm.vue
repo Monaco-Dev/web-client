@@ -11,7 +11,7 @@
               <UpdateAccount />
             </v-col>
 
-            <v-divider class="mx-10 mt-5 mb-1" />
+            <v-divider class="mx-10" />
 
             <v-col cols="12">
               <UpdatePassword />

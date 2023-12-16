@@ -4,18 +4,23 @@
 </template>
 
 <script>
+import { useTheme } from 'vuetify'
 import { computed } from 'vue'
 import { useAppStore } from '@/store/app'
+import ThemeService from '@/composables/theme'
 import AppProgress from '@/components/default/AppProgress.vue'
 
 export default {
   components: { AppProgress },
   setup () {
+    const theme = useTheme()
     const appStore = useAppStore()
     const loading = computed(() => appStore.loading)
-    return { appStore, loading }
+    return { appStore, loading, theme }
   },
   mounted () {
+    this.theme.global.name.value = ThemeService.getTheme()
+
     // [App.vue specific] When App.vue is finish loading finish the progress bar
     this.appStore.setLoading(false)
   },

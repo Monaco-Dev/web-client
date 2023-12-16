@@ -118,9 +118,9 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn-submit type="submit">
+        <v-btn-primary type="submit">
           Register
-        </v-btn-submit>
+        </v-btn-primary>
       </v-card-actions>
 
       <v-divider
@@ -286,6 +286,9 @@ export default {
           switch (response.status) {
             case 422:
               this.apiErrors = response.data.errors
+              this.form.password = null
+              this.form.password_confirmation = null
+              this.form.agreement = false
               break
 
             default:

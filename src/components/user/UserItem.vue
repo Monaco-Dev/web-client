@@ -2,7 +2,7 @@
   <v-list-item
     link
     nav
-    prepend-avatar="@/assets/default-avatar.png"
+    prepend-avatar="https://cdn.vuetifyjs.com/images/lists/1.jpg"
     :title="user.full_name"
     :subtitle="subtitle"
     :href="`/profile/${user.slug}`"

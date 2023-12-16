@@ -7,10 +7,11 @@
     @click.stop="viewPost(item.uuid)"
     :ripple="false"
     density="compact"
+    :border="border"
   >
     <template #prepend>
       <v-avatar @click.stop="viewUser(item.user.slug)">
-        <v-img src="@/assets/default-avatar.png" />
+        <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
       </v-avatar>
     </template>
 
@@ -52,7 +53,7 @@
         >
           <template #prepend>
             <v-avatar @click.stop="viewUser(item.content.user.slug)">
-              <v-img src="@/assets/default-avatar.png" />
+              <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
             </v-avatar>
           </template>
 
@@ -220,6 +221,11 @@ export default {
       type: Object,
       default: Object,
       required: true
+    },
+    border: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   setup () {

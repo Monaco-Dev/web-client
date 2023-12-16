@@ -20,7 +20,7 @@
         class="text-center mt-4"
         cols="12"
       >
-        {{ new Date().getFullYear() }} — <strong>Monaco</strong>
+        {{ new Date().getFullYear() }} — Realmate
       </v-col>
     </v-row>
   </v-footer>

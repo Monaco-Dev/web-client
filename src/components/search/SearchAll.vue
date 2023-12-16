@@ -1,9 +1,10 @@
 <template>
-  <AppGrid @load:center="load">
+  <AppGrid>
     <template #center>
       <UserList
         :loading="loading"
         :users="users.data"
+        class="mb-3"
       >
         <template #subheader>
           <v-list-subheader>People</v-list-subheader>
@@ -23,9 +24,9 @@
       </UserList>
 
       <PostList
-        class="mt-3"
         :posts="posts.data"
         :loading="loading"
+        @load="load"
       />
     </template>
   </AppGrid>

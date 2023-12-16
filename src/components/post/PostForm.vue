@@ -16,9 +16,7 @@
       >
         <template #prepend>
           <v-avatar>
-            <v-img
-              src="@/assets/default-avatar.png"
-            />
+            <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
           </v-avatar>
         </template>
 
@@ -32,7 +30,7 @@
             variant="tonal"
             v-bind="props"
           >
-            Create new listing...
+            Create new post...
           </v-btn>
         </template>
       </v-card>
@@ -46,9 +44,7 @@
       >
         <template #prepend>
           <v-avatar>
-            <v-img
-              src="@/assets/default-avatar.png"
-            />
+            <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
           </v-avatar>
         </template>
 
@@ -133,7 +129,7 @@
           </v-menu>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions class="pa-0 my-2 mx-3">
           <v-btn-primary
             type="submit"
             variant="tonal"

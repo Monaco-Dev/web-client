@@ -8,9 +8,8 @@
     <v-card
       flat
       tile
-      style="background: rgba(255,255,255, 0.3)"
     >
-      <v-card-title class="d-flex align-center bg-white pt-3">
+      <v-card-title class="d-flex align-center pt-3">
         <v-btn
           icon
           variant="tonal"
@@ -46,7 +45,6 @@
           color="primary"
           align-tabs="center"
           density="compact"
-          bg-color="white"
         >
           <v-tab
             value="searchAll"
@@ -74,12 +72,16 @@
           </v-tab>
         </v-tabs>
 
-        <v-window v-model="tab">
+        <v-window
+          v-model="tab"
+          class="bg-background"
+        >
           <v-window-item value="searchAll">
             <SearchAll
               ref="searchAll"
               :search="search"
               @click:seeMore="tab='searchUsers'"
+              class="mt-3"
             />
           </v-window-item>
 
@@ -87,6 +89,7 @@
             <SearchPosts
               ref="searchPosts"
               :search="search"
+              class="mt-1"
             />
           </v-window-item>
 
@@ -94,6 +97,7 @@
             <SearchUsers
               ref="searchUsers"
               :search="search"
+              class="mt-3"
             />
           </v-window-item>
         </v-window>
@@ -137,14 +141,9 @@ export default {
     dialog () {
       if (this.dialog) {
         this.search = this.searchStore.search
-
-        document.documentElement.style.setProperty('--root-bg', 'blur(10px)')
-
         this.searchStore.reset()
         this.applySearch()
       } else {
-        document.documentElement.style.setProperty('--root-bg', 'blur(0px)')
-
         this.searchStore.reset()
       }
     }
@@ -158,14 +157,3 @@ export default {
   }
 }
 </script>
-
-<style>
-:root {
-  --root-bg: blur(0px);
-}
-.blur {
-  filter: var(--root-bg);
-  transition-delay: 0.5s;
-  transition: filter 0.5s;
-}
-</style>

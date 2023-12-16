@@ -12,9 +12,7 @@
   >
     <template #prepend>
       <v-avatar size="100">
-        <v-img
-          src="@/assets/default-avatar.png"
-        />
+        <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
       </v-avatar>
     </template>
 

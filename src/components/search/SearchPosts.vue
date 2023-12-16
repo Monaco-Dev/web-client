@@ -1,7 +1,8 @@
 <template>
-  <AppGrid @load:center="load">
+  <AppGrid>
     <template #center>
       <PostList
+        @load="load"
         :posts="posts.data"
         :loading="loading"
       />

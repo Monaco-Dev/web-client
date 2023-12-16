@@ -10,13 +10,38 @@
         nav
         link
         :to="`/profile/${user.slug}`"
-        prepend-avatar="@/assets/default-avatar.png"
+        prepend-avatar="https://cdn.vuetifyjs.com/images/lists/1.jpg"
         :title="user.full_name"
         subtitle="See profile"
       />
     </v-list>
 
     <v-divider class="mx-4" />
+
+    <v-list density="compact">
+      <v-list-item>
+        <template #prepend>
+          <v-icon
+            icon="mdi-weather-night"
+            start
+            size="small"
+          />
+        </template>
+
+        <template #append>
+          <v-switch
+            v-model="darkMode"
+            hide-details
+            density="compact"
+            color="primary"
+          />
+        </template>
+
+        <v-list-item-title>
+          Dark mode
+        </v-list-item-title>
+      </v-list-item>
+    </v-list>
 
     <v-list
       density="compact"
@@ -73,18 +98,34 @@
 </template>
 
 <script>
+import { useTheme } from 'vuetify'
 import Auth from '@/api/auth/auth'
 import AuthService from '@/composables/auth'
+import ThemeService from '@/composables/theme'
 import httpException from '@/composables/http-exception'
 
 export default {
   name: 'AppMenu',
   setup () {
-    return { httpException }
+    return { httpException, theme: useTheme() }
+  },
+  data () {
+    return {
+      darkMode: false
+    }
+  },
+  mounted () {
+    this.darkMode = this.theme.global.current.value.dark
   },
   computed: {
     user () {
       return AuthService.getUser()
+    }
+  },
+  watch: {
+    darkMode () {
+      this.theme.global.name.value = this.darkMode ? 'dark' : 'light'
+      ThemeService.setTheme(this.theme.global.name.value)
     }
   },
   methods: {

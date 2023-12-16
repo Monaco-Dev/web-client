@@ -15,9 +15,9 @@ export default {
   components: { Navigation },
   beforeRouteEnter (to, from, next) {
     next((vm) => {
-      if (vm.$vuetify.display.mdAndUp && to.name === 'Networks') vm.$router.push({ name: 'NetworksIncomingInvites' })
-
-      return next()
+      if (vm.$vuetify.display.mdAndUp && to.name === 'Networks') {
+        vm.$router.push({ name: 'NetworksIncomingInvites' })
+      }
     })
   }
 }

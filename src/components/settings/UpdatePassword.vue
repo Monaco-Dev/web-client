@@ -5,7 +5,11 @@
       rounded
       title="Update password"
     >
-      <v-card-text>
+      <template #prepend>
+        <div />
+      </template>
+
+      <v-card-text class="ma-3 pa-0">
         <v-row justify="center">
           <v-col
             cols="12"
@@ -56,15 +60,15 @@
         </v-row>
       </v-card-text>
 
-      <v-card-actions>
+      <v-card-actions class="ma-3 pa-0">
         <v-row justify="center">
           <v-col
             cols="12"
             md="3"
           >
-            <v-btn-submit type="submit">
+            <v-btn-primary type="submit">
               save changes
-            </v-btn-submit>
+            </v-btn-primary>
           </v-col>
         </v-row>
       </v-card-actions>

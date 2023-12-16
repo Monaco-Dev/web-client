@@ -3,7 +3,7 @@
     fluid
     class="px-0"
   >
-    <AppGrid @load:center="load">
+    <AppGrid>
       <template #center>
         <v-skeleton-loader
           v-if="loading || !Object.keys(post).length"
@@ -13,16 +13,23 @@
         <div v-else>
           <PostItem :post="post" />
 
-          <v-card
-            flat
-            title="Matches"
-            class="mt-8 bg-transparent pa-0"
-            density="compact"
+          <v-expansion-panels
+            v-model="panels"
+            class="mt-5"
           >
-            <v-card-text class="pa-0">
-              <PostList :posts="matches.data" />
-            </v-card-text>
-          </v-card>
+            <v-expansion-panel
+              title="Matches"
+              elevation="0"
+            >
+              <v-expansion-panel-text>
+                <PostList
+                  :posts="matches.data"
+                  @load="load"
+                  border
+                />
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </div>
       </template>
     </AppGrid>
@@ -55,6 +62,7 @@ export default {
     return {
       loading: false,
       post: {},
+      panels: [0],
       matches: {
         data: [],
         meta: {

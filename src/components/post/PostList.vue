@@ -9,15 +9,23 @@
   </div>
 
   <div v-else>
-    <div
-      v-for="(post) in posts"
-      :key="post.id"
+    <v-infinite-scroll
+      height="100%"
+      @load="load"
+      empty-text="No more result"
+      style="overflow-y: hidden"
     >
-      <PostItem
-        :post="post"
-        class="my-3"
-      />
-    </div>
+      <div
+        v-for="(post, i) in posts"
+        :key="post.id"
+      >
+        <PostItem
+          :post="post"
+          :class="{'mt-2': i > 0}"
+          :border="border"
+        />
+      </div>
+    </v-infinite-scroll>
   </div>
 </template>
 
@@ -37,6 +45,16 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    border: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
+  },
+  methods: {
+    load (e) {
+      this.$emit('load', e)
     }
   }
 }

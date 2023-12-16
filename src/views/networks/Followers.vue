@@ -19,12 +19,13 @@
           />
         </template>
 
-        <v-card-text>
-          <AppGrid @load:center="load">
+        <v-card-text class="ma-3 pa-0">
+          <AppGrid>
             <template #center>
               <UserList
                 :users="users.data"
-                :loading="false"
+                :loading="loading"
+                @load="load"
               />
             </template>
           </AppGrid>
@@ -40,7 +41,7 @@ import AppGrid from '@/components/default/desktop/AppGrid.vue'
 import UserList from '@/components/user/UserList.vue'
 import AuthService from '@/composables/auth'
 import httpException from '@/composables/http-exception'
-import User from '@/api/auth/user'
+import Follow from '@/api/auth/follow'
 import { computed } from 'vue'
 import { useSearchStore } from '@/store/search'
 
@@ -69,7 +70,7 @@ export default {
   },
   methods: {
     onSearchUsers () {
-      return User.search({ search: this.search, page: this.users.meta.current_page })
+      return Follow.searchFollowers({ search: this.search, page: this.users.meta.current_page })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.searchStore.setLoading(false))
     },

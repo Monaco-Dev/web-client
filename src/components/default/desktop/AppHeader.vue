@@ -1,31 +1,32 @@
 <template>
   <v-app-bar
-    flat
+    elevation="1"
     app
-    color="white"
-    style="border-bottom: 1px solid lightgray !important"
+    color="primary"
   >
     <v-row no-gutters>
       <v-col
         align-self="center"
         class="d-flex justify-start align-center"
-        cols="3"
+        cols="4"
       >
-        <v-btn
-          icon
-          variant="tonal"
+        <v-card
           href="/"
-          class="mx-5"
+          width="170"
+          height="60"
+          class="mx-3 bg-transparent"
+          flat
         >
-          <v-icon size="x-large">
-            <template #default>
-              <v-img src="@/assets/logo.png" />
-            </template>
-          </v-icon>
-        </v-btn>
+          <v-img
+            src="@/assets/text-logo.png"
+            width="170"
+            height="100"
+            contain
+          />
+        </v-card>
 
         <v-row no-gutters>
-          <v-col cols="11">
+          <v-col cols="10">
             <v-combobox
               hide-details
               prepend-inner-icon="mdi-magnify"
@@ -43,16 +44,13 @@
       </v-col>
 
       <v-col
-        cols="6"
+        cols="4"
         class="px-2"
       >
         <v-tabs
-          grow
           centered
           center-active
-          color="primary"
           align-tabs="center"
-          bg-color="white"
           :mandatory="true"
         >
           <v-tab
@@ -60,7 +58,7 @@
             exact
             rounded="pill"
           >
-            <v-icon>mdi-home</v-icon>
+            Home
           </v-tab>
 
           <v-tab
@@ -68,7 +66,7 @@
             exact
             rounded="pill"
           >
-            <v-icon>mdi-account-group</v-icon>
+            Networks
           </v-tab>
 
           <v-tab
@@ -76,7 +74,7 @@
             exact
             rounded="pill"
           >
-            <v-icon>mdi-store</v-icon>
+            Posts
           </v-tab>
 
           <v-tab
@@ -84,7 +82,7 @@
             exact
             rounded="pill"
           >
-            <v-icon>mdi-pin</v-icon>
+            Pins
           </v-tab>
         </v-tabs>
       </v-col>
@@ -92,29 +90,17 @@
       <v-col
         align-self="center"
         class="text-end"
-        cols="3"
+        cols="4"
       >
-        <v-btn
-          icon
-          variant="tonal"
+        <v-menu
+          location="bottom"
+          :close-on-content-click="false"
         >
-          <v-badge
-            bordered
-            content="5"
-            color="red"
-          >
-            <v-icon size="x-large">
-              mdi-bell
-            </v-icon>
-          </v-badge>
-        </v-btn>
-
-        <v-menu location="bottom">
           <template #activator="{ props }">
             <v-btn
               icon
-              variant="tonal"
-              class="mx-5"
+              variant="outlined"
+              class="mr-3"
               v-bind="props"
             >
               <v-badge
@@ -124,11 +110,9 @@
                 :offset-x="5"
                 :offset-y="5"
               >
-                <v-img
-                  src="@/assets/default-avatar.png"
-                  width="50"
-                  height="50"
-                />
+                <v-avatar size="46">
+                  <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+                </v-avatar>
               </v-badge>
             </v-btn>
           </template>

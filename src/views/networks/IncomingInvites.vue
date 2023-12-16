@@ -19,12 +19,13 @@
           />
         </template>
 
-        <v-card-text>
-          <AppGrid @load:center="load">
+        <v-card-text class="ma-3 pa-0">
+          <AppGrid>
             <template #center>
               <UserList
                 :users="users.data"
                 :loading="loading"
+                @load="load"
               />
             </template>
           </AppGrid>

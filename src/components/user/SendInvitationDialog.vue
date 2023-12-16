@@ -13,9 +13,7 @@
       >
         <template #prepend>
           <v-avatar>
-            <v-img
-              src="@/assets/default-avatar.png"
-            />
+            <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
           </v-avatar>
         </template>
 
@@ -47,7 +45,7 @@
           />
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions class="pa-0 my-2 mx-3">
           <v-btn-primary
             type="submit"
             variant="tonal"

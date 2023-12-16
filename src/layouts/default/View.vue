@@ -1,19 +1,19 @@
 <template>
-  <v-main class="bg-grey-lighten-4 d-flex align-center justify-center">
+  <v-main class="d-flex align-center justify-center">
     <v-container fluid>
-      <div class="mb-5 text-center">
+      <div class="mb-3 text-center">
         <v-btn
-          height="auto"
           flat
-          class="bg-transparent pa-3"
+          class="bg-transparent"
           :ripple="false"
           :hover="false"
           to="/"
+          height="auto"
         >
           <v-img
-            src="@/assets/logo-with-text.png"
+            src="@/assets/text-logo.png"
             contain
-            width="200"
+            width="250"
           />
         </v-btn>
       </div>

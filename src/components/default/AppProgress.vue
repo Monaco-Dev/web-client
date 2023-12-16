@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main class="bg-grey-lighten-4 d-flex align-center justify-center">
+    <v-main class="d-flex align-center justify-center">
       <v-container fluid>
         <v-row justify="center">
           <v-col

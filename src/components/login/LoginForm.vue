@@ -153,6 +153,8 @@ export default {
           switch (response.status) {
             case 422:
               this.apiErrors = response.data.errors
+              this.form.password = null
+              this.form.remember_me = false
               break
 
             default:

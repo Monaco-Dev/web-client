@@ -4,7 +4,7 @@
     grow
     app
     :mandatory="true"
-    elevation="0"
+    elevation="1"
   >
     <v-btn
       to="/"

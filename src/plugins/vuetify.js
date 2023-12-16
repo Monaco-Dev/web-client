@@ -11,14 +11,15 @@ import 'vuetify/styles'
 // Composables
 import { createVuetify } from 'vuetify'
 import { VBtn, VCheckbox, VTextField } from 'vuetify/lib/components/index.mjs'
+import colors from 'vuetify/util/colors'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   aliases: {
     VTextFieldPrimary: VTextField,
     VCheckboxPrimary: VCheckbox,
-    VBtnSubmit: VBtn,
     VBtnPrimary: VBtn,
+    VBtnDanger: VBtn,
     VBtnError: VBtn
   },
   defaults: {
@@ -32,15 +33,15 @@ export default createVuetify({
       density: 'compact',
       hideDetails: 'auto'
     },
-    VBtnSubmit: {
-      block: true,
-      color: 'success',
-      density: 'default',
-      variant: 'flat'
-    },
     VBtnPrimary: {
       block: true,
       color: 'primary',
+      density: 'default',
+      variant: 'flat'
+    },
+    VBtnDanger: {
+      block: true,
+      color: 'error',
       density: 'default',
       variant: 'flat'
     },
@@ -52,11 +53,17 @@ export default createVuetify({
     }
   },
   theme: {
+    defaultTheme: 'light',
     themes: {
       light: {
         colors: {
-          primary: '#1867C0',
-          secondary: '#5CBBF6'
+          background: colors.grey.lighten4,
+          primary: '#32CD32'
+        }
+      },
+      dark: {
+        colors: {
+          primary: '#32CD32'
         }
       }
     }

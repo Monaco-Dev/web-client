@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <AppHeader class="blur" />
+    <AppHeader />
 
-    <v-main class="bg-grey-lighten-4 blur">
+    <v-main>
       <router-view />
     </v-main>
 
-    <AppBottomNavigation class="blur" />
+    <AppBottomNavigation />
 
     <AlertDialog />
     <ConfirmationDialog />

@@ -3,10 +3,17 @@
     <v-card
       flat
       rounded
-      title="Deactivating or deleting your Monaco account"
     >
+      <template #title>
+        <span class="text-wrap">
+          Deactivating or deleting your Realmate account
+        </span>
+      </template>
+
       <template #subtitle>
-        If you want to take a break from Monaco, you can temporarily deactivate this account. If you want to permanently delete your account, let us know.
+        <span class="text-wrap">
+          If you want to take a break from Realmate, you can temporarily deactivate this account. If you want to permanently delete your account, let us know.
+        </span>
       </template>
 
       <v-card-text>
@@ -40,7 +47,7 @@
             <v-list-item-title>Delete account</v-list-item-title>
 
             <v-list-item-subtitle>
-              <strong>Deleting your account is permanent.</strong> When you delete your Monaco account, you won't be able to retrieve the content or information you've shared on Monaco. Your profile will also be deleted.
+              <strong>Deleting your account is permanent.</strong> When you delete your Realmate account, you won't be able to retrieve the content or information you've shared on Realmate. Your profile will also be deleted.
             </v-list-item-subtitle>
           </v-list-item>
         </v-list>
@@ -52,13 +59,13 @@
             cols="12"
             md="3"
           >
-            <v-btn-primary
+            <v-btn-danger
               type="submit"
               :disabled="!select.length"
               @click="$refs.dialog.confirmationDialog=true"
             >
               Continue
-            </v-btn-primary>
+            </v-btn-danger>
           </v-col>
 
           <v-col

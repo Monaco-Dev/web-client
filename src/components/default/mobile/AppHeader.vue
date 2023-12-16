@@ -1,25 +1,25 @@
 <template>
   <v-app-bar
-    flat
+    elevation="1"
     app
-    color="white"
-    style="border-bottom: 1px solid lightgray !important"
     v-if="auth"
+    color="primary"
   >
     <v-app-bar-title>
-      <v-btn
-        flat
+      <v-card
         href="/"
-        variant="text"
-        size="large"
-        class="pa-0"
+        width="140"
+        height="50"
+        flat
+        class="bg-transparent"
       >
         <v-img
-          src="@/assets/logo-text.png"
+          src="@/assets/text-logo.png"
+          width="140"
+          height="100"
           contain
-          width="150"
         />
-      </v-btn>
+      </v-card>
     </v-app-bar-title>
 
     <template #append>
@@ -39,12 +39,11 @@
         variant="tonal"
         size="small"
         :to="`/profile/${user.slug}`"
+        class="ml-2"
       >
-        <v-img
-          src="@/assets/default-avatar.png"
-          width="40"
-          height="40"
-        />
+        <v-avatar>
+          <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+        </v-avatar>
       </v-btn>
     </template>
   </v-app-bar>

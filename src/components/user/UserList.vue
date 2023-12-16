@@ -16,17 +16,24 @@
   >
     <slot name="subheader" />
 
-    <div
-      v-for="(user, i) in users"
-      :key="user.id"
+    <v-infinite-scroll
+      height="100%"
+      @load="load"
+      empty-text="No more result"
+      style="overflow-y: hidden"
     >
-      <UserItem
-        :user="user"
-        class="my-3"
-      />
+      <div
+        v-for="(user, i) in users"
+        :key="user.id"
+      >
+        <UserItem
+          :user="user"
+          :class="{'mt-2': i > 0}"
+        />
 
-      <v-divider v-if="users.length > i + 1" />
-    </div>
+        <v-divider v-if="users.length > i + 1" />
+      </div>
+    </v-infinite-scroll>
 
     <slot name="seeMore" />
   </v-list>
@@ -48,6 +55,11 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    }
+  },
+  methods: {
+    load (e) {
+      this.$emit('load', e)
     }
   }
 }

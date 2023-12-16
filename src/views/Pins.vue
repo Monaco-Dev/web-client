@@ -3,11 +3,12 @@
     fluid
     class="px-0"
   >
-    <AppGrid @load:center="load">
+    <AppGrid>
       <template #center>
         <PostList
           :posts="posts"
           :loading="loading"
+          @load="load"
         />
       </template>
     </AppGrid>
@@ -44,14 +45,32 @@ export default {
   },
   mounted () {
     this.postStore.reset()
+    this.init()
   },
   methods: {
-    load ({ done }) {
-      if (!AuthService.isAuthenticated()) return done('empty')
+    onSearch () {
+      return Post.searchPins({ page: this.postStore.page })
+        .catch(({ response }) => this.httpException(response))
+        .finally(() => this.postStore.setLoading(false))
+    },
+    async init () {
+      if (!AuthService.isAuthenticated() || this.posts.length) return
+
+      this.postStore.setLoading(true)
+
+      await this.onSearch().then(({ data }) => {
+        if (!data.data.length) return
+
+        this.postStore.setPosts([...this.postStore.posts, ...data.data.map((v) => new Proxy(v, {}))])
+        this.postStore.setPage(data.meta.current_page + 1)
+      })
+    },
+    async load ({ done }) {
+      if (!AuthService.isAuthenticated() || !this.posts.length) return done('empty')
 
       if (!this.postStore.posts.length) this.postStore.setLoading(true)
 
-      return Post.searchPins({ page: this.postStore.page })
+      await this.onSearch()
         .then(({ data }) => {
           if (!data.data.length) return done('empty')
 
@@ -60,8 +79,6 @@ export default {
 
           return done('ok')
         })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.postStore.setLoading(false))
     }
   }
 }
