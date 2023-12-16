@@ -18,6 +18,7 @@
           width="140"
           height="100"
           contain
+          style="filter: brightness(0%)"
         />
       </v-card>
     </v-app-bar-title>

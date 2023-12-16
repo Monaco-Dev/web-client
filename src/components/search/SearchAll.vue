@@ -1,27 +1,56 @@
 <template>
   <AppGrid>
     <template #center>
-      <UserList
-        :loading="loading"
-        :users="users.data"
+      <div
+        v-if="loading"
         class="mb-3"
       >
-        <template #subheader>
-          <v-list-subheader>People</v-list-subheader>
-        </template>
+        <v-skeleton-loader
+          v-for="num in 2"
+          :key="num"
+          class="my-3"
+          type="list-item-avatar-two-line, card"
+        />
+      </div>
 
-        <template #seeMore>
-          <v-btn
-            variant="tonal"
-            block
-            flat
-            size="small"
-            @click="$emit('click:seeMore')"
+      <v-list
+        v-else-if="users.data.length"
+        nav
+        lines="three"
+        rounded
+        class="mb-3"
+      >
+        <v-list-subheader>People</v-list-subheader>
+
+        <v-infinite-scroll
+          height="100%"
+          @load="load"
+          empty-text="No more result"
+          style="overflow-y: hidden"
+        >
+          <div
+            v-for="(user, i) in users.data"
+            :key="user.id"
           >
-            see more
-          </v-btn>
-        </template>
-      </UserList>
+            <UserItem
+              :user="user"
+              :class="{'mt-2': i > 0}"
+            />
+
+            <v-divider v-if="users.data.length > i + 1" />
+          </div>
+        </v-infinite-scroll>
+
+        <v-btn
+          variant="tonal"
+          block
+          flat
+          size="small"
+          @click="$emit('click:seeMore')"
+        >
+          see more
+        </v-btn>
+      </v-list>
 
       <PostList
         :posts="posts.data"
@@ -39,14 +68,14 @@ import AuthService from '@/composables/auth'
 import Post from '@/api/feed/post'
 import User from '@/api/auth/user'
 import httpException from '@/composables/http-exception'
-import UserList from '../user/UserList.vue'
+import UserItem from '@/components/user/UserItem.vue'
 import PostList from '@/components/post/PostList.vue'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
 
 export default {
   name: 'SearchAll',
   components: {
-    UserList,
+    UserItem,
     PostList,
     AppGrid
   },

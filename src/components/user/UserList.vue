@@ -14,8 +14,6 @@
     lines="three"
     rounded
   >
-    <slot name="subheader" />
-
     <v-infinite-scroll
       height="100%"
       @load="load"
@@ -34,8 +32,6 @@
         <v-divider v-if="users.length > i + 1" />
       </div>
     </v-infinite-scroll>
-
-    <slot name="seeMore" />
   </v-list>
 </template>
 

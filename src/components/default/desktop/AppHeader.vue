@@ -22,6 +22,7 @@
             width="170"
             height="100"
             contain
+            style="filter: brightness(0%)"
           />
         </v-card>
 
@@ -67,14 +68,6 @@
             rounded="pill"
           >
             Networks
-          </v-tab>
-
-          <v-tab
-            to="/posts"
-            exact
-            rounded="pill"
-          >
-            Posts
           </v-tab>
 
           <v-tab

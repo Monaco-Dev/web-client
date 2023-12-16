@@ -25,15 +25,6 @@
     </v-btn>
 
     <v-btn
-      to="/posts"
-      exact
-      value="posts"
-    >
-      <v-icon>mdi-store</v-icon>
-      Posts
-    </v-btn>
-
-    <v-btn
       to="/pins"
       exact
       value="pins"

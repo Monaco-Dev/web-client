@@ -206,7 +206,7 @@ export default {
       return AuthService.getUser()
     },
     types () {
-      return Constants.post.types
+      return Object.keys(Constants.post.types)
     }
   },
   watch: {

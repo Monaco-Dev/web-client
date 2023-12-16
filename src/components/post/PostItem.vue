@@ -75,7 +75,10 @@
             </span>
           </template>
 
-          <v-card-text @click.stop>
+          <v-card-text
+            @click.stop
+            style="cursor: auto"
+          >
             <v-chip
               density="compact"
               class="mb-3"
@@ -83,6 +86,12 @@
               color="primary"
             >
               {{ item.content.content.type }}
+              <v-tooltip
+                activator="parent"
+                location="top"
+              >
+                {{ Constants.post.types[item.content.content.type] }}
+              </v-tooltip>
             </v-chip>
 
             <p
@@ -122,7 +131,10 @@
         </v-card>
       </div>
 
-      <div v-else>
+      <div
+        v-else
+        style="cursor: auto"
+      >
         <v-chip
           density="compact"
           class="mb-3"
@@ -130,6 +142,12 @@
           color="primary"
         >
           {{ item.content.type }}
+          <v-tooltip
+            activator="parent"
+            location="top"
+          >
+            {{ Constants.post.types[item.content.type] }}
+          </v-tooltip>
         </v-chip>
 
         <p
@@ -213,6 +231,7 @@ import httpException from '@/composables/http-exception'
 import PostActions from '@/components/post/PostActions.vue'
 import PostForm from '@/components/post/PostForm.vue'
 import Post from '@/api/feed/post'
+import Constants from '@/config/constants'
 
 export default {
   name: 'PostItem',
@@ -236,7 +255,8 @@ export default {
       snackbarStore: useSnackbarStore(),
       postStore: usePostStore(),
       postForm,
-      searchStore: useSearchStore()
+      searchStore: useSearchStore(),
+      Constants
     }
   },
   components: { PostActions, PostForm },

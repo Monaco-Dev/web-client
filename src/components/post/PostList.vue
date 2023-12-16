@@ -19,11 +19,27 @@
         v-for="(post, i) in posts"
         :key="post.id"
       >
-        <PostItem
-          :post="post"
-          :class="{'mt-2': i > 0}"
-          :border="border"
-        />
+        <div :class="{'mt-2': i > 0}">
+          <v-badge
+            v-if="post.pinned_at"
+            bordered
+            color="secondary"
+            icon="mdi-pin"
+            :offset-x="10"
+            :offset-y="10"
+          >
+            <PostItem
+              :post="post"
+              :border="border"
+            />
+          </v-badge>
+
+          <PostItem
+            v-else
+            :post="post"
+            :border="border"
+          />
+        </div>
       </div>
     </v-infinite-scroll>
   </div>
