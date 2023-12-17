@@ -60,6 +60,7 @@
 
 <script>
 export default {
+  name: 'SendInvitationDialog',
   props: {
     user: {
       type: Object,

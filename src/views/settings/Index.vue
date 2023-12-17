@@ -11,12 +11,13 @@
 import Navigation from '@/components/settings/Navigation.vue'
 
 export default {
+  name: 'SettingsIndex',
   components: { Navigation },
   beforeRouteEnter (to, from, next) {
     next((vm) => {
-      if (vm.$vuetify.display.mdAndUp && to.name === 'Settings') vm.$router.push({ name: 'SettingsProfile' })
-
-      return next()
+      if (vm.$vuetify.display.mdAndUp && to.name === 'Settings') {
+        vm.$router.push({ name: 'SettingsProfile' })
+      }
     })
   }
 }

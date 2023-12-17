@@ -9,7 +9,7 @@
       <v-list-item
         nav
         link
-        :to="`/profile/${user.slug}`"
+        :href="`/profile/${user.slug}`"
         prepend-avatar="https://cdn.vuetifyjs.com/images/lists/1.jpg"
         :title="user.full_name"
         subtitle="See profile"
@@ -115,7 +115,7 @@ export default {
     }
   },
   mounted () {
-    this.darkMode = this.theme.global.current.value.dark
+    this.darkMode = !!this.theme.global.current.value?.dark
   },
   computed: {
     user () {

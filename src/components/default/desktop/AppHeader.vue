@@ -12,42 +12,32 @@
       >
         <v-card
           href="/"
-          width="170"
-          height="60"
-          class="mx-3 bg-transparent"
+          width="30%"
+          class="ml-3 mr-5 bg-transparent"
           flat
         >
           <v-img
             src="@/assets/text-logo.png"
-            width="170"
-            height="100"
             contain
             style="filter: brightness(0%)"
           />
         </v-card>
 
-        <v-row no-gutters>
-          <v-col cols="10">
-            <v-combobox
-              hide-details
-              prepend-inner-icon="mdi-magnify"
-              menu-icon=""
-              placeholder="Search"
-              density="compact"
-              flat
-              variant="solo-filled"
-              rounded
-              v-model="search"
-              @keyup.enter="searchDialog"
-            />
-          </v-col>
-        </v-row>
+        <v-combobox
+          hide-details
+          prepend-inner-icon="mdi-magnify"
+          menu-icon=""
+          placeholder="Search"
+          density="compact"
+          flat
+          variant="solo-filled"
+          rounded
+          v-model="search"
+          @keyup.enter="searchDialog"
+        />
       </v-col>
 
-      <v-col
-        cols="4"
-        class="px-2"
-      >
+      <v-col cols="4">
         <v-tabs
           centered
           center-active

@@ -16,9 +16,9 @@
         </span>
       </template>
 
-      <v-card-text>
+      <v-card-text class="ma-3 pa-0">
         <v-list
-          lines="two"
+          lines="four"
           select-strategy="single-leaf"
           v-model:selected="select"
           :mandatory="true"
@@ -53,7 +53,7 @@
         </v-list>
       </v-card-text>
 
-      <v-card-actions>
+      <v-card-actions class="ma-3 pa-0">
         <v-row justify="center">
           <v-col
             cols="12"
@@ -100,6 +100,7 @@ import AccountConfirmationDialog from '@/components/settings/AccountConfirmation
 import AuthService from '@/composables/auth'
 
 export default {
+  name: 'AccountManagement',
   components: { AccountConfirmationDialog },
   setup () {
     return { dialog: ref(null) }

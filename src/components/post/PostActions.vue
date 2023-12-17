@@ -110,6 +110,7 @@ import { useSnackbarStore } from '@/store/snackbar'
 import { usePostStore } from '@/store/post'
 
 export default {
+  name: 'PostActions',
   props: {
     post: {
       type: Object,

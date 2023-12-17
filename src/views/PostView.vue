@@ -37,13 +37,14 @@
 </template>
 
 <script>
+import { usePostStore } from '@/store/post'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
 import PostItem from '@/components/post/PostItem.vue'
 import PostList from '@/components/post/PostList.vue'
 import Post from '@/api/feed/post'
 import httpException from '@/composables/http-exception'
 import AuthService from '@/composables/auth'
-import { usePostStore } from '@/store/post'
+import PostService from '@/composables/post'
 
 export default {
   name: 'PostView',
@@ -71,9 +72,8 @@ export default {
       }
     }
   },
-  async mounted () {
-    await this.getPost()
-    await this.getMatches()
+  mounted () {
+    this.getPost()
   },
   methods: {
     getPost () {
@@ -82,8 +82,10 @@ export default {
       this.loading = true
 
       return Post.show(uuid)
-        .then(({ data }) => {
-          this.post = this.postStore.mapPost(data)
+        .then(async ({ data }) => {
+          this.post = PostService.mapPost(data)
+
+          await this.getMatches()
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => {
@@ -97,7 +99,7 @@ export default {
         .then(({ data }) => {
           const posts = data
 
-          posts.data = posts.data.map((v) => this.postStore.mapPost(v))
+          posts.data = posts.data.map((v) => PostService.mapPost(v))
           posts.meta.current_page = posts.meta.current_page + 1
 
           this.matches = posts
@@ -120,7 +122,7 @@ export default {
 
           this.matches = {
             ...posts,
-            data: [...this.matches.data, ...posts.data.map((v) => this.postStore.mapPost(v))]
+            data: [...this.matches.data, ...posts.data.map((v) => PostService.mapPost(v))]
           }
 
           return done('ok')

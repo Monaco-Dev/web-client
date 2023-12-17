@@ -39,7 +39,7 @@
         icon
         variant="tonal"
         size="small"
-        :to="`/profile/${user.slug}`"
+        :href="`/profile/${user.slug}`"
         class="ml-2"
       >
         <v-avatar>

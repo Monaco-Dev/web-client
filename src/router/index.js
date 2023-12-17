@@ -1,6 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
-import GuardService from '@/composables/guard'
+import GuardService from '@/guards'
 
 const routes = [
   {
@@ -65,7 +65,7 @@ const routes = [
         path: 'profile/:slug',
         name: 'Profile',
         component: () => import('@/views/Profile.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
+        beforeEnter: (to, from, next) => GuardService.profile(to, next)
       },
       {
         path: 'menu',

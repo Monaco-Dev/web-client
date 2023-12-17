@@ -46,6 +46,7 @@ import { computed } from 'vue'
 import { useSearchStore } from '@/store/search'
 
 export default {
+  name: 'NetworkOutgoingInvites',
   components: {
     Navigation,
     AppGrid,

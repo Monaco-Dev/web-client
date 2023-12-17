@@ -6,7 +6,7 @@
       :loading="loading"
       :disabled="loading"
     >
-      <v-card-text>
+      <v-card-text class="pa-0 ma-3">
         <v-row>
           <v-col
             md="6"
@@ -117,7 +117,7 @@
         </v-row>
       </v-card-text>
 
-      <v-card-actions>
+      <v-card-actions class="pa-0 ma-3">
         <v-btn-primary type="submit">
           Register
         </v-btn-primary>

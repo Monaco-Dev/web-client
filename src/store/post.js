@@ -1,3 +1,4 @@
+import { uniqBy } from 'lodash'
 import { defineStore } from 'pinia'
 import Post from '@/composables/post'
 
@@ -32,7 +33,7 @@ export const usePostStore = defineStore('post', {
      * @param {*} posts
      */
     setPosts (posts = []) {
-      this.posts = posts.map((v) => Post.mapPost(v))
+      this.posts = uniqBy(posts.map((v) => Post.mapPost(v)), 'id')
     },
 
     /**
@@ -42,7 +43,7 @@ export const usePostStore = defineStore('post', {
      */
     addPost (post) {
       this.posts.unshift(post)
-      this.posts = this.posts.map((v) => Post.mapPost(v))
+      this.posts = uniqBy(this.posts.map((v) => Post.mapPost(v)), 'id')
     },
 
     /**
@@ -51,11 +52,14 @@ export const usePostStore = defineStore('post', {
      * @param {*} post
      */
     updatePost (post) {
-      this.posts = this.posts.map((val) => {
-        if (val.id === post.id) return Post.mapPost(post)
+      this.posts = uniqBy(
+        this.posts.map((val) => {
+          if (val.id === post.id) return Post.mapPost(post)
 
-        return Post.mapPost(val)
-      })
+          return Post.mapPost(val)
+        }),
+        'id'
+      )
     },
 
     /**
@@ -64,7 +68,7 @@ export const usePostStore = defineStore('post', {
      * @param {*} id
      */
     deletePost (id) {
-      this.posts = this.posts.filter((post) => (post.id !== id)).map((v) => Post.mapPost(v))
+      this.posts = uniqBy(this.posts.filter((post) => (post.id !== id)).map((v) => Post.mapPost(v)), 'id')
     },
 
     /**
@@ -75,11 +79,14 @@ export const usePostStore = defineStore('post', {
      */
     setLoading (status, id = null) {
       if (id) {
-        this.posts = this.posts.map((post) => {
-          if (post.id === id) post.loading = status
+        this.posts = uniqBy(
+          this.posts.map((post) => {
+            if (post.id === id) post.loading = status
 
-          return post
-        })
+            return post
+          }),
+          'id'
+        )
       } else {
         this.loading = status
       }

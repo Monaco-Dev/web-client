@@ -9,6 +9,7 @@
     v-else
     flat
     rounded
+    class="pa-3"
   >
     <template #prepend>
       <v-avatar size="100">
@@ -17,11 +18,11 @@
     </template>
 
     <template #title>
-      <span class="text-h5">{{ profile.full_name }}</span>
+      <span class="text-h4 ml-3">{{ profile.full_name }}</span>
     </template>
 
     <template #subtitle>
-      <v-chip-group>
+      <v-chip-group class="ml-3">
         <v-chip>
           {{ profile.connections_count }} Connections
         </v-chip>
@@ -59,20 +60,6 @@
       </v-container>
 
       <v-list v-if="auth || profile.is_connection">
-        <v-list-item v-if="profile.phone_number">
-          <template #prepend>
-            <v-icon
-              icon="mdi-phone"
-              start
-              size="small"
-            />
-          </template>
-
-          <v-list-item-title>
-            {{ profile.phone_number }}
-          </v-list-item-title>
-        </v-list-item>
-
         <v-list-item v-if="profile.email">
           <template #prepend>
             <v-icon
@@ -86,68 +73,46 @@
             {{ profile.email }}
           </v-list-item-title>
         </v-list-item>
+
+        <v-list-item v-if="profile.phone_number">
+          <template #prepend>
+            <v-icon
+              icon="mdi-phone"
+              start
+              size="small"
+            />
+          </template>
+
+          <v-list-item-title>
+            {{ profile.phone_number }}
+          </v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useProfileStore } from '@/store/profile'
-import AuthService from '@/composables/auth'
-import httpException from '@/composables/http-exception'
-import User from '@/api/auth/user'
 import UserAction from '@/components/user/UserAction.vue'
 
 export default {
-  name: 'ProfileInformation',
+  name: 'DesktopProfileInformation',
   components: { UserAction },
-  setup () {
-    const profileStore = useProfileStore()
-
-    const profile = computed(() => profileStore.profile)
-    const loading = computed(() => profileStore.loading)
-
-    return {
-      httpException,
-      profileStore,
-      profile,
-      loading
-    }
-  },
-  data () {
-    return {
-      slug: null
-    }
-  },
-  computed: {
-    auth () {
-      return AuthService.getUser().slug === this.profileStore.profile.slug
-    }
-  },
-  async mounted () {
-    this.profileStore.reset()
-
-    this.slug = this.$router.currentRoute.value.params.slug
-
-    if (!this.slug) this.$router.push({ name: 'PageNotFound' }).catch(() => {})
-
-    this.profileStore.setProfile(await this.init())
-  },
-  methods: {
-    init () {
-      this.profileStore.setLoading(true)
-
-      return User.show(this.slug)
-        .then(({ data }) => data)
-        .catch(({ response }) => {
-          if (response.status === 404) {
-            this.$router.push({ name: 'PageNotFound' }).catch(() => {})
-          } else {
-            this.httpException(response)
-          }
-        })
-        .finally(() => this.profileStore.setLoading(false))
+  props: {
+    profile: {
+      type: Object,
+      default: Object,
+      required: true
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+      required: true
+    },
+    auth: {
+      type: Boolean,
+      default: false,
+      required: true
     }
   }
 }

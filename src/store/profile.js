@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import Post from '@/composables/post'
+import User from '@/api/auth/user'
 
 export const useProfileStore = defineStore('profile', {
   state: () => ({
@@ -102,6 +103,19 @@ export const useProfileStore = defineStore('profile', {
       } else {
         this.loading = status
       }
+    },
+
+    /**
+     * Fetch user profile
+     *
+     * @param * slug
+     */
+    getProfile (slug) {
+      this.setLoading(true)
+
+      return User.show(slug)
+        .then(({ data }) => this.setProfile(data))
+        .finally(() => this.setLoading(false))
     }
   }
 })

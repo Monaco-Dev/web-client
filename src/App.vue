@@ -11,6 +11,7 @@ import ThemeService from '@/composables/theme'
 import AppProgress from '@/components/default/AppProgress.vue'
 
 export default {
+  name: 'App',
   components: { AppProgress },
   setup () {
     const theme = useTheme()

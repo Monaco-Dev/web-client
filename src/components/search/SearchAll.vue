@@ -13,44 +13,45 @@
         />
       </div>
 
-      <v-list
+      <v-card
         v-else-if="users.data.length"
-        nav
-        lines="three"
+        flat
         rounded
-        class="mb-3"
       >
-        <v-list-subheader>People</v-list-subheader>
-
-        <v-infinite-scroll
-          height="100%"
-          @load="load"
-          empty-text="No more result"
-          style="overflow-y: hidden"
-        >
-          <div
-            v-for="(user, i) in users.data"
-            :key="user.id"
+        <v-card-text class="pa-0 ma-3">
+          <v-list
+            nav
+            lines="three"
+            rounded
+            class="mb-3"
           >
-            <UserItem
-              :user="user"
-              :class="{'mt-2': i > 0}"
-            />
+            <v-list-subheader>People</v-list-subheader>
 
-            <v-divider v-if="users.data.length > i + 1" />
-          </div>
-        </v-infinite-scroll>
+            <div
+              v-for="(user, i) in users.data"
+              :key="user.id"
+            >
+              <UserItem
+                :user="user"
+                :class="{'mt-2': i > 0}"
+              />
 
-        <v-btn
-          variant="tonal"
-          block
-          flat
-          size="small"
-          @click="$emit('click:seeMore')"
-        >
-          see more
-        </v-btn>
-      </v-list>
+              <v-divider v-if="users.data.length > i + 1" />
+            </div>
+          </v-list>
+        </v-card-text>
+
+        <v-card-actions class="pa-0 ma-3">
+          <v-btn
+            variant="tonal"
+            block
+            flat
+            @click="$emit('click:seeMore')"
+          >
+            see more
+          </v-btn>
+        </v-card-actions>
+      </v-card>
 
       <PostList
         :posts="posts.data"

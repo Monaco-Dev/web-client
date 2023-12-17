@@ -1,10 +1,7 @@
 <template>
   <AppGrid>
     <template #center>
-      <PostForm
-        v-if="auth"
-        :class="{'mb-2': auth}"
-      />
+      <PostForm v-if="auth" />
 
       <PostList
         :posts="posts.data"
@@ -18,6 +15,7 @@
 <script>
 import { computed } from 'vue'
 import { useProfileStore } from '@/store/profile'
+import { usePostStore } from '@/store/post'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
 import PostForm from '@/components/post/PostForm.vue'
 import PostList from '@/components/post/PostList.vue'
@@ -41,6 +39,7 @@ export default {
 
     return {
       httpException,
+      postStore: usePostStore(),
       profileStore,
       posts,
       profile,
@@ -64,7 +63,10 @@ export default {
     onSearch () {
       return Post.searchWall(this.profile.id, { page: this.posts.meta.current_page })
         .catch(({ response }) => this.httpException(response))
-        .finally(() => this.profileStore.setLoading(false))
+        .finally(() => {
+          this.postStore.setLoading(false)
+          this.profileStore.setLoading(false)
+        })
     },
     async init () {
       if (
@@ -73,6 +75,7 @@ export default {
         this.posts.data.length
       ) return
 
+      this.postStore.setLoading(true)
       this.profileStore.setLoading(true)
 
       await this.onSearch().then(({ data }) => {

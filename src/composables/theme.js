@@ -19,6 +19,6 @@ export default {
    * @return *
    */
   getTheme () {
-    return localStorage.getItem('theme')
+    return localStorage.getItem('theme') ?? 'light'
   }
 }

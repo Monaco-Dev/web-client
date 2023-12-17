@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar
+    <v-toolbar
       flat
       class="bg-transparent"
     >
@@ -12,7 +12,7 @@
           <v-icon>{{ darkMode ? 'mdi-white-balance-sunny' : 'mdi-weather-night' }}</v-icon>
         </v-btn>
       </template>
-    </v-app-bar>
+    </v-toolbar>
 
     <DefaultView />
     <AlertDialog />
@@ -50,7 +50,7 @@ export default {
     }
   },
   mounted () {
-    this.darkMode = this.theme.global.current.value.dark
+    this.darkMode = !!this.theme.global.current.value?.dark
   },
   watch: {
     darkMode () {

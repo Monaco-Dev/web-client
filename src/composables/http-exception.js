@@ -13,8 +13,7 @@
 import { useDialogStore } from '@/store/dialog'
 import auth from '@/composables/auth'
 
-const dialogStore = useDialogStore()
-let apiError = null
+let apiError
 
 /**
  * Determine the appropriate action for the error
@@ -22,6 +21,8 @@ let apiError = null
  * @param error
  */
 export default function httpException (error) {
+  this.dialogStore = useDialogStore()
+
   if (!error) return criticalError()
 
   setError(error)
@@ -66,7 +67,7 @@ function setError (error) {
  *
  */
 function criticalError () {
-  dialogStore.openAlertDialog({
+  this.dialogStore.openAlertDialog({
     title: 'Server Error',
     body: 'We have encountered issues with our server, and our team is working on it. Apologies for any inconvenience this may have caused.'
   })
@@ -77,7 +78,7 @@ function criticalError () {
  *
  */
 function defaultError () {
-  dialogStore.openAlertDialog({
+  this.dialogStore.openAlertDialog({
     title: apiError.statusText,
     body: apiError.message
   })
@@ -88,7 +89,7 @@ function defaultError () {
  *
  */
 function internalServerError () {
-  dialogStore.openAlertDialog({
+  this.dialogStore.openAlertDialog({
     title: 'Oops! Something went wrong.',
     body: apiError.data.message
   })
@@ -99,7 +100,7 @@ function internalServerError () {
  *
  */
 function notFound () {
-  dialogStore.openAlertDialog({
+  this.dialogStore.openAlertDialog({
     title: 'The requested resource was not found.',
     body: apiError.data.message
   })
@@ -110,7 +111,7 @@ function notFound () {
  *
  */
 function unauthenticated () {
-  dialogStore.openAlertDialog({
+  this.dialogStore.openAlertDialog({
     title: 'Please login to continue.',
     body: apiError.data.message,
     action: () => {
@@ -126,7 +127,7 @@ function unauthenticated () {
  *
  */
 function unauthorized () {
-  dialogStore.openAlertDialog({
+  this.dialogStore.openAlertDialog({
     title: 'Forbidden',
     body: apiError.data.message
   })
@@ -137,7 +138,7 @@ function unauthorized () {
  *
  */
 function unprocessable () {
-  dialogStore.openAlertDialog({
+  this.dialogStore.openAlertDialog({
     title: 'There was an error with your request.',
     body: apiError.data.message
   })
@@ -148,7 +149,7 @@ function unprocessable () {
  *
  */
 function tooManyRequestsError () {
-  dialogStore.openAlertDialog({
+  this.dialogStore.openAlertDialog({
     title: 'Too many requests.',
     body: apiError.data.message
   })

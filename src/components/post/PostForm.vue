@@ -9,7 +9,13 @@
       #activator="{ props }"
       v-if="!isEdit"
     >
+      <v-skeleton-loader
+        type="list-item-avatar"
+        v-if="loading"
+      />
+
       <v-card
+        v-else
         flat
         rounded
         :disabled="loading"
@@ -155,6 +161,7 @@ import Post from '@/api/feed/post'
 import httpException from '@/composables/http-exception'
 
 export default {
+  name: 'PostForm',
   props: {
     isEdit: {
       type: Boolean,
