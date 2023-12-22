@@ -305,10 +305,12 @@ export default {
     },
     viewPost (uuid) {
       this.searchStore.closeDialog()
+      this.searchStore.reset()
       this.$router.push(`/posts/${uuid}`)
     },
     viewUser (slug) {
       this.searchStore.closeDialog()
+      this.searchStore.reset()
       this.$router.push(`/profile/${slug}`)
     }
   }

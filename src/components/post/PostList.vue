@@ -1,9 +1,9 @@
 <template>
   <div v-if="loading">
     <v-skeleton-loader
-      v-for="(num, i) in 2"
+      v-for="num in 2"
       :key="num"
-      :class="{'mt-2': i > 0}"
+      class="mt-3"
       type="list-item-avatar-two-line, card"
     />
   </div>

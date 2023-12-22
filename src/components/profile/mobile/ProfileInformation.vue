@@ -108,25 +108,28 @@
 
 <script>
 import UserAction from '@/components/user/UserAction.vue'
+import AuthService from '@/composables/auth'
+import { computed } from 'vue'
+import { useProfileStore } from '@/store/profile'
 
 export default {
   name: 'MobileProfileInformation',
   components: { UserAction },
-  props: {
-    profile: {
-      type: Object,
-      default: Object,
-      required: true
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-      required: true
-    },
-    auth: {
-      type: Boolean,
-      default: false,
-      required: true
+  setup () {
+    const profileStore = useProfileStore()
+
+    const profile = computed(() => profileStore.profile)
+    const loading = computed(() => profileStore.loading)
+
+    return {
+      profileStore,
+      profile,
+      loading
+    }
+  },
+  computed: {
+    auth () {
+      return AuthService.getUser().slug === this.profile?.slug
     }
   }
 }

@@ -39,6 +39,7 @@
 
       <v-col cols="4">
         <v-tabs
+          v-model="tabValue"
           centered
           center-active
           align-tabs="center"
@@ -47,6 +48,7 @@
           <v-tab
             to="/"
             exact
+            value="Home"
             rounded="pill"
           >
             Home
@@ -54,7 +56,7 @@
 
           <v-tab
             to="/networks"
-            exact
+            value="Networks"
             rounded="pill"
           >
             Networks
@@ -62,7 +64,7 @@
 
           <v-tab
             to="/pins"
-            exact
+            value="Pins"
             rounded="pill"
           >
             Pins
@@ -75,10 +77,7 @@
         class="text-end"
         cols="4"
       >
-        <v-menu
-          location="bottom"
-          :close-on-content-click="false"
-        >
+        <v-menu location="bottom">
           <template #activator="{ props }">
             <v-btn
               icon
@@ -108,25 +107,44 @@
 </template>
 
 <script>
-import { useSearchStore } from '@/store/search'
+import { computed } from 'vue'
+import { useTabStore } from '@/store/tab'
 import AppMenu from '@/components/default/AppMenu.vue'
 
 export default {
   name: 'AppHeader',
   components: { AppMenu },
   setup () {
-    return { searchStore: useSearchStore() }
+    const tabStore = useTabStore()
+
+    const tab = computed(() => tabStore.tab)
+
+    return {
+      tabStore,
+      tab
+    }
   },
   data () {
     return {
+      tabValue: null,
       search: null
+    }
+  },
+  watch: {
+    tabValue () {
+      this.tabStore.setTab(this.tab)
+    },
+    tab () {
+      this.tabValue = this.tab
     }
   },
   methods: {
     searchDialog () {
-      this.searchStore.setSearch(this.search)
-      this.searchStore.openDialog()
-      this.search = null
+      if (this.search) {
+        this.$router.push({ query: { search: this.search } })
+      } else {
+        this.$router.push({ query: {} })
+      }
     }
   }
 }

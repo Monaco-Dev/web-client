@@ -17,37 +17,39 @@ const routes = [
         path: 'networks',
         name: 'Networks',
         component: () => import('@/views/networks/Index.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
-      },
-      {
-        path: 'networks/incoming-invites',
-        name: 'NetworksIncomingInvites',
-        component: () => import('@/views/networks/IncomingInvites.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
-      },
-      {
-        path: 'networks/outgoing-invites',
-        name: 'NetworksOutgoingInvites',
-        component: () => import('@/views/networks/OutgoingInvites.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
-      },
-      {
-        path: 'networks/connections',
-        name: 'NetworksConnections',
-        component: () => import('@/views/networks/Connections.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
-      },
-      {
-        path: 'networks/followers',
-        name: 'NetworksFollowers',
-        component: () => import('@/views/networks/Followers.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
-      },
-      {
-        path: 'networks/following',
-        name: 'NetworksFollowing',
-        component: () => import('@/views/networks/Following.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
+        beforeEnter: (to, from, next) => GuardService.authorized(next),
+        children: [
+          {
+            path: 'incoming-invites',
+            name: 'NetworksIncomingInvites',
+            component: () => import('@/views/networks/IncomingInvites.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          },
+          {
+            path: 'outgoing-invites',
+            name: 'NetworksOutgoingInvites',
+            component: () => import('@/views/networks/OutgoingInvites.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          },
+          {
+            path: 'connections',
+            name: 'NetworksConnections',
+            component: () => import('@/views/networks/Connections.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          },
+          {
+            path: 'followers',
+            name: 'NetworksFollowers',
+            component: () => import('@/views/networks/Followers.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          },
+          {
+            path: 'following',
+            name: 'NetworksFollowing',
+            component: () => import('@/views/networks/Following.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          }
+        ]
       },
       {
         path: 'pins',
@@ -65,7 +67,7 @@ const routes = [
         path: 'profile/:slug',
         name: 'Profile',
         component: () => import('@/views/Profile.vue'),
-        beforeEnter: (to, from, next) => GuardService.profile(to, next)
+        beforeEnter: (to, from, next) => GuardService.authorized(next)
       },
       {
         path: 'menu',
@@ -77,19 +79,21 @@ const routes = [
         path: 'settings',
         name: 'Settings',
         component: () => import('@/views/settings/Index.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
-      },
-      {
-        path: 'settings/profile',
-        name: 'SettingsProfile',
-        component: () => import('@/views/settings/Profile.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
-      },
-      {
-        path: 'settings/account',
-        name: 'SettingsAccount',
-        component: () => import('@/views/settings/Account.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
+        beforeEnter: (to, from, next) => GuardService.authorized(next),
+        children: [
+          {
+            path: 'profile',
+            name: 'SettingsProfile',
+            component: () => import('@/views/settings/Profile.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          },
+          {
+            path: 'account',
+            name: 'SettingsAccount',
+            component: () => import('@/views/settings/Account.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          }
+        ]
       }
     ]
   },

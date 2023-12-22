@@ -9,7 +9,7 @@
       <v-list-item
         nav
         link
-        :href="`/profile/${user.slug}`"
+        :to="`/profile/${user.slug}`"
         prepend-avatar="https://cdn.vuetifyjs.com/images/lists/1.jpg"
         :title="user.full_name"
         subtitle="See profile"

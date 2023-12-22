@@ -33,7 +33,7 @@ export default {
 
         const summaryTags = post.content.content.summary.match(/#\w+/g) ?? []
         summaryTags.forEach(tag => {
-          post.content.content.summary = post.content.content.summary.replace(tag, `<a href="#">${tag}</a>`)
+          post.content.content.summary = post.content.content.summary.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
         })
       }
 
@@ -43,7 +43,7 @@ export default {
       const bodyTags = post.content.content.body.match(/#\w+/g) ?? []
 
       bodyTags.forEach(tag => {
-        post.content.content.body = post.content.content.body.replace(tag, `<a href="#">${tag}</a>`)
+        post.content.content.body = post.content.content.body.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
       })
     } else {
       post.content.hasSummary = false
@@ -58,7 +58,7 @@ export default {
 
         const summaryTags = post.content.summary.match(/#\w+/g) ?? []
         summaryTags.forEach(tag => {
-          post.content.summary = post.content.summary.replace(tag, `<a href="#">${tag}</a>`)
+          post.content.summary = post.content.summary.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
         })
       }
 
@@ -68,7 +68,7 @@ export default {
       const bodyTags = post.content.body.match(/#\w+/g) ?? []
 
       bodyTags.forEach(tag => {
-        post.content.body = post.content.body.replace(tag, `<a href="#">${tag}</a>`)
+        post.content.body = post.content.body.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
       })
     }
 

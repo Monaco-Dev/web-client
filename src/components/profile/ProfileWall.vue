@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     auth () {
-      return AuthService.getUser().slug === this.profile.slug
+      return AuthService.getUser().slug === this.profile?.slug
     }
   },
   watch: {

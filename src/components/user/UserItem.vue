@@ -5,7 +5,8 @@
     prepend-avatar="https://cdn.vuetifyjs.com/images/lists/1.jpg"
     :title="user.full_name"
     :subtitle="subtitle"
-    :href="`/profile/${user.slug}`"
+    :to="`/profile/${user.slug}`"
+    @click="goto"
   >
     <v-list-item-action v-if="!auth">
       <UserAction :user="user" />
@@ -16,6 +17,7 @@
 <script>
 import AuthService from '@/composables/auth'
 import UserAction from '@/components/user/UserAction.vue'
+import { useSearchStore } from '@/store/search'
 
 export default {
   name: 'UserItem',
@@ -27,6 +29,9 @@ export default {
       required: true
     }
   },
+  setup () {
+    return { searchStore: useSearchStore() }
+  },
   computed: {
     subtitle () {
       const a = `${this.user.connections_count} Connections`
@@ -34,6 +39,12 @@ export default {
     },
     auth () {
       return AuthService.getUser().id === this.user.id
+    }
+  },
+  methods: {
+    goto () {
+      this.searchStore.closeDialog()
+      this.searchStore.reset()
     }
   }
 }

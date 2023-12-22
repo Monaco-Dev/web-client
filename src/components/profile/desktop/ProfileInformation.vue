@@ -18,23 +18,30 @@
     </template>
 
     <template #title>
-      <span class="text-h4 ml-3">{{ profile.full_name }}</span>
+      <span class="text-h4 ml-3">{{ profile.full_name }} {{ auth }}</span>
     </template>
 
     <template #subtitle>
-      <v-chip-group class="ml-3">
-        <v-chip>
+      <div class="mt-3">
+        <v-chip
+          :to="auth ? `/networks/connections` : null"
+          class="mx-3"
+        >
           {{ profile.connections_count }} Connections
         </v-chip>
 
-        <v-chip>
+        <v-chip :to="auth ? `/networks/followers` : null">
           {{ profile.followers_count }} Followers
         </v-chip>
 
-        <v-chip v-if="auth">
+        <v-chip
+          v-if="auth"
+          to="/networks/following"
+          class="ml-3"
+        >
           {{ profile.following_count }} Following
         </v-chip>
-      </v-chip-group>
+      </div>
     </template>
 
     <template #append>
@@ -94,25 +101,28 @@
 
 <script>
 import UserAction from '@/components/user/UserAction.vue'
+import AuthService from '@/composables/auth'
+import { computed } from 'vue'
+import { useProfileStore } from '@/store/profile'
 
 export default {
   name: 'DesktopProfileInformation',
   components: { UserAction },
-  props: {
-    profile: {
-      type: Object,
-      default: Object,
-      required: true
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-      required: true
-    },
-    auth: {
-      type: Boolean,
-      default: false,
-      required: true
+  setup () {
+    const profileStore = useProfileStore()
+
+    const profile = computed(() => profileStore.profile)
+    const loading = computed(() => profileStore.loading)
+
+    return {
+      profileStore,
+      profile,
+      loading
+    }
+  },
+  computed: {
+    auth () {
+      return AuthService.getUser().slug === this.profile?.slug
     }
   }
 }

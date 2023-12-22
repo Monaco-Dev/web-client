@@ -16,7 +16,7 @@
           flat
           size="small"
           class="mr-3"
-          @click="searchStore.closeDialog"
+          @click="close"
         >
           <v-icon icon="mdi-chevron-left" />
         </v-btn>
@@ -140,7 +140,7 @@ export default {
   watch: {
     dialog () {
       if (this.dialog) {
-        this.search = this.searchStore.search
+        this.search = this.searchStore.search ?? null
         this.searchStore.reset()
         this.applySearch()
       } else {
@@ -153,6 +153,10 @@ export default {
       this.$nextTick(() => {
         this.$refs[this.tab].applySearch()
       })
+    },
+    close () {
+      this.$router.push({ query: {} })
+      this.searchStore.closeDialog()
     }
   }
 }

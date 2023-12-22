@@ -9,7 +9,7 @@
     <v-btn
       to="/"
       exact
-      value="home"
+      value="Home"
     >
       <v-icon>mdi-home</v-icon>
       Home
@@ -17,8 +17,7 @@
 
     <v-btn
       to="/networks"
-      exact
-      value="networks"
+      value="Networks"
     >
       <v-icon>mdi-account-group</v-icon>
       Networks
@@ -26,8 +25,7 @@
 
     <v-btn
       to="/pins"
-      exact
-      value="pins"
+      value="Pins"
     >
       <v-icon>mdi-pin</v-icon>
       Pins
@@ -35,8 +33,7 @@
 
     <v-btn
       to="/menu"
-      exact
-      value="menu"
+      value="Menu"
     >
       <v-icon>mdi-menu</v-icon>
       Menu

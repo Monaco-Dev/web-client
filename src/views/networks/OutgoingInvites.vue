@@ -1,65 +1,55 @@
 <template>
-  <div>
-    <v-navigation-drawer :permanent="$vuetify.display.mdAndUp">
-      <Navigation />
-    </v-navigation-drawer>
+  <v-card
+    flat
+    rounded
+    title="Outgoing Invites"
+  >
+    <template #prepend>
+      <v-btn
+        v-if="$vuetify.display.smAndDown"
+        icon="mdi-chevron-left"
+        variant="text"
+        to="/networks"
+      />
+    </template>
 
-    <v-container fluid>
-      <v-card
-        flat
-        rounded
-        title="Outgoing Invites"
-      >
-        <template #prepend>
-          <v-btn
-            v-if="$vuetify.display.smAndDown"
-            icon="mdi-chevron-left"
-            variant="text"
-            to="/networks"
+    <v-card-text class="ma-3 pa-0">
+      <AppGrid>
+        <template #center>
+          <UserList
+            :users="users.data"
+            :loading="loading"
+            @load="load"
           />
         </template>
-
-        <v-card-text class="ma-3 pa-0">
-          <AppGrid>
-            <template #center>
-              <UserList
-                :users="users.data"
-                :loading="loading"
-                @load="load"
-              />
-            </template>
-          </AppGrid>
-        </v-card-text>
-      </v-card>
-    </v-container>
-  </div>
+      </AppGrid>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
-import Navigation from '@/components/networks/Navigation.vue'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
 import UserList from '@/components/user/UserList.vue'
 import AuthService from '@/composables/auth'
 import httpException from '@/composables/http-exception'
 import ConnectionInvitation from '@/api/auth/connection-invitation'
 import { computed } from 'vue'
-import { useSearchStore } from '@/store/search'
+import { useNetworkStore } from '@/store/network'
 
 export default {
   name: 'NetworkOutgoingInvites',
   components: {
-    Navigation,
     AppGrid,
     UserList
   },
   setup () {
-    const searchStore = useSearchStore()
+    const networkStore = useNetworkStore()
 
-    const loading = computed(() => searchStore.loading)
-    const users = computed(() => searchStore.users)
+    const loading = computed(() => networkStore.loading)
+    const users = computed(() => networkStore.users)
 
     return {
-      searchStore,
+      networkStore,
       loading,
       users,
       httpException
@@ -72,21 +62,19 @@ export default {
     onSearchUsers () {
       return ConnectionInvitation.searchOutgoing({ search: this.search, page: this.users.meta.current_page })
         .catch(({ response }) => this.httpException(response))
-        .finally(() => this.searchStore.setLoading(false))
+        .finally(() => this.networkStore.setLoading(false))
     },
     async applySearch () {
-      this.searchStore.reset()
-      this.searchStore.setSearch(this.search)
-
-      this.searchStore.setLoading(true)
+      this.networkStore.reset()
+      this.networkStore.setLoading(true)
 
       await this.onSearchUsers().then(({ data }) => {
         const users = data
 
         users.data = [...data.data.map((v) => new Proxy(v, {}))]
 
-        this.searchStore.setUsers(users)
-        this.searchStore.setUserPage(data.meta.current_page + 1)
+        this.networkStore.setUsers(users)
+        this.networkStore.setUserPage(data.meta.current_page + 1)
       })
     },
     async load ({ done }) {
@@ -99,8 +87,8 @@ export default {
 
         users.data = [...this.users.data, ...data.data.map((v) => new Proxy(v, {}))]
 
-        this.searchStore.setUsers(users)
-        this.searchStore.setUserPage(data.meta.current_page + 1)
+        this.networkStore.setUsers(users)
+        this.networkStore.setUserPage(data.meta.current_page + 1)
 
         return done('ok')
       })

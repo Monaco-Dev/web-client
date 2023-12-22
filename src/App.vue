@@ -28,13 +28,7 @@ export default {
   created () {
     // [App.vue specific] When App.vue is first loading start the progress bar
     this.appStore.setLoading(true)
-    // hook the progress bar to start before we move router-view
-    this.$router.beforeEach((to, from, next) => {
-      // start the progress bar
-      this.appStore.setLoading(true)
-      // continue to next page
-      next()
-    })
+
     // hook the progress bar to finish after we've finished moving router-view
     this.$router.afterEach(() => this.appStore.setLoading(false))
   }
