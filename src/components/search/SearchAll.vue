@@ -47,8 +47,9 @@
             block
             flat
             @click="$emit('click:seeMore')"
+            class="text-none"
           >
-            see more
+            See more
           </v-btn>
         </v-card-actions>
       </v-card>

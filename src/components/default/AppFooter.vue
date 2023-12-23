@@ -8,7 +8,7 @@
         v-for="link in links"
         :key="link"
         variant="plain"
-        class="mx-2"
+        class="mx-2 text-none"
         rounded="xl"
         density="comfortable"
         flat

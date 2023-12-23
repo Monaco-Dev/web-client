@@ -97,8 +97,11 @@
             cols="12"
             md="3"
           >
-            <v-btn-primary type="submit">
-              save changes
+            <v-btn-primary
+              type="submit"
+              class="text-none"
+            >
+              Save changes
             </v-btn-primary>
           </v-col>
         </v-row>

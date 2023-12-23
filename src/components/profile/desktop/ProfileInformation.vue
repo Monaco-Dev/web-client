@@ -9,16 +9,21 @@
     v-else
     flat
     rounded
-    class="pa-3"
+    class="pa-0"
   >
     <template #prepend>
-      <v-avatar size="100">
+      <v-avatar
+        size="100"
+        class="mt-3 ml-3"
+      >
         <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
       </v-avatar>
     </template>
 
     <template #title>
-      <span class="text-h4 ml-3">{{ profile.full_name }} {{ auth }}</span>
+      <div class="mt-5">
+        <span class="text-h4 ml-3 font-weight-bold">{{ profile.full_name }}</span>
+      </div>
     </template>
 
     <template #subtitle>
@@ -45,57 +50,101 @@
     </template>
 
     <template #append>
-      <v-btn
+      <div
         v-if="auth"
-        size="small"
-        variant="tonal"
-        icon="mdi-pencil"
-        to="/settings/profile"
-      />
+        class="mr-3 mt-5"
+      >
+        <v-btn
+          size="small"
+          variant="tonal"
+          prepend-icon="mdi-pencil"
+          to="/settings/profile"
+          text="Edit profile"
+          class="text-none"
+        />
+
+        <v-menu location="bottom">
+          <template #activator="{ props }">
+            <v-btn
+              variant="tonal"
+              size="small"
+              class="ml-3"
+              v-bind="props"
+            >
+              <v-icon>mdi-dots-horizontal</v-icon>
+            </v-btn>
+          </template>
+
+          <v-card min-width="200">
+            <v-list
+              density="compact"
+              nav
+            >
+              <v-list-item
+                color="primary"
+                link
+                nav
+                :to="`/profile/${profile.slug}/archive`"
+                density="compact"
+              >
+                <template #prepend>
+                  <v-icon
+                    icon="mdi-archive"
+                    start
+                    size="small"
+                  />
+                </template>
+
+                <v-list-item-title>
+                  Archive
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-menu>
+      </div>
     </template>
 
-    <v-card-text>
-      <v-container
-        fluid
-        v-if="!auth"
-      >
-        <v-row>
-          <v-col cols="6">
-            <UserAction :user="profile" />
-          </v-col>
-        </v-row>
-      </v-container>
-
-      <v-list v-if="auth || profile.is_connection">
-        <v-list-item v-if="profile.email">
-          <template #prepend>
-            <v-icon
-              icon="mdi-email"
-              start
-              size="small"
-            />
-          </template>
-
-          <v-list-item-title>
-            {{ profile.email }}
-          </v-list-item-title>
-        </v-list-item>
-
-        <v-list-item v-if="profile.phone_number">
-          <template #prepend>
-            <v-icon
-              icon="mdi-phone"
-              start
-              size="small"
-            />
-          </template>
-
-          <v-list-item-title>
-            {{ profile.phone_number }}
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
+    <v-card-text
+      class="mx-3 mt-3"
+      v-if="!auth || profile.is_connection"
+    >
+      <v-row>
+        <v-col cols="6">
+          <UserAction :user="profile" />
+        </v-col>
+      </v-row>
     </v-card-text>
+
+    <v-card-actions
+      class="pa-0 mt-3"
+      v-if="auth || profile.is_connection"
+    >
+      <v-tabs
+        v-model="tab"
+        :mandatory="true"
+        color="primary"
+      >
+        <v-tab
+          :to="`/profile/${profile.slug}`"
+          exact
+          rounded="pill"
+          class="text-none"
+          value="ProfileWall"
+        >
+          Posts
+        </v-tab>
+
+        <v-tab
+          :to="`/profile/${profile.slug}/about`"
+          rounded="pill"
+          class="text-none"
+          value="ProfileAbout"
+        >
+          About
+        </v-tab>
+      </v-tabs>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -120,10 +169,21 @@ export default {
       loading
     }
   },
+  data () {
+    return {
+      tab: null
+    }
+  },
   computed: {
     auth () {
       return AuthService.getUser().slug === this.profile?.slug
     }
+  },
+  created () {
+    this.$router.beforeEach((to, from, next) => {
+      this.tab = null
+      next()
+    })
   }
 }
 </script>

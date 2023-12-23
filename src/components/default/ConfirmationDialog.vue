@@ -35,6 +35,9 @@
                 rounded
                 block
                 @click="closeAndAgree()"
+                size="small"
+                variant="tonal"
+                class="text-none"
               >
                 {{ actionLabel }}
               </v-btn>
@@ -48,6 +51,9 @@
                 rounded
                 block
                 @click="closeAndDisagree()"
+                size="small"
+                variant="tonal"
+                class="text-none"
               >
                 {{ cancelLabel }}
               </v-btn>

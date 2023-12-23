@@ -39,7 +39,10 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn-primary type="submit">
+        <v-btn-primary
+          type="submit"
+          class="text-none"
+        >
           Reset Password
         </v-btn-primary>
       </v-card-actions>

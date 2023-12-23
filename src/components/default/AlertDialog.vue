@@ -20,8 +20,10 @@
           class="text-center"
         >
           <v-btn
-            rounded
+            size="small"
+            variant="tonal"
             @click="closeAndAgree()"
+            class="text-none"
           >
             {{ actionLabel }}
           </v-btn>

@@ -139,6 +139,7 @@
           <v-btn-primary
             type="submit"
             variant="tonal"
+            class="text-none"
           >
             {{ isEdit ? 'Save changes' : 'Post' }}
           </v-btn-primary>

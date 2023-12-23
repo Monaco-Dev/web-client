@@ -15,6 +15,7 @@
       <v-btn-primary
         type="submit"
         @click="resend"
+        class="text-none"
       >
         Resend verification email
       </v-btn-primary>
@@ -30,6 +31,7 @@
         variant="tonal"
         @click="logout"
         color="accent"
+        class="text-none"
       >
         Logout
       </v-btn-primary>

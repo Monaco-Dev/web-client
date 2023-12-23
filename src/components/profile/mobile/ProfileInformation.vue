@@ -9,18 +9,9 @@
     v-else
     flat
     rounded
+    class="pa-0"
   >
-    <template #append>
-      <v-btn
-        v-if="auth"
-        size="small"
-        variant="tonal"
-        icon="mdi-pencil"
-        to="/settings/profile"
-      />
-    </template>
-
-    <v-card-text class="pa-0 ma-3">
+    <v-card-text class="pa-0 ma-5">
       <div class="text-center">
         <v-avatar
           size="100"
@@ -70,39 +61,141 @@
           </v-col>
         </v-row>
       </v-container>
-
-      <v-divider class="mt-5 mx-5" />
-
-      <v-list v-if="auth || profile.is_connection">
-        <v-list-item v-if="profile.email">
-          <template #prepend>
-            <v-icon
-              icon="mdi-email"
-              start
-              size="small"
-            />
-          </template>
-
-          <v-list-item-title>
-            {{ profile.email }}
-          </v-list-item-title>
-        </v-list-item>
-
-        <v-list-item v-if="profile.phone_number">
-          <template #prepend>
-            <v-icon
-              icon="mdi-phone"
-              start
-              size="small"
-            />
-          </template>
-
-          <v-list-item-title>
-            {{ profile.phone_number }}
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
     </v-card-text>
+
+    <v-divider class="mt-5 mx-5" />
+
+    <v-card-actions
+      v-if="auth || profile.is_connection"
+      class="pa-0 mt-3"
+    >
+      <v-tabs
+        v-model="tab"
+        :mandatory="true"
+        color="primary"
+      >
+        <v-tab
+          :to="`/profile/${profile.slug}`"
+          exact
+          rounded="pill"
+          class="text-none"
+          value="ProfileWall"
+        >
+          Posts
+        </v-tab>
+
+        <v-tab
+          :to="`/profile/${profile.slug}/about`"
+          rounded="pill"
+          class="text-none"
+          value="ProfileAbout"
+        >
+          About
+        </v-tab>
+      </v-tabs>
+
+      <v-spacer />
+
+      <v-dialog
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+      >
+        <template #activator="{ props }">
+          <v-btn
+            variant="tonal"
+            size="small"
+            class="mr-3"
+            v-bind="props"
+          >
+            <v-icon>mdi-dots-horizontal</v-icon>
+          </v-btn>
+        </template>
+
+        <template #default="{ isActive }">
+          <v-card title="Profile">
+            <template #prepend>
+              <v-btn
+                icon
+                variant="tonal"
+                flat
+                size="small"
+                class="mr-3"
+                @click="isActive.value = false"
+              >
+                <v-icon icon="mdi-chevron-left" />
+              </v-btn>
+            </template>
+
+            <v-card-text class="bg-background pa-0 mt-3">
+              <v-list
+                density="compact"
+                nav
+                class="bg-background"
+              >
+                <v-list-item
+                  color="primary"
+                  link
+                  nav
+                  to="/settings/profile"
+                  density="compact"
+                  @click="isActive.value = false"
+                >
+                  <template #prepend>
+                    <v-icon
+                      icon="mdi-pencil"
+                      start
+                      size="small"
+                    />
+                  </template>
+
+                  <template #append>
+                    <v-icon
+                      icon="mdi-chevron-right"
+                      end
+                      size="small"
+                    />
+                  </template>
+
+                  <v-list-item-title>
+                    Edit profile
+                  </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item
+                  color="primary"
+                  link
+                  nav
+                  :to="`/profile/${profile.slug}/archive`"
+                  density="compact"
+                  @click="isActive.value = false"
+                >
+                  <template #prepend>
+                    <v-icon
+                      icon="mdi-archive"
+                      start
+                      size="small"
+                    />
+                  </template>
+
+                  <template #append>
+                    <v-icon
+                      icon="mdi-chevron-right"
+                      end
+                      size="small"
+                    />
+                  </template>
+
+                  <v-list-item-title>
+                    Archive
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </template>
+      </v-dialog>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -127,10 +220,21 @@ export default {
       loading
     }
   },
+  data () {
+    return {
+      tab: null
+    }
+  },
   computed: {
     auth () {
       return AuthService.getUser().slug === this.profile?.slug
     }
+  },
+  created () {
+    this.$router.beforeEach((to, from, next) => {
+      this.tab = null
+      next()
+    })
   }
 }
 </script>

@@ -193,6 +193,7 @@
         size="small"
         flat
         @click.stop="share"
+        class="text-none"
       >
         <v-icon start>
           mdi-share
@@ -208,6 +209,7 @@
         flat
         variant="tonal"
         color="primary"
+        class="text-none"
       >
         {{ item.matches_count }} Matches
       </v-btn>

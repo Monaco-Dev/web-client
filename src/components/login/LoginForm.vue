@@ -50,7 +50,10 @@
       </v-card-text>
 
       <v-card-actions class="pa-0 ma-3">
-        <v-btn-primary type="submit">
+        <v-btn-primary
+          type="submit"
+          class="text-none"
+        >
           Login
         </v-btn-primary>
       </v-card-actions>

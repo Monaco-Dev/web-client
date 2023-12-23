@@ -65,9 +65,28 @@ const routes = [
       },
       {
         path: 'profile/:slug',
-        name: 'Profile',
-        component: () => import('@/views/Profile.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
+        name: 'ProfileIndex',
+        component: () => import('@/views/profile/Index.vue'),
+        children: [
+          {
+            path: '',
+            name: 'ProfileWall',
+            component: () => import('@/views/profile/Wall.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          },
+          {
+            path: 'about',
+            name: 'ProfileAbout',
+            component: () => import('@/views/profile/About.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          },
+          {
+            path: 'archive',
+            name: 'ProfileArchive',
+            component: () => import('@/views/profile/Archive.vue'),
+            beforeEnter: (to, from, next) => GuardService.authorized(next)
+          }
+        ]
       },
       {
         path: 'menu',

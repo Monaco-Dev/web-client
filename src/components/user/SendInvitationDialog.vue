@@ -49,6 +49,7 @@
           <v-btn-primary
             type="submit"
             variant="tonal"
+            class="text-none"
           >
             Send invite
           </v-btn-primary>

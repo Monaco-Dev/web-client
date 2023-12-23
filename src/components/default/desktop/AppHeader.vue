@@ -50,7 +50,10 @@
             exact
             value="Home"
             rounded="pill"
+            class="text-none"
+            stacked
           >
+            <v-icon>mdi-home</v-icon>
             Home
           </v-tab>
 
@@ -58,7 +61,10 @@
             to="/networks"
             value="Networks"
             rounded="pill"
+            class="text-none"
+            stacked
           >
+            <v-icon>mdi-account-group</v-icon>
             Networks
           </v-tab>
 
@@ -66,7 +72,10 @@
             to="/pins"
             value="Pins"
             rounded="pill"
+            class="text-none"
+            stacked
           >
+            <v-icon>mdi-pin</v-icon>
             Pins
           </v-tab>
         </v-tabs>
@@ -109,6 +118,7 @@
 <script>
 import { computed } from 'vue'
 import { useTabStore } from '@/store/tab'
+import { useSearchStore } from '@/store/search'
 import AppMenu from '@/components/default/AppMenu.vue'
 
 export default {
@@ -120,6 +130,7 @@ export default {
     const tab = computed(() => tabStore.tab)
 
     return {
+      searchStore: useSearchStore(),
       tabStore,
       tab
     }
@@ -144,6 +155,8 @@ export default {
         this.$router.push({ query: { search: this.search } })
       } else {
         this.$router.push({ query: {} })
+        this.searchStore.setSearch(null)
+        this.searchStore.openDialog()
       }
     }
   }

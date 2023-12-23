@@ -55,6 +55,7 @@
                 type="submit"
                 :block="false"
                 width="150"
+                class="text-none"
               >
                 Continue
               </v-btn-primary>
@@ -69,6 +70,7 @@
                 width="150"
                 @click="reset"
                 variant="tonal"
+                class="text-none"
               >
                 Cancel
               </v-btn>

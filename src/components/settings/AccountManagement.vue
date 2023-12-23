@@ -63,6 +63,7 @@
               type="submit"
               :disabled="!select.length"
               @click="$refs.dialog.confirmationDialog=true"
+              class="text-none"
             >
               Continue
             </v-btn-danger>
@@ -77,6 +78,7 @@
               variant="tonal"
               @click="select=[]"
               :disabled="!select.length"
+              class="text-none"
             >
               Cancel
             </v-btn>

@@ -27,7 +27,10 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn-primary type="submit">
+        <v-btn-primary
+          type="submit"
+          class="text-none"
+        >
           Email password reset link
         </v-btn-primary>
       </v-card-actions>

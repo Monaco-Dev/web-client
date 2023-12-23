@@ -13,6 +13,7 @@
           block
           @click.prevent="$refs.sendInvitationDialog.dialog=true"
           :loading="item.connect_loading"
+          class="text-none"
         >
           Connect
         </v-btn>
@@ -29,6 +30,7 @@
           flat
           block
           disabled
+          class="text-none"
         >
           Pending invite
         </v-btn>
@@ -46,6 +48,7 @@
           block
           @click.prevent="disconnect"
           :loading="item.disconnect_loading"
+          class="text-none"
         >
           Disconnect
         </v-btn>
@@ -63,6 +66,7 @@
           block
           @click.prevent="accept"
           :loading="item.accept_loading"
+          class="text-none"
         >
           Accept
         </v-btn>
@@ -80,6 +84,7 @@
           block
           @click.prevent="follow"
           :loading="item.follow_loading"
+          class="text-none"
         >
           Follow
         </v-btn>
@@ -96,6 +101,7 @@
           block
           @click.prevent="unfollow"
           :loading="item.unfollow_loading"
+          class="text-none"
         >
           Unfollow
         </v-btn>
