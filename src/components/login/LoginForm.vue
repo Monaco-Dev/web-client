@@ -149,8 +149,8 @@ export default {
       return Auth.login(this.form)
         .then(({ data }) => {
           AuthService.setAuth(data)
-          this.reset()
           this.$router.push({ name: 'Home' }).catch(() => {})
+          this.reset()
         })
         .catch(({ response }) => {
           switch (response.status) {

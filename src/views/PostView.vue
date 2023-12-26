@@ -14,6 +14,7 @@
           <PostItem :post="post" />
 
           <v-expansion-panels
+            v-if="isAuthenticated && !post.is_shared"
             v-model="panels"
             class="mt-5"
           >
@@ -74,6 +75,11 @@ export default {
   },
   mounted () {
     this.getPost()
+  },
+  computed: {
+    isAuthenticated () {
+      return AuthService.getUser().id === this.post.user_id
+    }
   },
   methods: {
     getPost () {

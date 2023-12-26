@@ -31,7 +31,24 @@ export default {
   },
   created () {
     this.$router.beforeEach((to, from, next) => {
-      this.tabStore.setTab(to.name)
+      let name
+
+      switch (to.name) {
+        case 'Networks':
+        case 'NetworksIncomingInvites':
+        case 'NetworksOutgoingInvites':
+        case 'NetworksConnections':
+        case 'NetworksFollowers':
+        case 'NetworksFollowing':
+          name = 'Networks'
+          break
+
+        default:
+          name = to.name
+          break
+      }
+
+      this.tabStore.setTab(name)
 
       if (to.hash || to.query.search) {
         this.searchStore.setSearch((to.hash) ? to.hash : to.query.search)

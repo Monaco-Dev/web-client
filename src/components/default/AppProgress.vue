@@ -11,7 +11,7 @@
             class="d-flex align-center justify-center"
           >
             <v-img
-              src="@/assets/text-logo.png"
+              src="@/assets/icon.png"
               contain
               width="100"
             />
