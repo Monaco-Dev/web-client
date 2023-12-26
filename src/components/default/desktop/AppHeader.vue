@@ -2,7 +2,6 @@
   <v-app-bar
     elevation="1"
     app
-    color="primary"
   >
     <v-row no-gutters>
       <v-col
@@ -12,28 +11,23 @@
       >
         <v-card
           href="/"
-          width="30%"
-          class="ml-3 mr-5 bg-transparent"
+          width="10%"
+          class="ml-3 mr-2 bg-transparent"
           flat
         >
           <v-img
-            src="@/assets/text-logo.png"
+            src="@/assets/icon.png"
             contain
-            style="filter: brightness(0%)"
+            width="50"
           />
         </v-card>
 
-        <v-combobox
-          hide-details
-          prepend-inner-icon="mdi-magnify"
-          menu-icon=""
-          placeholder="Search"
-          density="compact"
+        <v-btn
+          icon="mdi-magnify"
+          variant="tonal"
+          size="small"
           flat
-          variant="solo-filled"
-          rounded
-          v-model="search"
-          @keyup.enter="searchDialog"
+          @click="searchDialog"
         />
       </v-col>
 
@@ -44,6 +38,7 @@
           center-active
           align-tabs="center"
           :mandatory="true"
+          color="primary"
         >
           <v-tab
             to="/"
@@ -51,10 +46,14 @@
             value="Home"
             rounded="pill"
             class="text-none"
-            stacked
           >
             <v-icon>mdi-home</v-icon>
-            Home
+            <v-tooltip
+              activator="parent"
+              location="top"
+            >
+              Home
+            </v-tooltip>
           </v-tab>
 
           <v-tab
@@ -62,10 +61,14 @@
             value="Networks"
             rounded="pill"
             class="text-none"
-            stacked
           >
             <v-icon>mdi-account-group</v-icon>
-            Networks
+            <v-tooltip
+              activator="parent"
+              location="top"
+            >
+              Networks
+            </v-tooltip>
           </v-tab>
 
           <v-tab
@@ -73,10 +76,14 @@
             value="Pins"
             rounded="pill"
             class="text-none"
-            stacked
           >
             <v-icon>mdi-pin</v-icon>
-            Pins
+            <v-tooltip
+              activator="parent"
+              location="top"
+            >
+              Pins
+            </v-tooltip>
           </v-tab>
         </v-tabs>
       </v-col>

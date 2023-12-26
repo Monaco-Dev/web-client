@@ -3,22 +3,20 @@
     elevation="1"
     app
     v-if="auth"
-    color="primary"
   >
     <v-app-bar-title>
       <v-card
         href="/"
-        width="140"
+        width="150"
         height="50"
         flat
         class="bg-transparent"
       >
         <v-img
-          src="@/assets/text-logo.png"
-          width="140"
+          src="@/assets/brand.png"
+          width="150"
           height="100"
           contain
-          style="filter: brightness(0%)"
         />
       </v-card>
     </v-app-bar-title>

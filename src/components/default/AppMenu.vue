@@ -99,6 +99,7 @@
 
 <script>
 import { useTheme } from 'vuetify'
+import { useAppStore } from '@/store/app'
 import Auth from '@/api/auth/auth'
 import AuthService from '@/composables/auth'
 import ThemeService from '@/composables/theme'
@@ -107,7 +108,7 @@ import httpException from '@/composables/http-exception'
 export default {
   name: 'AppMenu',
   setup () {
-    return { httpException, theme: useTheme() }
+    return { httpException, theme: useTheme(), appStore: useAppStore() }
   },
   data () {
     return {
@@ -133,12 +134,15 @@ export default {
      * Perform logout and flush storage
      */
     logout () {
+      this.appStore.setLoading(true)
+
       return Auth.logout()
         .then(() => {
           AuthService.flush()
           this.$router.push({ name: 'Login' }).catch(() => {})
         })
         .catch(({ response }) => this.httpException(response))
+        .finally(() => this.appStore.setLoading(false))
     }
   }
 }

@@ -11,9 +11,10 @@
           height="auto"
         >
           <v-img
-            src="@/assets/text-logo.png"
+            src="@/assets/brand.png"
             contain
             width="250"
+            height="100"
           />
         </v-btn>
       </div>
