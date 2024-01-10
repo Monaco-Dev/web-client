@@ -40,6 +40,11 @@ export default {
       .post(`${this.url}/search/pins`, payload)
   },
 
+  searchArchives (payload) {
+    return this.http(this.baseUrl)
+      .post(`${this.url}/search/archives`, payload)
+  },
+
   share (id) {
     return this.http(this.baseUrl)
       .post(`${this.url}/${id}/share`)
@@ -53,5 +58,10 @@ export default {
   unpin (id) {
     return this.http(this.baseUrl)
       .post(`${this.url}/${id}/unpin`)
+  },
+
+  restore (id) {
+    return this.http(this.baseUrl)
+      .post(`${this.url}/${id}/restore`)
   }
 }

@@ -91,7 +91,7 @@ export default {
         .then(async ({ data }) => {
           this.post = PostService.mapPost(data)
 
-          await this.getMatches()
+          if (this.isAuthenticated) await this.getMatches()
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => {

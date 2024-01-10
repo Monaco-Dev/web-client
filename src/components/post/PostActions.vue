@@ -15,7 +15,7 @@
         density="compact"
       >
         <v-list-item
-          v-if="post.pinned_at"
+          v-if="post.pinned_at && !post.deleted_at"
           link
           nav
           color="primary"
@@ -36,7 +36,7 @@
         </v-list-item>
 
         <v-list-item
-          v-else
+          v-else-if="!post.deleted_at"
           link
           nav
           color="primary"
@@ -57,7 +57,7 @@
         </v-list-item>
 
         <v-list-item
-          v-if="isAuthenticated && !post.is_shared"
+          v-if="isAuthenticated && !post.is_shared && !post.deleted_at"
           link
           nav
           color="primary"
@@ -78,7 +78,7 @@
         </v-list-item>
 
         <v-list-item
-          v-if="isAuthenticated"
+          v-if="isAuthenticated && !post.deleted_at"
           link
           nav
           color="primary"
@@ -95,6 +95,27 @@
 
           <v-list-item-title>
             Move to archive
+          </v-list-item-title>
+        </v-list-item>
+
+        <v-list-item
+          v-if="isAuthenticated && post.deleted_at"
+          link
+          nav
+          color="primary"
+          density="compact"
+          @click="restore"
+        >
+          <template #prepend>
+            <v-icon
+              icon="mdi-restore"
+              start
+              size="small"
+            />
+          </template>
+
+          <v-list-item-title>
+            Restore
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -170,6 +191,21 @@ export default {
 
           this.snackbarStore.open({
             text: 'You have archived a post successfully.',
+            color: 'success'
+          })
+        })
+        .catch(({ response }) => this.httpException(response))
+        .finally(() => this.$emit('loading', false))
+    },
+    restore () {
+      this.$emit('loading', true)
+
+      return Post.restore(this.post.id)
+        .then(() => {
+          this.postStore.deletePost(this.post.id)
+
+          this.snackbarStore.open({
+            text: 'You have restored a post successfully.',
             color: 'success'
           })
         })

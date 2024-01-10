@@ -1,57 +1,79 @@
 <template>
   <AppGrid>
     <template #center>
-      <v-list>
-        <v-list-item>
-          <template #prepend>
-            <v-icon
-              icon="mdi-email"
-              start
-              size="small"
-            />
-          </template>
-
-          <v-list-item-title>
-            {{ profile.email ?? 'None' }}
-          </v-list-item-title>
-        </v-list-item>
-
-        <v-list-item>
-          <template #prepend>
-            <v-icon
-              icon="mdi-phone"
-              start
-              size="small"
-            />
-          </template>
-
-          <v-list-item-title>
-            {{ profile.phone_number ?? 'None' }}
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
+      <PostList
+        :posts="posts"
+        :loading="loading"
+        @load="load"
+      />
     </template>
   </AppGrid>
 </template>
 
 <script>
 import { computed } from 'vue'
-import { useProfileStore } from '@/store/profile'
+import { usePostStore } from '@/store/post'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
+import PostList from '@/components/post/PostList.vue'
+import Post from '@/api/feed/post'
+import httpException from '@/composables/http-exception'
+import AuthService from '@/composables/auth'
 
 export default {
   name: 'ProfileArchive',
-  components: { AppGrid },
+  components: {
+    AppGrid,
+    PostList
+  },
   setup () {
-    const profileStore = useProfileStore()
+    const postStore = usePostStore()
 
-    const profile = computed(() => profileStore.profile)
-    const loading = computed(() => profileStore.loading)
+    const posts = computed(() => postStore.posts)
+    const loading = computed(() => postStore.loading)
 
     return {
-      profileStore,
-      profile,
+      httpException,
+      postStore,
+      posts,
       loading
+    }
+  },
+  mounted () {
+    this.postStore.reset()
+    this.init()
+  },
+  methods: {
+    onSearch () {
+      return Post.searchArchives({ page: this.postStore.page })
+        .catch(({ response }) => this.httpException(response))
+        .finally(() => this.postStore.setLoading(false))
+    },
+    async init () {
+      if (!AuthService.isAuthenticated() || this.posts.length) return
+
+      this.postStore.setLoading(true)
+
+      await this.onSearch().then(({ data }) => {
+        if (!data.data.length) return
+
+        this.postStore.setPosts([...this.postStore.posts, ...data.data.map((v) => new Proxy(v, {}))])
+        this.postStore.setPage(data.meta.current_page + 1)
+      })
+    },
+    async load ({ done }) {
+      if (!AuthService.isAuthenticated() || !this.posts.length) return done('empty')
+
+      if (!this.postStore.posts.length) this.postStore.setLoading(true)
+
+      await this.onSearch()
+        .then(({ data }) => {
+          if (!data.data.length) return done('empty')
+
+          this.postStore.setPosts([...this.postStore.posts, ...data.data.map((v) => new Proxy(v, {}))])
+          this.postStore.setPage(data.meta.current_page + 1)
+
+          return done('ok')
+        })
     }
   }
 }

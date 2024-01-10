@@ -186,9 +186,15 @@
       </div>
     </v-card-text>
 
-    <v-divider class="mx-5" />
+    <v-divider
+      class="mx-5"
+      v-if="!item.deleted_at"
+    />
 
-    <v-card-actions class="mx-3">
+    <v-card-actions
+      class="mx-3"
+      v-if="!item.deleted_at"
+    >
       <v-btn
         size="small"
         flat
