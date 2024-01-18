@@ -11,7 +11,13 @@
         />
 
         <div v-else>
-          <PostItem :post="post" />
+          <PostItem
+            :post="post"
+            @click:pin="pin"
+            @click:unpin="unpin"
+            @click:archive="archive"
+            @click:submit="submit"
+          />
 
           <v-expansion-panels
             v-if="isAuthenticated && !post.is_shared"
@@ -27,6 +33,8 @@
                   :posts="matches.data"
                   @load="load"
                   border
+                  @click:pin="pinMatch"
+                  @click:unpin="unpinMatch"
                 />
               </v-expansion-panel-text>
             </v-expansion-panel>
@@ -46,6 +54,7 @@ import Post from '@/api/feed/post'
 import httpException from '@/composables/http-exception'
 import AuthService from '@/composables/auth'
 import PostService from '@/composables/post'
+import { uniqBy } from 'lodash'
 
 export default {
   name: 'PostView',
@@ -134,6 +143,39 @@ export default {
           return done('ok')
         })
         .catch(({ response }) => this.httpException(response))
+    },
+
+    submit (data) {
+      this.post = PostService.mapPost(data)
+    },
+    pin (data) {
+      this.post = PostService.mapPost(data)
+    },
+    unpin (data) {
+      this.post = PostService.mapPost(data)
+    },
+    archive () {
+      this.$router.replace({ name: 'Home' })
+    },
+    pinMatch (data) {
+      this.matches.data = uniqBy(
+        this.matches.data.map((val) => {
+          if (val.id === data.id) return PostService.mapPost(data)
+
+          return PostService.mapPost(val)
+        }),
+        'id'
+      )
+    },
+    unpinMatch (data) {
+      this.matches.data = uniqBy(
+        this.matches.data.map((val) => {
+          if (val.id === data.id) return PostService.mapPost(data)
+
+          return PostService.mapPost(val)
+        }),
+        'id'
+      )
     }
   }
 }

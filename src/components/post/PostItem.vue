@@ -34,10 +34,29 @@
     </template>
 
     <template #append>
+      <v-badge
+        v-if="item.pinned_at"
+        color="secondary"
+        icon="mdi-pin"
+      >
+        <PostActions
+          :post="item"
+          @loading="setLoading"
+          @click:edit="postForm.onEdit()"
+          @click:pin="$emit('click:pin', $event)"
+          @click:unpin="$emit('click:unpin', $event)"
+          @click:archive="$emit('click:archive', $event)"
+        />
+      </v-badge>
+
       <PostActions
+        v-else
         :post="item"
         @loading="setLoading"
         @click:edit="postForm.onEdit()"
+        @click:pin="$emit('click:pin', $event)"
+        @click:unpin="$emit('click:unpin', $event)"
+        @click:archive="$emit('click:archive', $event)"
       />
     </template>
 
@@ -225,6 +244,7 @@
       is-edit
       :post="item"
       ref="postForm"
+      @click:submit="$emit('click:submit', $event)"
     />
   </v-card>
 </template>
@@ -250,6 +270,11 @@ export default {
       required: true
     },
     border: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    isArchived: {
       type: Boolean,
       default: false,
       required: false
@@ -312,6 +337,8 @@ export default {
         .finally(() => this.setLoading(false))
     },
     viewPost (uuid) {
+      if (this.isArchived) return
+
       this.searchStore.closeDialog()
       this.searchStore.reset()
       this.$router.push(`/posts/${uuid}`)

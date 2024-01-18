@@ -249,6 +249,8 @@ export default {
           }
 
           this.reset()
+
+          this.$emit('click:submit', data)
         })
         .catch(({ response }) => {
           this.loading = false

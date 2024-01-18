@@ -4,6 +4,7 @@
     fullscreen
     hide-overlay
     transition="dialog-bottom-transition"
+    persistent
   >
     <v-card
       flat

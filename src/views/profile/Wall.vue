@@ -4,7 +4,7 @@
       <PostForm v-if="auth" />
 
       <PostList
-        :posts="posts.data"
+        :posts="posts"
         :loading="loading"
         @load="load"
       />
@@ -32,14 +32,15 @@ export default {
   },
   setup () {
     const profileStore = useProfileStore()
+    const postStore = usePostStore()
 
-    const posts = computed(() => profileStore.posts)
+    const posts = computed(() => postStore.posts)
     const profile = computed(() => profileStore.profile)
     const loading = computed(() => profileStore.loading)
 
     return {
       httpException,
-      postStore: usePostStore(),
+      postStore,
       profileStore,
       posts,
       profile,
@@ -61,7 +62,7 @@ export default {
   },
   methods: {
     onSearch () {
-      return Post.searchWall(this.profile.id, { page: this.posts.meta.current_page })
+      return Post.searchWall(this.profile.id, { page: this.postStore.page })
         .catch(({ response }) => this.httpException(response))
         .finally(() => {
           this.postStore.setLoading(false)
@@ -71,22 +72,20 @@ export default {
     async init () {
       if (
         !AuthService.isAuthenticated() ||
-        !Object.keys(this.profile).length ||
-        this.posts.data.length
+        !Object.keys(this.profile).length
       ) return
 
+      this.postStore.reset()
       this.postStore.setLoading(true)
       this.profileStore.setLoading(true)
 
       await this.onSearch().then(({ data }) => {
         if (!data.data.length) return
 
-        const posts = data
+        const posts = data.data.map((v) => new Proxy(v, {}))
 
-        posts.data = data.data.map((v) => new Proxy(v, {}))
-
-        this.profileStore.setPosts(posts)
-        this.profileStore.setPostPage(data.meta.current_page + 1)
+        this.postStore.setPosts(posts)
+        this.postStore.setPage(data.meta.current_page + 1)
       })
     },
     async load ({ done }) {
@@ -95,12 +94,10 @@ export default {
       await this.onSearch().then(({ data }) => {
         if (!data.data.length) return done('empty')
 
-        const posts = data
+        const posts = [...this.posts, ...data.data.map((v) => new Proxy(v, {}))]
 
-        posts.data = [...this.posts.data, ...data.data.map((v) => new Proxy(v, {}))]
-
-        this.profileStore.setPosts(posts)
-        this.profileStore.setPostPage(data.meta.current_page + 1)
+        this.postStore.setPosts(posts)
+        this.postStore.setPage(data.meta.current_page + 1)
 
         return done('ok')
       })

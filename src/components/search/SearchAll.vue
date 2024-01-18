@@ -58,6 +58,9 @@
         :posts="posts.data"
         :loading="loading"
         @load="load"
+        @click:pin="pin"
+        @click:unpin="unpin"
+        @click:archive="archive"
       />
     </template>
   </AppGrid>
@@ -157,6 +160,16 @@ export default {
 
         return done('ok')
       })
+    },
+
+    pin (data) {
+      this.searchStore.updatePost(data)
+    },
+    unpin (data) {
+      this.searchStore.updatePost(data)
+    },
+    archive (id) {
+      this.searchStore.deletePost(id)
     }
   }
 }

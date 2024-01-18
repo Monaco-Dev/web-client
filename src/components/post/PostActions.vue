@@ -159,6 +159,8 @@ export default {
         .then(({ data }) => {
           this.postStore.updatePost(data)
 
+          this.$emit('click:unpin', data)
+
           this.snackbarStore.open({
             text: 'You have unpinned a post successfully.',
             color: 'success'
@@ -174,6 +176,8 @@ export default {
         .then(({ data }) => {
           this.postStore.updatePost(data)
 
+          this.$emit('click:pin', data)
+
           this.snackbarStore.open({
             text: 'You have pinned a post successfully.',
             color: 'success'
@@ -188,6 +192,8 @@ export default {
       return Post.destroy(this.post.id)
         .then(() => {
           this.postStore.deletePost(this.post.id)
+
+          this.$emit('click:archive', this.post.id)
 
           this.snackbarStore.open({
             text: 'You have archived a post successfully.',

@@ -20,24 +20,13 @@
         :key="post.id"
       >
         <div :class="{'mt-2': i > 0}">
-          <v-badge
-            v-if="post.pinned_at"
-            bordered
-            color="secondary"
-            icon="mdi-pin"
-            :offset-x="10"
-            :offset-y="10"
-          >
-            <PostItem
-              :post="post"
-              :border="border"
-            />
-          </v-badge>
-
           <PostItem
-            v-else
             :post="post"
             :border="border"
+            :is-archived="isArchived"
+            @click:pin="$emit('click:pin', $event)"
+            @click:unpin="$emit('click:unpin', $event)"
+            @click:archive="$emit('click:archive', $event)"
           />
         </div>
       </div>
@@ -63,6 +52,11 @@ export default {
       required: false
     },
     border: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    isArchived: {
       type: Boolean,
       default: false,
       required: false

@@ -5,8 +5,7 @@
     prepend-avatar="https://cdn.vuetifyjs.com/images/lists/1.jpg"
     :title="user.full_name"
     :subtitle="subtitle"
-    :to="`/profile/${user.slug}`"
-    @click="goto"
+    :href="`/profile/${user.slug}`"
   >
     <v-list-item-action v-if="!auth">
       <UserAction :user="user" />
@@ -39,12 +38,6 @@ export default {
     },
     auth () {
       return AuthService.getUser().id === this.user.id
-    }
-  },
-  methods: {
-    goto () {
-      this.searchStore.closeDialog()
-      this.searchStore.reset()
     }
   }
 }

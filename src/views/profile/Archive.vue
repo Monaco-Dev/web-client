@@ -5,6 +5,7 @@
         :posts="posts"
         :loading="loading"
         @load="load"
+        :is-archived="true"
       />
     </template>
   </AppGrid>
@@ -51,6 +52,7 @@ export default {
     async init () {
       if (!AuthService.isAuthenticated() || this.posts.length) return
 
+      this.postStore.reset()
       this.postStore.setLoading(true)
 
       await this.onSearch().then(({ data }) => {
