@@ -124,5 +124,17 @@ export default {
     const payload = { refresh_token: `${this.getRefreshToken()}` }
 
     return axios.post(`${Config.services.auth.url}/api/auth/refresh-token`, payload, { headers })
+  },
+  /**
+   * Sends refresh token to Auth API.
+   *
+   * @return {*} http
+   */
+  socialite (id, driver) {
+    const headers = { Accept: 'application/json' }
+
+    const payload = { id }
+
+    return axios.post(`${Config.services.auth.url}/api/auth/${driver}/login`, payload, { headers })
   }
 }

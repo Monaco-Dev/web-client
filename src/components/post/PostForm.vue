@@ -22,7 +22,7 @@
       >
         <template #prepend>
           <v-avatar>
-            <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+            <v-img :src="avatar" />
           </v-avatar>
         </template>
 
@@ -50,7 +50,7 @@
       >
         <template #prepend>
           <v-avatar>
-            <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+            <v-img :src="avatar" />
           </v-avatar>
         </template>
 
@@ -215,6 +215,9 @@ export default {
     },
     types () {
       return Object.keys(Constants.post.types)
+    },
+    avatar () {
+      return this.user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     }
   },
   watch: {

@@ -25,7 +25,7 @@
                 class="text-caption text-decoration-none text-primary"
                 href="/forgot-password"
               >
-                Forgot login password?</a>
+                Forgot your password?</a>
             </div>
 
             <v-text-field-primary
@@ -54,12 +54,38 @@
           type="submit"
           class="text-none"
         >
-          Login
+          Log in
         </v-btn-primary>
       </v-card-actions>
 
+      <v-row
+        wrap
+        no-gutters
+      >
+        <v-col
+          cols="5"
+          class="text-center"
+        >
+          <v-divider class="mt-3 ml-10" />
+        </v-col>
+        <v-col
+          cols="2"
+          class="text-center text-caption"
+        >
+          OR
+        </v-col>
+        <v-col
+          cols="5"
+          class="text-center"
+        >
+          <v-divider class="mt-3 mr-10" />
+        </v-col>
+      </v-row>
+
+      <Socialite />
+
       <v-divider
-        class="mt-3 mx-10"
+        class="mt-8 mx-10"
         color="grey"
       />
 
@@ -84,9 +110,11 @@ import { required, email, helpers } from '@vuelidate/validators'
 import httpException from '@/composables/http-exception'
 import AuthService from '@/composables/auth'
 import Auth from '@/api/auth/auth'
+import Socialite from '@/components/login/Socialite.vue'
 
 export default {
   name: 'LoginForm',
+  components: { Socialite },
   setup () {
     return {
       v$: useVuelidate(),

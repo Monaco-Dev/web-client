@@ -112,7 +112,7 @@ function notFound () {
  */
 function unauthenticated () {
   this.dialogStore.openAlertDialog({
-    title: 'Please login to continue.',
+    title: 'Please log in to continue.',
     body: apiError.data.message,
     action: () => {
       auth.flush()

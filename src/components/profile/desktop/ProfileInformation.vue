@@ -16,7 +16,7 @@
         size="100"
         class="mt-3 ml-3"
       >
-        <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+        <v-img :src="avatar" />
       </v-avatar>
     </template>
 
@@ -176,7 +176,13 @@ export default {
   },
   computed: {
     auth () {
-      return AuthService.getUser().slug === this.profile?.slug
+      return this.user.slug === this.profile?.slug
+    },
+    user () {
+      return AuthService.getUser()
+    },
+    avatar () {
+      return this.user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     }
   },
   created () {

@@ -13,7 +13,7 @@
       >
         <template #prepend>
           <v-avatar>
-            <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+            <v-img :src="avatar(user)" />
           </v-avatar>
         </template>
 
@@ -83,6 +83,9 @@ export default {
     }
   },
   methods: {
+    avatar (user) {
+      return user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
+    },
     submit () {
       this.$emit('connect', this.form)
       this.reset()

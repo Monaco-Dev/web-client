@@ -126,8 +126,34 @@
         </v-btn-primary>
       </v-card-actions>
 
+      <v-row
+        wrap
+        no-gutters
+      >
+        <v-col
+          cols="5"
+          class="text-center"
+        >
+          <v-divider class="mt-3 ml-10" />
+        </v-col>
+        <v-col
+          cols="2"
+          class="text-center text-caption"
+        >
+          OR
+        </v-col>
+        <v-col
+          cols="5"
+          class="text-center"
+        >
+          <v-divider class="mt-3 mr-10" />
+        </v-col>
+      </v-row>
+
+      <Socialite />
+
       <v-divider
-        class="mt-3 mx-10"
+        class="mt-8 mx-10"
         color="grey"
       />
 
@@ -160,9 +186,11 @@ import {
 import AuthService from '@/composables/auth'
 import Auth from '@/api/auth/auth'
 import httpException from '@/composables/http-exception'
+import Socialite from '@/components/login/Socialite.vue'
 
 export default {
   name: 'RegisterForm',
+  components: { Socialite },
   setup () {
     return {
       v$: useVuelidate(),

@@ -10,7 +10,7 @@
         nav
         link
         :to="`/profile/${user.slug}`"
-        prepend-avatar="https://cdn.vuetifyjs.com/images/lists/1.jpg"
+        :prepend-avatar="avatar"
         :title="user.full_name"
         subtitle="See profile"
       />
@@ -121,6 +121,9 @@ export default {
   computed: {
     user () {
       return AuthService.getUser()
+    },
+    avatar () {
+      return this.user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     }
   },
   watch: {

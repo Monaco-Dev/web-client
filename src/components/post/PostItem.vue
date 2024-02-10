@@ -11,7 +11,7 @@
   >
     <template #prepend>
       <v-avatar @click.stop="viewUser(item.user.slug)">
-        <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+        <v-img :src="avatar(item.user)" />
       </v-avatar>
     </template>
 
@@ -72,7 +72,7 @@
         >
           <template #prepend>
             <v-avatar @click.stop="viewUser(item.content.user.slug)">
-              <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+              <v-img :src="avatar(item.content.user)" />
             </v-avatar>
           </template>
 
@@ -317,6 +317,9 @@ export default {
   methods: {
     init () {
       this.item = { ...JSON.parse(JSON.stringify(this.post)) }
+    },
+    avatar (user) {
+      return user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     },
     setLoading (status) {
       this.item.loading = status

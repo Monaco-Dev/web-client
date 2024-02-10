@@ -109,7 +109,7 @@
                 :offset-y="5"
               >
                 <v-avatar size="46">
-                  <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+                  <v-img :src="avatar" />
                 </v-avatar>
               </v-badge>
             </v-btn>
@@ -127,6 +127,7 @@ import { computed } from 'vue'
 import { useTabStore } from '@/store/tab'
 import { useSearchStore } from '@/store/search'
 import AppMenu from '@/components/default/AppMenu.vue'
+import AuthService from '@/composables/auth'
 
 export default {
   name: 'AppHeader',
@@ -146,6 +147,14 @@ export default {
     return {
       tabValue: null,
       search: null
+    }
+  },
+  computed: {
+    user () {
+      return AuthService.getUser()
+    },
+    avatar () {
+      return this.user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     }
   },
   watch: {

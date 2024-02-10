@@ -2,7 +2,7 @@
   <v-list-item
     link
     nav
-    prepend-avatar="https://cdn.vuetifyjs.com/images/lists/1.jpg"
+    :prepend-avatar="avatar(user)"
     :title="user.full_name"
     :subtitle="subtitle"
     :href="`/profile/${user.slug}`"
@@ -38,6 +38,11 @@ export default {
     },
     auth () {
       return AuthService.getUser().id === this.user.id
+    }
+  },
+  methods: {
+    avatar (user) {
+      return user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     }
   }
 }
