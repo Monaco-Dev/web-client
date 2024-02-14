@@ -25,7 +25,7 @@ export default {
    */
   update (id, payload) {
     return this.http(this.baseUrl)
-      .post(`${this.url}/${id}`, payload, {
+      .post(`${this.url}/update/${id}`, payload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
   },
