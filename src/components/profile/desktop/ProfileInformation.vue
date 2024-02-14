@@ -16,7 +16,10 @@
         size="100"
         class="mt-3 ml-3"
       >
-        <v-img :src="avatar" />
+        <v-img
+          :src="user.avatar_url"
+          cover
+        />
       </v-avatar>
     </template>
 
@@ -46,6 +49,13 @@
         >
           {{ profile.following_count }} Following
         </v-chip>
+      </div>
+
+      <div class="mt-3 ml-3">
+        <h3>{{ profile.license.license_type }}</h3>
+        <p>
+          License no: {{ profile.license.license_number }}
+        </p>
       </div>
     </template>
 
@@ -180,9 +190,6 @@ export default {
     },
     user () {
       return AuthService.getUser()
-    },
-    avatar () {
-      return this.user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     }
   },
   created () {

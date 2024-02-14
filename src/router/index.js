@@ -148,6 +148,12 @@ const routes = [
         name: 'VerifyEmail',
         component: () => import('@/views/VerifyEmail.vue'),
         beforeEnter: (to, from, next) => GuardService.unauthorized(to, from, next)
+      },
+      {
+        path: '/verify-license',
+        name: 'VerifyLicense',
+        component: () => import('@/views/VerifyLicense.vue'),
+        beforeEnter: (to, from, next) => GuardService.verifyLicense(to, from, next)
       }
     ]
   },

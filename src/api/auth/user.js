@@ -4,7 +4,6 @@ import Config from '@/config/app'
 const {
   http,
   show,
-  update,
   search
 } = api
 
@@ -18,8 +17,18 @@ export default {
   url: 'users',
   http,
   show,
-  update,
   search,
+
+  /**
+   * Update the specified resource in storage.
+   *
+   */
+  update (id, payload) {
+    return this.http(this.baseUrl)
+      .post(`${this.url}/${id}`, payload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+  },
 
   /**
    * Validate and verify email token

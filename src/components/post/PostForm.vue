@@ -9,37 +9,42 @@
       #activator="{ props }"
       v-if="!isEdit"
     >
-      <v-skeleton-loader
-        type="list-item-avatar"
-        v-if="loading"
-      />
+      <template v-if="!floating">
+        <v-skeleton-loader
+          type="list-item-avatar"
+          v-if="loading"
+        />
 
-      <v-card
-        v-else
-        flat
-        rounded
-        :disabled="loading"
-      >
-        <template #prepend>
-          <v-avatar>
-            <v-img :src="avatar" />
-          </v-avatar>
-        </template>
+        <v-card
+          v-else
+          flat
+          rounded
+          :disabled="loading"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                :src="user.avatar_url"
+                cover
+              />
+            </v-avatar>
+          </template>
 
-        <template #title>
-          <v-btn
-            rounded
-            flat
-            color="grey"
-            class="text-none justify-start"
-            block
-            variant="tonal"
-            v-bind="props"
-          >
-            Create new post...
-          </v-btn>
-        </template>
-      </v-card>
+          <template #title>
+            <v-btn
+              rounded
+              flat
+              color="grey"
+              class="text-none justify-start"
+              block
+              variant="tonal"
+              v-bind="props"
+            >
+              Create new post...
+            </v-btn>
+          </template>
+        </v-card>
+      </template>
     </template>
 
     <v-form @submit.prevent="submit">
@@ -50,7 +55,10 @@
       >
         <template #prepend>
           <v-avatar>
-            <v-img :src="avatar" />
+            <v-img
+              :src="user.avatar_url"
+              cover
+            />
           </v-avatar>
         </template>
 
@@ -164,6 +172,11 @@ import httpException from '@/composables/http-exception'
 export default {
   name: 'PostForm',
   props: {
+    floating: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
     isEdit: {
       type: Boolean,
       default: false,
@@ -215,9 +228,6 @@ export default {
     },
     types () {
       return Object.keys(Constants.post.types)
-    },
-    avatar () {
-      return this.user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     }
   },
   watch: {

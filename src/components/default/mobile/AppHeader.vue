@@ -41,7 +41,10 @@
         class="ml-2"
       >
         <v-avatar>
-          <v-img :src="avatar" />
+          <v-img
+            :src="user.avatar_url"
+            cover
+          />
         </v-avatar>
       </v-btn>
     </template>
@@ -63,9 +66,6 @@ export default {
     },
     user () {
       return AuthService.getUser()
-    },
-    avatar () {
-      return this.user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     }
   }
 }

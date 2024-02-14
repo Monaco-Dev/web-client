@@ -24,17 +24,21 @@
           >
             <v-btn
               icon
+              border
               size="x-large"
               width="150"
               height="150"
-              @click="$refs.uploader.$refs.input.click()"
+              @click="$refs.uploader.click()"
             >
               <v-avatar
                 size="150"
                 data-content="edit"
                 class="image"
               >
-                <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" />
+                <v-img
+                  :src="source"
+                  cover
+                />
               </v-avatar>
             </v-btn>
 
@@ -42,10 +46,15 @@
               ref="uploader"
               accept="image/*"
               class="d-none"
+              v-model="form.avatar"
+              @change="upload"
             />
 
-            <p class="error--text caption">
-              null
+            <p
+              class="text-error caption"
+              v-if="formErrors.avatar.length"
+            >
+              {{ formErrors.avatar[0] }}
             </p>
           </v-col>
 
@@ -138,13 +147,16 @@ export default {
       form: {
         first_name: null,
         last_name: null,
-        phone_number: null
+        phone_number: null,
+        avatar: null
       },
       apiErrors: {
         first_name: [],
         last_name: [],
-        phone_number: []
+        phone_number: [],
+        avatar: []
       },
+      source: null,
       loading: false
     }
   },
@@ -156,7 +168,8 @@ export default {
       return {
         first_name: this.v$.form.first_name.$errors.map(v => v.$message).concat(this.apiErrors.first_name).filter(Boolean),
         last_name: this.v$.form.last_name.$errors.map(v => v.$message).concat(this.apiErrors.last_name).filter(Boolean),
-        phone_number: this.v$.form.phone_number.$errors.map(v => v.$message).concat(this.apiErrors.phone_number).filter(Boolean)
+        phone_number: this.v$.form.phone_number.$errors.map(v => v.$message).concat(this.apiErrors.phone_number).filter(Boolean),
+        avatar: this.apiErrors.avatar
       }
     }
   },
@@ -175,9 +188,17 @@ export default {
       if (this.form.phone_number) this.form.phone_number = this.form.phone_number.trim()
 
       delete this.apiErrors.phone_number
+    },
+    'form.avatar' () {
+      this.apiErrors.avatar = []
     }
   },
   methods: {
+    upload () {
+      if (this.form.avatar?.[0]) {
+        this.source = window.URL.createObjectURL(this.form.avatar[0])
+      }
+    },
     capitalize (field) {
       const arr = this.form[field].split(' ')
 
@@ -195,21 +216,27 @@ export default {
       this.form.first_name = user.first_name
       this.form.last_name = user.last_name
       this.form.phone_number = user.phone_number
+      this.form.avatar = null
+      this.source = user.avatar_url
       this.loading = false
 
       this.apiErrors = {
         first_name: [],
         last_name: [],
-        phone_number: []
+        phone_number: [],
+        avatar: []
       }
     },
     async submit () {
       const result = await this.v$.$validate()
       if (!result) return
 
+      const form = { ...this.form }
+      form.avatar = this.form.avatar?.[0]
+
       this.loading = true
 
-      return User.update(AuthService.getUser().id, this.form)
+      return User.update(AuthService.getUser().id, form)
         .then(({ data }) => {
           AuthService.setUser(data)
           this.reset()

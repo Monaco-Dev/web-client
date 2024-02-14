@@ -164,7 +164,7 @@
             href="/login"
             class="text-caption text-decoration-none text-primary"
           >
-            Login
+            Log in
           </a>
         </small>
       </v-card-actions>

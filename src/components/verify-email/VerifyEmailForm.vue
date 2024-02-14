@@ -4,6 +4,7 @@
     rounded
     :loading="loading"
     :disabled="loading"
+    title="Email verification"
   >
     <v-card-text>
       <v-container fluid>
@@ -40,7 +41,6 @@
 </template>
 
 <script>
-import { useVuelidate } from '@vuelidate/core'
 import { useSnackbarStore } from '@/store/snackbar'
 import httpException from '@/composables/http-exception'
 import AuthService from '@/composables/auth'
@@ -51,7 +51,6 @@ export default {
   name: 'VerifyEmailForm',
   setup () {
     return {
-      v$: useVuelidate(),
       httpException,
       snackbarStore: useSnackbarStore()
     }

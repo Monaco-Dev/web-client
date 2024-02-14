@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { uniqBy } from 'lodash'
 import Post from '@/composables/post'
 import User from '@/api/auth/user'
 
@@ -52,7 +53,7 @@ export const useProfileStore = defineStore('profile', {
      * @param {*} posts
      */
     setPosts (posts = {}) {
-      this.posts = { ...posts, data: posts.data.map((v) => Post.mapPost(v)) }
+      this.posts = { ...posts, data: uniqBy([...this.posts.data, ...posts.data.map((v) => Post.mapPost(v))], 'id') }
     },
 
     /**
@@ -61,8 +62,8 @@ export const useProfileStore = defineStore('profile', {
      * @param {*} post
      */
     addPost (post) {
-      this.posts.data.unshift(post)
-      this.posts.data = this.posts.data.map((v) => Post.mapPost(v))
+      this.posts.data.unshift(Post.mapPost(post))
+      this.posts.data = uniqBy(this.posts.data, 'id')
     },
 
     /**
@@ -71,11 +72,14 @@ export const useProfileStore = defineStore('profile', {
      * @param {*} post
      */
     updatePost (post) {
-      this.posts.data = this.posts.data.map((val) => {
-        if (val.id === post.id) return Post.mapPost(post)
+      this.posts.data = uniqBy(
+        this.posts.data.map((val) => {
+          if (val.id === post.id) return Post.mapPost(post)
 
-        return Post.mapPost(val)
-      })
+          return Post.mapPost(val)
+        }),
+        'id'
+      )
     },
 
     /**
@@ -84,7 +88,7 @@ export const useProfileStore = defineStore('profile', {
      * @param {*} id
      */
     deletePost (id) {
-      this.posts.data = this.posts.data.filter((post) => (post.id !== id)).map((v) => Post.mapPost(v))
+      this.posts.data = uniqBy(this.posts.data.filter((post) => (post.id !== id)), 'id')
     },
 
     /**

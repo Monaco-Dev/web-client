@@ -27,16 +27,10 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
-      if (Object.keys(to.query).includes('id') && Object.keys(to.query).includes('driver')) {
-        vm.appStore.setLoading(true)
-
-        await AuthService.socialite(to.query.id, to.query.driver)
-          .then(({ data }) => {
-            AuthService.setAuth(data)
-            vm.$router.replace('/')
-          })
-          .catch(({ response }) => vm.httpException(response))
-          .finally(() => vm.appStore.setLoading(false))
+      if (vm.$cookies.isKey('token')) {
+        await AuthService.setAuth(JSON.parse(atob(vm.$cookies.get('token'))))
+        vm.$cookies.remove('token')
+        vm.$router.replace({ name: 'Home' })
       }
     })
   }

@@ -11,14 +11,16 @@
       >
         <v-card
           href="/"
-          width="10%"
-          class="ml-3 mr-2 bg-transparent"
+          width="150"
+          height="50"
           flat
+          class="ml-3 mr-2 bg-transparent"
         >
           <v-img
-            src="@/assets/icon.png"
+            src="@/assets/brand.png"
+            width="150"
+            height="100"
             contain
-            width="50"
           />
         </v-card>
 
@@ -109,7 +111,10 @@
                 :offset-y="5"
               >
                 <v-avatar size="46">
-                  <v-img :src="avatar" />
+                  <v-img
+                    :src="user.avatar_url"
+                    cover
+                  />
                 </v-avatar>
               </v-badge>
             </v-btn>
@@ -152,9 +157,6 @@ export default {
   computed: {
     user () {
       return AuthService.getUser()
-    },
-    avatar () {
-      return this.user?.avatar ?? 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     }
   },
   watch: {

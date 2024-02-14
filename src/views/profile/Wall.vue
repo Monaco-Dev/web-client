@@ -94,9 +94,7 @@ export default {
       await this.onSearch().then(({ data }) => {
         if (!data.data.length) return done('empty')
 
-        const posts = [...this.posts, ...data.data.map((v) => new Proxy(v, {}))]
-
-        this.postStore.setPosts(posts)
+        this.postStore.setPosts(data.data.map((v) => new Proxy(v, {})))
         this.postStore.setPage(data.meta.current_page + 1)
 
         return done('ok')

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { uniqBy } from 'lodash'
 import Post from '@/composables/post'
 
 /**
@@ -90,7 +91,7 @@ export const useSearchStore = defineStore('search', {
      * @param {*} posts
      */
     setPosts (posts = {}) {
-      this.posts = { ...posts, data: posts.data.map((v) => Post.mapPost(v)) }
+      this.posts = { ...posts, data: uniqBy([...this.posts.data, ...posts.data.map((v) => Post.mapPost(v))], 'id') }
     },
 
     /**
@@ -108,11 +109,14 @@ export const useSearchStore = defineStore('search', {
      * @param {*} post
      */
     updatePost (post) {
-      this.posts.data = this.posts.data.map((val) => {
-        if (val.id === post.id) return Post.mapPost(post)
+      this.posts.data = uniqBy(
+        this.posts.data.map((val) => {
+          if (val.id === post.id) return Post.mapPost(post)
 
-        return Post.mapPost(val)
-      })
+          return val
+        }),
+        'id'
+      )
     },
 
     /**
@@ -121,11 +125,14 @@ export const useSearchStore = defineStore('search', {
      * @param {*} user
      */
     updateUser (user) {
-      this.users.data = this.users.data.map((val) => {
-        if (val.id === user.id) return user
+      this.users.data = uniqBy(
+        this.users.data.map((val) => {
+          if (val.id === user.id) return user
 
-        return val
-      })
+          return val
+        }),
+        'id'
+      )
     },
 
     /**
@@ -134,7 +141,7 @@ export const useSearchStore = defineStore('search', {
      * @param {*} id
      */
     deletePost (id) {
-      this.posts.data = this.posts.data.filter((post) => (post.id !== id)).map((v) => Post.mapPost(v))
+      this.posts.data = uniqBy(this.posts.data.filter((post) => (post.id !== id)), 'id')
     },
 
     /**

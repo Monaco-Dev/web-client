@@ -30,10 +30,10 @@ export const usePostStore = defineStore('post', {
     /**
      * Store posts value
      *
-     * @param {*} posts
+     * @param {*} newPosts
      */
-    setPosts (posts = []) {
-      this.posts = uniqBy(posts.map((v) => Post.mapPost(v)), 'id')
+    setPosts (newPosts = []) {
+      this.posts = uniqBy([...this.posts, ...newPosts.map((v) => Post.mapPost(v))], 'id')
     },
 
     /**
@@ -42,8 +42,8 @@ export const usePostStore = defineStore('post', {
      * @param {*} post
      */
     addPost (post) {
-      this.posts.unshift(post)
-      this.posts = uniqBy(this.posts.map((v) => Post.mapPost(v)), 'id')
+      this.posts.unshift(Post.mapPost(post))
+      this.posts = uniqBy(this.posts, 'id')
     },
 
     /**
@@ -56,7 +56,7 @@ export const usePostStore = defineStore('post', {
         this.posts.map((val) => {
           if (val.id === post.id) return Post.mapPost(post)
 
-          return Post.mapPost(val)
+          return val
         }),
         'id'
       )
@@ -68,7 +68,7 @@ export const usePostStore = defineStore('post', {
      * @param {*} id
      */
     deletePost (id) {
-      this.posts = uniqBy(this.posts.filter((post) => (post.id !== id)).map((v) => Post.mapPost(v)), 'id')
+      this.posts = uniqBy(this.posts.filter((post) => (post.id !== id)), 'id')
     },
 
     /**

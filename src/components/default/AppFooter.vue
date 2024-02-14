@@ -5,16 +5,17 @@
       no-gutters
     >
       <v-btn
-        v-for="link in links"
-        :key="link"
+        v-for="(link, key) in links"
+        :key="key"
         variant="plain"
         class="mx-2 text-none"
         rounded="xl"
         density="comfortable"
         flat
         size="small"
+        :href="link.url"
       >
-        {{ link }}
+        {{ link.text }}
       </v-btn>
       <v-col
         class="text-center mt-4"
@@ -32,8 +33,14 @@ export default {
   data () {
     return {
       links: [
-        'About Us',
-        'Contact Us'
+        {
+          text: 'About Us',
+          url: 'https://realmate.ph/about-us'
+        },
+        {
+          text: 'Contact Us',
+          url: 'https://www.facebook.com/realmateph'
+        }
       ]
     }
   }

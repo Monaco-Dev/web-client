@@ -13,7 +13,6 @@
       class="text-none"
     >
       <v-icon>mdi-home</v-icon>
-      Home
     </v-btn>
 
     <v-btn
@@ -22,8 +21,16 @@
       class="text-none"
     >
       <v-icon>mdi-account-group</v-icon>
-      Networks
     </v-btn>
+
+    <v-avatar
+      color="primary"
+      class="mx-3"
+      size="large"
+      @click="$emit('click:form')"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-avatar>
 
     <v-btn
       to="/pins"
@@ -31,7 +38,6 @@
       class="text-none"
     >
       <v-icon>mdi-pin</v-icon>
-      Pins
     </v-btn>
 
     <v-btn
@@ -40,7 +46,6 @@
       class="text-none"
     >
       <v-icon>mdi-menu</v-icon>
-      Menu
     </v-btn>
   </v-bottom-navigation>
 </template>

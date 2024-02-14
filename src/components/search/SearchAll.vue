@@ -153,7 +153,7 @@ export default {
 
         const posts = data
 
-        posts.data = [...this.posts.data, ...data.data.map((v) => new Proxy(v, {}))]
+        posts.data = [...data.data.map((v) => new Proxy(v, {}))]
 
         this.searchStore.setPosts(posts)
         this.searchStore.setPostPage(data.meta.current_page + 1)

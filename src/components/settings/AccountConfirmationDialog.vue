@@ -113,14 +113,24 @@ export default {
       confirmationDialog: false,
       form: {
         password: null
+      },
+      apiErrors: {
+        password: []
       }
     }
   },
   computed: {
     formErrors () {
       return {
-        password: this.v$.form.password.$errors.map(v => v.$message).filter(Boolean)
+        password: this.v$.form.password.$errors.map(v => v.$message).concat(this.apiErrors.password).filter(Boolean)
       }
+    }
+  },
+  watch: {
+    'form.password' () {
+      if (this.form.password) this.form.password = this.form.password.trim()
+
+      delete this.apiErrors.password
     }
   },
   methods: {
@@ -132,6 +142,9 @@ export default {
       this.confirmationDialog = false
       this.form = {
         password: null
+      }
+      this.apiErrors = {
+        password: []
       }
     },
     async submit () {
@@ -166,7 +179,17 @@ export default {
 
           this.$emit(this.select[0], data)
         })
-        .catch(({ response }) => this.httpException(response))
+        .catch(({ response }) => {
+          switch (response.status) {
+            case 422:
+              this.apiErrors = response.data.errors
+              break
+
+            default:
+              this.httpException(response)
+              break
+          }
+        })
         .finally(() => { this.loading = false })
     }
   },

@@ -6,10 +6,10 @@ import AuthService from '@/composables/auth'
  * @param next
  * @return next
  */
-export default async function authorized (next) {
+export default async function verifyLicense (to, from, next) {
   let unauthenticated = false
   let unverifiedEmail = false
-  let unverified = false
+  let verified = false
 
   // Proceed to login page if the user is unauthenticated
   if (!AuthService.isAuthenticated()) {
@@ -36,20 +36,20 @@ export default async function authorized (next) {
 
       if (!AuthService.getUser().is_email_verified) {
         unverifiedEmail = true
-      } else if (!AuthService.getUser().is_verified) {
-        unverified = true
+      } else if (AuthService.getUser().is_verified) {
+        verified = true
       }
     })
     .catch(() => { unauthenticated = true })
+
+  if (unverifiedEmail) return next({ name: 'VerifyEmail' })
 
   if (unauthenticated) {
     AuthService.flush()
     return next({ name: 'Login' })
   }
 
-  if (unverifiedEmail) return next({ name: 'VerifyEmail' })
-
-  if (unverified) return next({ name: 'VerifyLicense' })
+  if (verified) return next({ name: 'Home' })
 
   return next()
 }
