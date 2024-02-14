@@ -199,10 +199,7 @@ export default {
       this.loading = true
 
       return License.store(form)
-        .then(() => {
-          this.$router.replace({ name: 'Home' }).catch(() => {})
-          this.reset()
-        })
+        .then(() => window.location.reload())
         .catch(({ response }) => {
           switch (response.status) {
             case 422:
