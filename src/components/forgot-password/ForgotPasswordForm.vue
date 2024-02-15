@@ -20,7 +20,6 @@
               :max-errors="formErrors.email.length"
               :error-messages="formErrors.email"
               @blur="v$.form.email.$touch()"
-              autofocus
             />
           </v-col>
         </v-row>

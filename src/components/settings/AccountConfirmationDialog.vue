@@ -35,7 +35,6 @@
                 :error-messages="formErrors.password"
                 @blur="v$.form.password.$touch()"
                 v-model="form.password"
-                autofocus
               />
             </v-col>
           </v-row>

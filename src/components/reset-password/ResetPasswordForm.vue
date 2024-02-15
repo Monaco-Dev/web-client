@@ -10,7 +10,6 @@
         <v-row>
           <v-col cols="12">
             <v-text-field-primary
-              autofocus
               :append-inner-icon="showPsw ? 'mdi-eye-off' : 'mdi-eye'"
               v-model="form.password"
               placeholder="Password"
