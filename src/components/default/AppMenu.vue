@@ -10,10 +10,25 @@
         nav
         link
         :to="`/profile/${user.slug}`"
-        :prepend-avatar="user.avatar_url"
         :title="user.full_name"
         subtitle="See profile"
-      />
+      >
+        <template #prepend>
+          <v-avatar color="grey">
+            <v-img
+              v-if="user.avatar_url"
+              :src="user.avatar_url"
+              cover
+            />
+            <span
+              class="text-white"
+              v-else
+            >
+              {{ user.first_name.charAt(0) }}{{ user.last_name.charAt(0) }}
+            </span>
+          </v-avatar>
+        </template>
+      </v-list-item>
     </v-list>
 
     <v-divider class="mx-4" />

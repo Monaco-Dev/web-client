@@ -16,11 +16,19 @@
         <v-avatar
           size="100"
           class="mb-3"
+          color="grey"
         >
           <v-img
+            v-if="user.avatar_url"
             :src="user.avatar_url"
             cover
           />
+          <span
+            class="text-white"
+            v-else
+          >
+            {{ user.first_name.charAt(0) }}{{ user.last_name.charAt(0) }}
+          </span>
         </v-avatar>
 
         <br>

@@ -31,14 +31,22 @@
               @click="$refs.uploader.click()"
             >
               <v-avatar
+                color="grey"
                 size="150"
                 data-content="edit"
                 class="image"
               >
                 <v-img
+                  v-if="source"
                   :src="source"
                   cover
                 />
+                <span
+                  class="text-white"
+                  v-else
+                >
+                  {{ initials }}
+                </span>
               </v-avatar>
             </v-btn>
 
@@ -171,6 +179,9 @@ export default {
         phone_number: this.v$.form.phone_number.$errors.map(v => v.$message).concat(this.apiErrors.phone_number).filter(Boolean),
         avatar: this.apiErrors.avatar
       }
+    },
+    initials () {
+      return this.form.first_name?.charAt(0) + this.form.last_name?.charAt(0)
     }
   },
   watch: {

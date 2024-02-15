@@ -2,11 +2,26 @@
   <v-list-item
     link
     nav
-    :prepend-avatar="user.avatar_url"
     :title="user.full_name"
     :subtitle="subtitle"
     :href="`/profile/${user.slug}`"
   >
+    <template #prepend>
+      <v-avatar color="grey">
+        <v-img
+          v-if="user.avatar_url"
+          :src="user.avatar_url"
+          cover
+        />
+        <span
+          class="text-white"
+          v-else
+        >
+          {{ user.first_name.charAt(0) }}{{ user.last_name.charAt(0) }}
+        </span>
+      </v-avatar>
+    </template>
+
     <v-list-item-action v-if="!auth">
       <UserAction :user="user" />
     </v-list-item-action>
