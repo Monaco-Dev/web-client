@@ -14,15 +14,15 @@
         <template #prepend>
           <v-avatar color="grey">
             <v-img
-              v-if="user.avatar_url"
-              :src="user.avatar_url"
+              v-if="user?.avatar_url"
+              :src="user?.avatar_url"
               cover
             />
             <span
               class="text-white"
               v-else
             >
-              {{ user.first_name.charAt(0) }}{{ user.last_name.charAt(0) }}
+              {{ user?.first_name?.charAt(0) }}{{ user?.last_name?.charAt(0) }}
             </span>
           </v-avatar>
         </template>

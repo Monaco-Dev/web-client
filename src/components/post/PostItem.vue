@@ -15,15 +15,15 @@
         @click.stop="viewUser(item.user.slug)"
       >
         <v-img
-          v-if="item.user.avatar_url"
-          :src="item.user.avatar_url"
+          v-if="item?.user?.avatar_url"
+          :src="item?.user?.avatar_url"
           cover
         />
         <span
           class="text-white"
           v-else
         >
-          {{ item.user.first_name.charAt(0) }}{{ item.user.last_name.charAt(0) }}
+          {{ item?.user?.first_name?.charAt(0) }}{{ item?.user?.last_name?.charAt(0) }}
         </span>
       </v-avatar>
     </template>
@@ -89,15 +89,15 @@
               @click.stop="viewUser(item.content.user.slug)"
             >
               <v-img
-                v-if="item.content.user.avatar_url"
-                :src="item.content.user.avatar_url"
+                v-if="item?.content?.user?.avatar_url"
+                :src="item?.content?.user?.avatar_url"
                 cover
               />
               <span
                 class="text-white"
                 v-else
               >
-                {{ item.content.user.first_name.charAt(0) }}{{ item.content.user.last_name.charAt(0) }}
+                {{ item?.content?.user?.first_name?.charAt(0) }}{{ item?.content?.user?.last_name?.charAt(0) }}
               </span>
             </v-avatar>
           </template>
