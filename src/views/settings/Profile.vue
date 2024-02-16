@@ -60,9 +60,9 @@
 
             <p
               class="text-error caption"
-              v-if="formErrors.avatar.length"
+              v-if="formErrors?.avatar?.length"
             >
-              {{ formErrors.avatar[0] }}
+              {{ formErrors?.avatar?.[0] }}
             </p>
           </v-col>
 
