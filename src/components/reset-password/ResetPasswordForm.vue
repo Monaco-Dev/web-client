@@ -156,7 +156,7 @@ export default {
       return Auth.resetPassword(this.form)
         .then(() => {
           this.reset()
-          this.$router.push({ name: 'Login' }).catch(() => {})
+          this.$router.replace({ name: 'Login' }).catch(() => {})
           this.snackbarStore.open({
             text: 'Your password has been changed successfully.',
             color: 'success'
