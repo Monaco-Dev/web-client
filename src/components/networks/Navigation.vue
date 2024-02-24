@@ -6,7 +6,7 @@
     <v-list-subheader>Networks</v-list-subheader>
 
     <v-list-item
-      :title="`Incoming invites: ${auth.incoming_invites_count}`"
+      :title="`Incoming invites: ${auth?.incoming_invites_count}`"
       to="/networks/incoming-invites"
       link
       nav
@@ -15,7 +15,7 @@
       append-icon="mdi-chevron-right"
     />
     <v-list-item
-      :title="`Outgoing invites: ${auth.outgoing_invites_count}`"
+      :title="`Outgoing invites: ${auth?.outgoing_invites_count}`"
       to="/networks/outgoing-invites"
       link
       nav
@@ -24,7 +24,7 @@
       append-icon="mdi-chevron-right"
     />
     <v-list-item
-      :title="`Connections: ${auth.connections_count}`"
+      :title="`Connections: ${auth?.connections_count}`"
       to="/networks/connections"
       link
       nav
@@ -33,7 +33,7 @@
       append-icon="mdi-chevron-right"
     />
     <v-list-item
-      :title="`Followers: ${auth.followers_count}`"
+      :title="`Followers: ${auth?.followers_count}`"
       to="/networks/followers"
       link
       nav
@@ -42,7 +42,7 @@
       append-icon="mdi-chevron-right"
     />
     <v-list-item
-      :title="`Following: ${auth.following_count}`"
+      :title="`Following: ${auth?.following_count}`"
       to="/networks/following"
       link
       nav

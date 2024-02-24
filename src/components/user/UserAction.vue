@@ -13,6 +13,7 @@
           block
           @click.prevent="$refs.sendInvitationDialog.dialog=true"
           :loading="item.connect_loading"
+          :disabled="item.disabled"
           class="text-none"
         >
           Connect
@@ -48,6 +49,7 @@
           block
           @click.prevent="disconnect"
           :loading="item.disconnect_loading"
+          :disabled="item.disabled"
           class="text-none"
         >
           Disconnect
@@ -66,6 +68,7 @@
           block
           @click.prevent="accept"
           :loading="item.accept_loading"
+          :disabled="item.disabled"
           class="text-none"
         >
           Accept
@@ -84,6 +87,7 @@
           block
           @click.prevent="follow"
           :loading="item.follow_loading"
+          :disabled="item.disabled"
           class="text-none"
         >
           Follow
@@ -101,6 +105,7 @@
           block
           @click.prevent="unfollow"
           :loading="item.unfollow_loading"
+          :disabled="item.disabled"
           class="text-none"
         >
           Unfollow
@@ -164,6 +169,7 @@ export default {
     },
     setLoading (status, action) {
       this.item[`${action}_loading`] = status
+      this.item.disabled = status
     },
     connect (form) {
       this.setLoading(true, 'connect')
