@@ -29,6 +29,14 @@
               elevation="0"
             >
               <v-expansion-panel-text>
+                <v-switch
+                  v-model="onlyPins"
+                  label="Show only pinned"
+                  hide-details
+                  density="compact"
+                  color="primary"
+                />
+
                 <PostList
                   :posts="matches.data"
                   @load="load"
@@ -79,7 +87,8 @@ export default {
         meta: {
           current_page: 1
         }
-      }
+      },
+      onlyPins: false
     }
   },
   mounted () {
@@ -88,6 +97,11 @@ export default {
   computed: {
     isAuthenticated () {
       return AuthService.getUser().id === this.post.user_id
+    }
+  },
+  watch: {
+    onlyPins () {
+      this.getMatches()
     }
   },
   methods: {
@@ -117,7 +131,11 @@ export default {
         }
       }
 
-      return Post.searchMatches(this.post.id, { page: this.matches.meta.current_page })
+      return Post.searchMatches(this.post.id,
+        {
+          page: this.matches.meta.current_page,
+          only_pins: this.onlyPins
+        })
         .then(({ data }) => {
           const posts = data
 
