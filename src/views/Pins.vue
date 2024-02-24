@@ -9,6 +9,8 @@
           :posts="posts"
           :loading="loading"
           @load="load"
+          @click:unpin="unpin"
+          @click:archive="archive"
         />
       </template>
     </AppGrid>
@@ -79,6 +81,13 @@ export default {
 
           return done('ok')
         })
+    },
+
+    unpin (post) {
+      this.postStore.deletePost(post.id)
+    },
+    archive (post) {
+      this.postStore.deletePost(post.id)
     }
   }
 }
