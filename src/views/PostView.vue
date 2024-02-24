@@ -16,7 +16,7 @@
             @click:pin="pin"
             @click:unpin="unpin"
             @click:archive="archive"
-            @click:submit="submit"
+            @click:submit="getPost"
           />
 
           <v-expansion-panels
@@ -110,6 +110,13 @@ export default {
     getMatches () {
       this.loading = true
 
+      this.matches = {
+        data: [],
+        meta: {
+          current_page: 1
+        }
+      }
+
       return Post.searchMatches(this.post.id, { page: this.matches.meta.current_page })
         .then(({ data }) => {
           const posts = data
@@ -145,9 +152,6 @@ export default {
         .catch(({ response }) => this.httpException(response))
     },
 
-    submit (data) {
-      this.post = PostService.mapPost(data)
-    },
     pin (data) {
       this.post = PostService.mapPost(data)
     },
