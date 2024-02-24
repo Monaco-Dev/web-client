@@ -115,15 +115,15 @@
                   size="46"
                 >
                   <v-img
-                    v-if="user?.avatar_url"
-                    :src="user?.avatar_url"
+                    v-if="getAvatar()"
+                    :src="getAvatar()"
                     cover
                   />
                   <span
                     class="text-white"
                     v-else
                   >
-                    {{ user?.first_name?.charAt(0) }}{{ user?.last_name?.charAt(0) }}
+                    {{ getInitials() }}
                   </span>
                 </v-avatar>
               </v-badge>
@@ -164,11 +164,6 @@ export default {
       search: null
     }
   },
-  computed: {
-    user () {
-      return AuthService.getUser()
-    }
-  },
   watch: {
     tabValue () {
       this.tabStore.setTab(this.tab)
@@ -178,6 +173,12 @@ export default {
     }
   },
   methods: {
+    getAvatar () {
+      return AuthService.getUser()?.avatar_url
+    },
+    getInitials () {
+      return AuthService.getUser()?.first_name?.charAt(0) + AuthService.getUser()?.last_name?.charAt(0)
+    },
     searchDialog () {
       if (this.search) {
         this.$router.push({ query: { search: this.search } })

@@ -2,7 +2,7 @@
   <v-app-bar
     elevation="1"
     app
-    v-if="auth"
+    v-if="isAuth"
   >
     <v-app-bar-title>
       <v-card
@@ -37,20 +37,20 @@
         icon
         variant="tonal"
         size="small"
-        :href="`/profile/${user.slug}`"
+        :href="`/profile/${getSlug()}`"
         class="ml-2"
       >
         <v-avatar color="grey">
           <v-img
-            v-if="user?.avatar_url"
-            :src="user?.avatar_url"
+            v-if="getAvatar()"
+            :src="getAvatar"
             cover
           />
           <span
             class="text-white"
             v-else
           >
-            {{ user?.first_name?.charAt(0) }}{{ user?.last_name?.charAt(0) }}
+            {{ getInitials() }}
           </span>
         </v-avatar>
       </v-btn>
@@ -67,12 +67,18 @@ export default {
   setup () {
     return { searchStore: useSearchStore() }
   },
-  computed: {
-    auth () {
-      return AuthService.isAuthenticated()
+  methods: {
+    getAvatar () {
+      return AuthService.getUser()?.avatar_url
     },
-    user () {
-      return AuthService.getUser()
+    getInitials () {
+      return AuthService.getUser()?.first_name?.charAt(0) + AuthService.getUser()?.last_name?.charAt(0)
+    },
+    getSlug () {
+      return AuthService.getUser()?.slug
+    },
+    isAuth () {
+      return AuthService.isAuthenticated()
     }
   }
 }
