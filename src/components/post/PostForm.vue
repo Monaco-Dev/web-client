@@ -98,7 +98,7 @@
               mandatory="force"
             >
               <v-chip
-                v-for="type in types"
+                v-for="type in Object.keys(types)"
                 :key="type"
                 :value="type"
                 density="compact"
@@ -106,6 +106,12 @@
                 variant="outlined"
               >
                 {{ type }}
+                <v-tooltip
+                  activator="parent"
+                  location="top"
+                >
+                  {{ types[type] }}
+                </v-tooltip>
               </v-chip>
             </v-chip-group>
           </v-sheet>
@@ -241,7 +247,7 @@ export default {
       return AuthService.getUser()
     },
     types () {
-      return Object.keys(Constants.post.types)
+      return Constants.post.types
     }
   },
   watch: {
