@@ -249,12 +249,12 @@ export default {
 
       return User.update(AuthService.getUser().id, form)
         .then(({ data }) => {
-          AuthService.setUser(data)
-          this.reset()
           this.snackbarStore.open({
             text: 'Your profile information has been updated successfully.',
             color: 'success'
           })
+          AuthService.setUser(data)
+          this.reset()
         })
         .catch(({ response }) => {
           switch (response.status) {

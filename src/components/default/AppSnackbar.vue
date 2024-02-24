@@ -1,6 +1,6 @@
 <template>
   <v-snackbar
-    :model-value="snackbar"
+    v-model="bool"
     :timeout="timeout"
     :color="color"
   >
@@ -35,6 +35,19 @@ export default {
       text,
       timeout,
       color
+    }
+  },
+  data () {
+    return {
+      bool: this.snackbar
+    }
+  },
+  watch: {
+    snackbar () {
+      this.bool = this.snackbar
+    },
+    bool () {
+      this.snackbarStore.snackbar = this.bool
     }
   }
 }
