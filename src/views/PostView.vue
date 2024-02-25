@@ -184,7 +184,7 @@ export default {
         this.matches.data.map((val) => {
           if (val.id === data.id) return PostService.mapPost(data)
 
-          return PostService.mapPost(val)
+          return val
         }),
         'id'
       )
@@ -194,7 +194,7 @@ export default {
         this.matches.data.map((val) => {
           if (val.id === data.id) return PostService.mapPost(data)
 
-          return PostService.mapPost(val)
+          return val
         }),
         'id'
       )
