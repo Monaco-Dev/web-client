@@ -121,6 +121,8 @@ export default {
         })
     },
     getMatches () {
+      this.matchStore.reset()
+
       this.loading = true
 
       return Post.searchMatches(this.post.id,
