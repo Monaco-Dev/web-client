@@ -169,7 +169,7 @@ export default {
     }
   },
   mounted () {
-    this.reset()
+    if (AuthService.isAuthenticated()) this.reset()
   },
   computed: {
     formErrors () {

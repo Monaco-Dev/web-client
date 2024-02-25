@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted () {
-    this.getPost()
+    if (AuthService.isAuthenticated()) this.getPost()
   },
   computed: {
     isAuthenticated () {
