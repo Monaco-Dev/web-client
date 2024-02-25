@@ -43,7 +43,7 @@
         <v-avatar color="grey">
           <v-img
             v-if="getAvatar()"
-            :src="getAvatar"
+            :src="getAvatar()"
             cover
           />
           <span
