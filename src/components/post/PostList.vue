@@ -27,6 +27,7 @@
             @click:pin="$emit('click:pin', $event)"
             @click:unpin="$emit('click:unpin', $event)"
             @click:archive="$emit('click:archive', $event)"
+            @click:restore="$emit('click:restore', $event)"
           />
         </div>
       </div>

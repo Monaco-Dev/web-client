@@ -128,7 +128,6 @@ import AuthService from '@/composables/auth'
 import Post from '@/api/feed/post'
 import httpException from '@/composables/http-exception'
 import { useSnackbarStore } from '@/store/snackbar'
-import { usePostStore } from '@/store/post'
 
 export default {
   name: 'PostActions',
@@ -142,8 +141,7 @@ export default {
   setup () {
     return {
       httpException,
-      snackbarStore: useSnackbarStore(),
-      postStore: usePostStore()
+      snackbarStore: useSnackbarStore()
     }
   },
   computed: {
@@ -157,14 +155,12 @@ export default {
 
       return Post.unpin(this.post.id)
         .then(({ data }) => {
-          this.postStore.updatePost(data)
-
-          this.$emit('click:unpin', data)
-
           this.snackbarStore.open({
             text: 'You have unpinned a post successfully.',
             color: 'success'
           })
+
+          this.$emit('click:unpin', new Proxy(data, {}))
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.$emit('loading', false))
@@ -174,14 +170,12 @@ export default {
 
       return Post.pin(this.post.id)
         .then(({ data }) => {
-          this.postStore.updatePost(data)
-
-          this.$emit('click:pin', data)
-
           this.snackbarStore.open({
             text: 'You have pinned a post successfully.',
             color: 'success'
           })
+
+          this.$emit('click:pin', new Proxy(data, {}))
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.$emit('loading', false))
@@ -191,14 +185,12 @@ export default {
 
       return Post.destroy(this.post.id)
         .then(() => {
-          this.postStore.deletePost(this.post.id)
-
-          this.$emit('click:archive', this.post.id)
-
           this.snackbarStore.open({
             text: 'You have archived a post successfully.',
             color: 'success'
           })
+
+          this.$emit('click:archive', this.post.id)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.$emit('loading', false))
@@ -208,12 +200,12 @@ export default {
 
       return Post.restore(this.post.id)
         .then(() => {
-          this.postStore.deletePost(this.post.id)
-
           this.snackbarStore.open({
             text: 'You have restored a post successfully.',
             color: 'success'
           })
+
+          this.$emit('click:restore', this.post.id)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.$emit('loading', false))

@@ -38,7 +38,7 @@
                 />
 
                 <PostList
-                  :posts="matches.data"
+                  :posts="matches"
                   @load="load"
                   border
                   @click:pin="pinMatch"
@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import { usePostStore } from '@/store/post'
 import AppGrid from '@/components/default/desktop/AppGrid.vue'
 import PostItem from '@/components/post/PostItem.vue'
 import PostList from '@/components/post/PostList.vue'
@@ -62,7 +61,8 @@ import Post from '@/api/feed/post'
 import httpException from '@/composables/http-exception'
 import AuthService from '@/composables/auth'
 import PostService from '@/composables/post'
-import { uniqBy } from 'lodash'
+import { computed } from 'vue'
+import { useMatchStore } from '@/store/match'
 
 export default {
   name: 'PostView',
@@ -72,9 +72,14 @@ export default {
     AppGrid
   },
   setup () {
+    const matchStore = useMatchStore()
+
+    const matches = computed(() => matchStore.posts)
+
     return {
-      httpException,
-      postStore: usePostStore()
+      matchStore,
+      matches,
+      httpException
     }
   },
   data () {
@@ -82,12 +87,6 @@ export default {
       loading: false,
       post: {},
       panels: [0],
-      matches: {
-        data: [],
-        meta: {
-          current_page: 1
-        }
-      },
       onlyPins: false
     }
   },
@@ -124,25 +123,16 @@ export default {
     getMatches () {
       this.loading = true
 
-      this.matches = {
-        data: [],
-        meta: {
-          current_page: 1
-        }
-      }
-
       return Post.searchMatches(this.post.id,
         {
-          page: this.matches.meta.current_page,
+          page: this.matchStore.page,
           only_pins: this.onlyPins
         })
         .then(({ data }) => {
-          const posts = data
+          if (!data.data.length) return
 
-          posts.data = posts.data.map((v) => PostService.mapPost(v))
-          posts.meta.current_page = posts.meta.current_page + 1
-
-          this.matches = posts
+          this.matchStore.setPosts(data.data.map((v) => new Proxy(v, {})))
+          this.matchStore.setPage(data.meta.current_page + 1)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => {
@@ -152,18 +142,12 @@ export default {
     load ({ done }) {
       if (!AuthService.isAuthenticated() || !Object.keys(this.post).length) return done('empty')
 
-      return Post.searchMatches(this.post.id, { page: this.matches.meta.current_page })
+      return Post.searchMatches(this.post.id, { page: this.matchStore.page })
         .then(({ data }) => {
           if (!data.data.length) return done('empty')
 
-          const posts = data
-
-          posts.meta.current_page = posts.meta.current_page + 1
-
-          this.matches = {
-            ...posts,
-            data: [...this.matches.data, ...posts.data.map((v) => PostService.mapPost(v))]
-          }
+          this.matchStore.setPosts(data.data.map((v) => new Proxy(v, {})))
+          this.matchStore.setPage(data.meta.current_page + 1)
 
           return done('ok')
         })
@@ -180,24 +164,12 @@ export default {
       this.$router.replace({ name: 'Home' })
     },
     pinMatch (data) {
-      this.matches.data = uniqBy(
-        this.matches.data.map((val) => {
-          if (val.id === data.id) return PostService.mapPost(data)
-
-          return val
-        }),
-        'id'
-      )
+      this.matchStore.updatePost(data)
     },
     unpinMatch (data) {
-      this.matches.data = uniqBy(
-        this.matches.data.map((val) => {
-          if (val.id === data.id) return PostService.mapPost(data)
+      this.matchStore.updatePost(data)
 
-          return val
-        }).filter((val) => (val.id !== data.id)),
-        'id'
-      )
+      if (this.onlyPins) this.matchStore.deletePost(data.id)
     }
   }
 }

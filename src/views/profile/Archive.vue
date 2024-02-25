@@ -5,6 +5,7 @@
         :posts="posts"
         :loading="loading"
         @load="load"
+        @click:restore="restore"
         :is-archived="true"
       />
     </template>
@@ -76,6 +77,10 @@ export default {
 
           return done('ok')
         })
+    },
+
+    restore (data) {
+      this.postStore.deletePost(data.id)
     }
   }
 }

@@ -60,6 +60,7 @@
           @click:pin="$emit('click:pin', $event)"
           @click:unpin="$emit('click:unpin', $event)"
           @click:archive="$emit('click:archive', $event)"
+          @click:restore="$emit('click:restore', $event)"
         />
       </v-badge>
 
@@ -71,6 +72,7 @@
         @click:pin="$emit('click:pin', $event)"
         @click:unpin="$emit('click:unpin', $event)"
         @click:archive="$emit('click:archive', $event)"
+        @click:restore="$emit('click:restore', $event)"
       />
     </template>
 
@@ -335,7 +337,7 @@ export default {
     }
   },
   watch: {
-    'postStore.posts' () {
+    post () {
       this.init()
     }
   },

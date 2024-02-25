@@ -7,6 +7,9 @@
         :posts="posts"
         :loading="loading"
         @load="load"
+        @click:pin="pin"
+        @click:unpin="unpin"
+        @click:archive="archive"
       />
     </template>
   </AppGrid>
@@ -99,6 +102,16 @@ export default {
 
         return done('ok')
       })
+    },
+
+    pin (data) {
+      this.postStore.updatePost(data)
+    },
+    unpin (data) {
+      this.postStore.updatePost(data)
+    },
+    archive (data) {
+      this.postStore.deletePost(data.id)
     }
   }
 }
