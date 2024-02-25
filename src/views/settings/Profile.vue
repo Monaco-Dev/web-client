@@ -15,7 +15,10 @@
       </template>
 
       <v-card-text class="ma-3 pa-0">
-        <v-row>
+        <v-row
+          align="center"
+          justify="center"
+        >
           <v-col
             cols="12"
             md="4"
@@ -67,7 +70,11 @@
             </p>
           </v-col>
 
-          <v-col align-self="center">
+          <v-col
+            align-self="center"
+            cols="12"
+            md="7"
+          >
             <v-row>
               <v-col
                 cols="12"
@@ -106,6 +113,76 @@
               </v-col>
             </v-row>
           </v-col>
+
+          <v-col
+            cols="12"
+            md="9"
+            align-self="center"
+          >
+            <br>
+
+            <h3>Social accounts:</h3>
+
+            <br>
+
+            <v-row
+              align="center"
+              justify="center"
+            >
+              <v-col
+                cols="12"
+                align-self="center"
+                v-for="(social, key) in form.socials"
+                :key="key"
+              >
+                <v-row>
+                  <v-col cols="2">
+                    <v-select
+                      flat
+                      variant="solo-filled"
+                      density="comfortable"
+                      :items="providers"
+                      hide-details="auto"
+                      item-value="value"
+                      item-title="value"
+                      v-model="social.provider"
+                      placeholder="..."
+                      :max-errors="formErrors.socials[key]?.provider?.length"
+                      :error-messages="formErrors.socials[key]?.provider"
+                      :prepend-icon="(!key) ? 'mdi-plus' : 'mdi-blank'"
+                      @click:prepend="(!key) ? addSocial() : null"
+                      menu-icon=""
+                    >
+                      <template #item="{ props, item }">
+                        <v-list-item
+                          v-bind="props"
+                          class="text-center"
+                          title=""
+                        >
+                          <v-icon>{{ item.raw.icon }}</v-icon>
+                        </v-list-item>
+                      </template>
+
+                      <template #selection="{item}">
+                        <v-icon>{{ item.raw.icon }}</v-icon>
+                      </template>
+                    </v-select>
+                  </v-col>
+
+                  <v-col cols="9">
+                    <v-text-field-primary
+                      placeholder="Link here"
+                      v-model="social.url"
+                      :append-icon="(form.socials.length === 1 && !social.url && !social.provider) ? '' : 'mdi-delete'"
+                      @click:append="removeSocial(key)"
+                      :max-errors="formErrors.socials[key]?.url?.length"
+                      :error-messages="formErrors.socials[key]?.url"
+                    />
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-col>
         </v-row>
       </v-card-text>
 
@@ -132,9 +209,11 @@
 import { useVuelidate } from '@vuelidate/core'
 import {
   required,
+  requiredIf,
   maxLength,
   minLength,
   numeric,
+  url,
   helpers
 } from '@vuelidate/validators'
 import { useSnackbarStore } from '@/store/snackbar'
@@ -157,16 +236,29 @@ export default {
         first_name: null,
         last_name: null,
         phone_number: null,
-        avatar: null
+        avatar: null,
+        socials: [
+          {
+            provider: null,
+            url: null
+          }
+        ]
       },
       apiErrors: {
         first_name: [],
         last_name: [],
         phone_number: [],
-        avatar: []
+        avatar: [],
+        socials: []
       },
       source: null,
-      loading: false
+      loading: false,
+      providers: [
+        {
+          value: 'facebook',
+          icon: 'mdi-facebook'
+        }
+      ]
     }
   },
   mounted () {
@@ -174,11 +266,23 @@ export default {
   },
   computed: {
     formErrors () {
+      const socials = []
+
+      if (this.v$.form.socials.$anyDirty) {
+        this.form.socials.forEach((element, key) => {
+          socials.push({
+            provider: this.v$.form.socials.$each.$response.$errors[key].provider.map(v => v.$message),
+            url: this.v$.form.socials.$each.$response.$errors[key].url.map(v => v.$message)
+          })
+        })
+      }
+
       return {
         first_name: this.v$.form.first_name.$errors.map(v => v.$message).concat(this.apiErrors.first_name).filter(Boolean),
         last_name: this.v$.form.last_name.$errors.map(v => v.$message).concat(this.apiErrors.last_name).filter(Boolean),
         phone_number: this.v$.form.phone_number.$errors.map(v => v.$message).concat(this.apiErrors.phone_number).filter(Boolean),
-        avatar: this.apiErrors.avatar
+        avatar: this.apiErrors.avatar,
+        socials
       }
     },
     initials () {
@@ -206,6 +310,13 @@ export default {
     }
   },
   methods: {
+    addSocial () {
+      this.form.socials.push({ provider: null, url: null })
+    },
+    removeSocial (key) {
+      this.form.socials.splice(key, 1)
+      if (!this.form.socials.length) this.addSocial()
+    },
     getFullName () {
       return AuthService.getUser()?.full_name
     },
@@ -232,6 +343,11 @@ export default {
       this.form.last_name = user.last_name
       this.form.phone_number = user.phone_number
       this.form.avatar = null
+
+      if (user.socials.length) {
+        this.form.socials = user.socials
+      }
+
       this.source = user.avatar_url
       this.loading = false
 
@@ -239,11 +355,18 @@ export default {
         first_name: [],
         last_name: [],
         phone_number: [],
-        avatar: []
+        avatar: [],
+        socials: [
+          {
+            provider: null,
+            url: null
+          }
+        ]
       }
     },
     async submit () {
       const result = await this.v$.$validate()
+
       if (!result) return
 
       const form = { ...this.form }
@@ -290,6 +413,21 @@ export default {
           maxLength: maxLength(11),
           minLength: minLength(11),
           required: helpers.withMessage('This field cannot be empty', required)
+        },
+        socials: {
+          $each: helpers.forEach({
+            provider: {
+              required: requiredIf(function (form, a) {
+                return !!a.url
+              })
+            },
+            url: {
+              url,
+              required: requiredIf(function (form, a) {
+                return !!a.provider
+              })
+            }
+          })
         }
       }
     }

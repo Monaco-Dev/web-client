@@ -2,6 +2,10 @@
   <AppGrid>
     <template #center>
       <v-list>
+        <v-list-subheader>
+          Contacts
+        </v-list-subheader>
+
         <v-list-item>
           <template #prepend>
             <v-icon
@@ -27,6 +31,30 @@
 
           <v-list-item-title>
             {{ profile.phone_number ?? 'None' }}
+          </v-list-item-title>
+        </v-list-item>
+
+        <v-list-subheader v-if="profile?.socials?.length">
+          Socials
+        </v-list-subheader>
+
+        <v-list-item
+          v-for="(social, key) in profile.socials"
+          :key="key"
+        >
+          <template #prepend>
+            <v-icon
+              :icon="`mdi-${social.provider}`"
+              start
+              size="small"
+            />
+          </template>
+
+          <v-list-item-title>
+            <a
+              :href="social.url"
+              target="_blank"
+            >{{ social.url }}</a>
           </v-list-item-title>
         </v-list-item>
       </v-list>
