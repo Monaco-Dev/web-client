@@ -15,6 +15,7 @@
             contain
             width="250"
             height="100"
+            alt="Realmate"
           />
         </v-btn>
       </div>

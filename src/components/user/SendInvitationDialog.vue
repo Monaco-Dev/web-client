@@ -17,6 +17,7 @@
               v-if="user?.avatar_url"
               :src="user?.avatar_url"
               cover
+              :alt="user?.full_name"
             />
             <span
               class="text-white"

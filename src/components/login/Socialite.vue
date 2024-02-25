@@ -10,14 +10,6 @@
 
     <v-col cols="12">
       <SocialBtn
-        icon="facebook"
-        text="Continue with Facebook"
-        @click="redirect('facebook')"
-      />
-    </v-col>
-
-    <v-col cols="12">
-      <SocialBtn
         icon="linkedin"
         text="Continue with LinkedIn"
         @click="redirect('linkedin-openid')"

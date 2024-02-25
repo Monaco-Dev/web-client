@@ -19,7 +19,10 @@
             cols="5"
             align-self="center"
           >
-            <v-img src="@/assets/verification.avif" />
+            <v-img
+              src="@/assets/verification.avif"
+              alt="Realmate"
+            />
           </v-col>
 
           <v-col

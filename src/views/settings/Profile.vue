@@ -40,6 +40,7 @@
                   v-if="source"
                   :src="source"
                   cover
+                  :alt="getFullName()"
                 />
                 <span
                   class="text-white"
@@ -205,6 +206,9 @@ export default {
     }
   },
   methods: {
+    getFullName () {
+      return AuthService.getUser()?.full_name
+    },
     upload () {
       if (this.form.avatar?.[0]) {
         this.source = window.URL.createObjectURL(this.form.avatar[0])

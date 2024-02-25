@@ -21,6 +21,7 @@
             width="150"
             height="100"
             contain
+            alt="Realmate"
           />
         </v-card>
 
@@ -118,6 +119,7 @@
                     v-if="getAvatar()"
                     :src="getAvatar()"
                     cover
+                    :alt="getFullName()"
                   />
                   <span
                     class="text-white"
@@ -173,6 +175,9 @@ export default {
     }
   },
   methods: {
+    getFullName () {
+      return AuthService.getUser()?.full_name
+    },
     getAvatar () {
       return AuthService.getUser()?.avatar_url
     },

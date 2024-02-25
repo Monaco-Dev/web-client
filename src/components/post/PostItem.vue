@@ -18,6 +18,7 @@
           v-if="item?.user?.avatar_url"
           :src="item?.user?.avatar_url"
           cover
+          :alt="item?.user?.full_name"
         />
         <span
           class="text-white"
@@ -92,6 +93,7 @@
                 v-if="item?.content?.user?.avatar_url"
                 :src="item?.content?.user?.avatar_url"
                 cover
+                :alt="item?.content?.user?.full_name"
               />
               <span
                 class="text-white"

@@ -8,7 +8,7 @@
   >
     <v-img
       :src="src"
-      alt=""
+      :alt="icon"
       class="social-logo"
     />
 
@@ -35,9 +35,6 @@ export default {
       switch (this.icon) {
         case 'google':
           return new URL('@/assets/icon-google.svg', import.meta.url).href
-
-        case 'facebook':
-          return new URL('@/assets/icon-facebook.svg', import.meta.url).href
 
         case 'linkedin':
           return new URL('@/assets/icon-linkedin.svg', import.meta.url).href

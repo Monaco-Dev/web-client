@@ -14,6 +14,7 @@
               src="@/assets/icon.png"
               contain
               width="100"
+              alt="Realmate"
             />
           </v-col>
         </v-row>
