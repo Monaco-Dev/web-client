@@ -195,7 +195,7 @@ export default {
           if (val.id === data.id) return PostService.mapPost(data)
 
           return val
-        }),
+        }).filter((val) => (val.id !== data.id)),
         'id'
       )
     }
