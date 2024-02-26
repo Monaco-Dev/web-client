@@ -144,7 +144,10 @@ export default {
     load ({ done }) {
       if (!AuthService.isAuthenticated() || !Object.keys(this.post).length) return done('empty')
 
-      return Post.searchMatches(this.post.id, { page: this.matchStore.page })
+      return Post.searchMatches(this.post.id, {
+        page: this.matchStore.page,
+        only_pins: this.onlyPins
+      })
         .then(({ data }) => {
           if (!data.data.length) return done('empty')
 
