@@ -12,7 +12,7 @@
     <template #prepend>
       <v-avatar
         color="grey"
-        @click.stop="viewUser(item.user.slug)"
+        @click.stop="viewUser(item.user.uuid)"
       >
         <v-img
           v-if="item?.user?.avatar_url"
@@ -32,7 +32,7 @@
     <template #title>
       <span
         class="text-body-1"
-        @click.stop="viewUser(item.user.slug)"
+        @click.stop="viewUser(item.user.uuid)"
       >
         {{ item.user.full_name }}
       </span>
@@ -41,7 +41,7 @@
     <template #subtitle>
       <span
         class="text-caption"
-        @click.stop="viewUser(item.user.slug)"
+        @click.stop="viewUser(item.user.uuid)"
       >
         {{ item.timestamp }} {{ item.is_edited ? '&bull; Edited' : null }}
       </span>
@@ -89,7 +89,7 @@
           <template #prepend>
             <v-avatar
               color="grey"
-              @click.stop="viewUser(item.content.user.slug)"
+              @click.stop="viewUser(item.content.user.uuid)"
             >
               <v-img
                 v-if="item?.content?.user?.avatar_url"
@@ -109,7 +109,7 @@
           <template #title>
             <span
               class="text-body-1"
-              @click.stop="viewUser(item.content.user.slug)"
+              @click.stop="viewUser(item.content.user.uuid)"
             >
               {{ item.content.user.full_name }}
             </span>
@@ -118,7 +118,7 @@
           <template #subtitle>
             <span
               class="text-caption"
-              @click.stop="viewUser(post.content.user.slug)"
+              @click.stop="viewUser(post.content.user.uuid)"
             >
               {{ post.content.timestamp }} {{ item.content.is_edited ? '&bull; Edited' : null }}
             </span>
@@ -373,10 +373,10 @@ export default {
       this.searchStore.reset()
       this.$router.push(`/posts/${uuid}`)
     },
-    viewUser (slug) {
+    viewUser (uuid) {
       this.searchStore.closeDialog()
       this.searchStore.reset()
-      this.$router.push(`/profile/${slug}`)
+      this.$router.push(`/profile/${uuid}`)
     }
   }
 }

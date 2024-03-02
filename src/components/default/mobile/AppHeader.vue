@@ -38,7 +38,7 @@
         icon
         variant="tonal"
         size="small"
-        :href="`/profile/${getSlug()}`"
+        :href="`/profile/${getUuid()}`"
         class="ml-2"
       >
         <v-avatar color="grey">
@@ -79,8 +79,8 @@ export default {
     getInitials () {
       return AuthService.getUser()?.first_name?.charAt(0) + AuthService.getUser()?.last_name?.charAt(0)
     },
-    getSlug () {
-      return AuthService.getUser()?.slug
+    getUuid () {
+      return AuthService.getUser()?.uuid
     },
     isAuth () {
       return AuthService.isAuthenticated()

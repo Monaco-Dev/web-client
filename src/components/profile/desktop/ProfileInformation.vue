@@ -103,7 +103,7 @@
                 color="primary"
                 link
                 nav
-                :to="`/profile/${profile.slug}/archive`"
+                :to="`/profile/${profile.uuid}/archive`"
                 density="compact"
               >
                 <template #prepend>
@@ -145,7 +145,7 @@
         color="primary"
       >
         <v-tab
-          :to="`/profile/${profile.slug}`"
+          :to="`/profile/${profile.uuid}`"
           exact
           rounded="pill"
           class="text-none"
@@ -155,7 +155,7 @@
         </v-tab>
 
         <v-tab
-          :to="`/profile/${profile.slug}/about`"
+          :to="`/profile/${profile.uuid}/about`"
           rounded="pill"
           class="text-none"
           value="ProfileAbout"
@@ -195,7 +195,7 @@ export default {
   },
   computed: {
     auth () {
-      return this.user.slug === this.profile?.slug
+      return this.user.uuid === this.profile?.uuid
     },
     user () {
       return AuthService.getUser()

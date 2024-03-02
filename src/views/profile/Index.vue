@@ -47,7 +47,7 @@ export default {
     })
   },
   async beforeRouteUpdate (to, from) {
-    if (to.params.slug !== from.params.slug) await this.fetch(to)
+    if (to.params.uuid !== from.params.uuid) await this.fetch(to)
 
     if (to.name === 'ProfileAbout' && !this.auth && !this.profile.is_connection) {
       this.$router.replace({ name: 'PageNotFound' })
@@ -55,18 +55,18 @@ export default {
   },
   computed: {
     auth () {
-      return AuthService.getUser().slug === this.profile?.slug
+      return AuthService.getUser().uuid === this.profile?.uuid
     }
   },
   methods: {
     fetch (to) {
       this.profileStore.reset()
 
-      const slug = to.params.slug
+      const uuid = to.params.uuid
 
-      if (!slug) this.$router.replace({ name: 'PageNotFound' })
+      if (!uuid) this.$router.replace({ name: 'PageNotFound' })
 
-      return this.profileStore.getProfile(slug)
+      return this.profileStore.getProfile(uuid)
         .catch(({ response }) => {
           if (response.status === 404) {
             this.$router.replace({ name: 'PageNotFound' })

@@ -4,7 +4,7 @@
     nav
     :title="user.full_name"
     :subtitle="subtitle"
-    :href="`/profile/${user.slug}`"
+    :href="`/profile/${user.uuid}`"
   >
     <template #prepend>
       <v-avatar color="grey">

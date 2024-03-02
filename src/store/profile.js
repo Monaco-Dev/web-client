@@ -112,12 +112,12 @@ export const useProfileStore = defineStore('profile', {
     /**
      * Fetch user profile
      *
-     * @param * slug
+     * @param * uuid
      */
-    getProfile (slug) {
+    getProfile (uuid) {
       this.setLoading(true)
 
-      return User.show(slug)
+      return User.show(uuid)
         .then(({ data }) => this.setProfile(data))
         .finally(() => this.setLoading(false))
     }

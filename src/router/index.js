@@ -64,7 +64,7 @@ const routes = [
         beforeEnter: (to, from, next) => GuardService.authorized(next)
       },
       {
-        path: 'profile/:slug',
+        path: 'profile/:uuid',
         name: 'ProfileIndex',
         component: () => import('@/views/profile/Index.vue'),
         children: [

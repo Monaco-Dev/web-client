@@ -9,7 +9,7 @@
       <v-list-item
         nav
         link
-        :to="`/profile/${user?.slug}`"
+        :to="`/profile/${user?.uuid}`"
         :title="user?.full_name"
         subtitle="See profile"
       >
