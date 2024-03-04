@@ -5,7 +5,6 @@ const {
   http,
   show,
   store,
-  update,
   destroy,
   search
 } = api
@@ -21,9 +20,17 @@ export default {
   http,
   show,
   store,
-  update,
   search,
   destroy,
+
+  /**
+   * Update the specified resource in storage.
+   *
+   */
+  update (payload) {
+    return this.http(this.baseUrl)
+      .post(`${this.url}/update`, payload)
+  },
 
   searchWall (id, payload) {
     return this.http(this.baseUrl)
