@@ -80,7 +80,7 @@ export default {
     },
 
     restore (data) {
-      this.postStore.deletePost(data.id)
+      this.postStore.deletePost(data)
     }
   }
 }

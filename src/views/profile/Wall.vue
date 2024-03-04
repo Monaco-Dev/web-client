@@ -111,7 +111,7 @@ export default {
       this.postStore.updatePost(data)
     },
     archive (data) {
-      this.postStore.deletePost(data.id)
+      this.postStore.deletePost(data)
     }
   }
 }
