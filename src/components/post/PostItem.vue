@@ -128,54 +128,11 @@
             @click.stop
             style="cursor: auto"
           >
-            <v-chip
-              density="compact"
-              class="mb-3"
-              variant="outlined"
-              color="primary"
-            >
-              {{ item?.shared_post?.content?.type }}
-              <v-tooltip
-                activator="parent"
-                location="top"
-              >
-                {{ Constants.post.types[item?.shared_post?.content?.type] }}
-              </v-tooltip>
-            </v-chip>
-
-            <p
-              v-if="!item?.shared_post?.content?.hasSummary"
-              class="ma-0"
-              v-html="item?.shared_post?.content?.body"
+            <PostContent
+              :tags="item?.tags"
+              :content="item?.shared_post.content"
+              @click:seeMore="item.shared_post.content.expanded = !item.shared_post.content.expanded"
             />
-            <p
-              v-else-if="item?.shared_post?.content?.hasSummary && item?.shared_post?.content?.expanded"
-              class="ma-0"
-              v-html="item?.shared_post?.content?.body"
-            />
-            <p
-              v-else
-              class="ma-0"
-              v-html="item?.shared_post?.content?.summary"
-            />
-
-            <div
-              class="text-center"
-              v-if="item?.shared_post?.content?.hasSummary"
-            >
-              <v-btn
-                size="small"
-                flat
-                variant="tonal"
-                class="text-none"
-                @click.stop="item.shared_post.content.expanded = !item.shared_post.content.expanded"
-              >
-                See {{ item?.shared_post?.content?.expanded ? 'less' : 'more' }}
-                <v-icon end>
-                  {{ item?.shared_post?.content?.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-                </v-icon>
-              </v-btn>
-            </div>
           </v-card-text>
         </v-card>
       </div>
@@ -184,54 +141,11 @@
         v-else
         style="cursor: auto"
       >
-        <v-chip
-          density="compact"
-          class="mb-3"
-          variant="outlined"
-          color="primary"
-        >
-          {{ item?.content?.type }}
-          <v-tooltip
-            activator="parent"
-            location="top"
-          >
-            {{ Constants.post.types[item?.content?.type] }}
-          </v-tooltip>
-        </v-chip>
-
-        <p
-          v-if="!item?.content?.hasSummary"
-          class="ma-0"
-          v-html="item?.content?.body"
+        <PostContent
+          :content="item?.content"
+          :tags="item?.tags"
+          @click:seeMore="item.content.expanded = !item.content.expanded"
         />
-        <p
-          v-else-if="item?.content?.hasSummary && item?.content.expanded"
-          class="ma-0"
-          v-html="item?.content?.body"
-        />
-        <p
-          v-else
-          class="ma-0"
-          v-html="item?.content?.summary"
-        />
-
-        <div
-          class="text-center"
-          v-if="item?.content?.hasSummary"
-        >
-          <v-btn
-            size="small"
-            flat
-            variant="tonal"
-            class="text-none"
-            @click.stop="item.content.expanded = !item.content.expanded"
-          >
-            See {{ item?.content?.expanded ? 'less' : 'more' }}
-            <v-icon end>
-              {{ item?.content?.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-            </v-icon>
-          </v-btn>
-        </div>
       </div>
     </v-card-text>
 
@@ -253,7 +167,7 @@
         <v-icon start>
           mdi-share
         </v-icon>
-        Share
+        {{ item?.shares_count }} Shares
       </v-btn>
 
       <v-spacer />
@@ -262,7 +176,6 @@
         v-if="isAuthenticated && !item?.is_shared"
         size="small"
         flat
-        variant="tonal"
         color="primary"
         class="text-none"
       >
@@ -284,12 +197,12 @@ import { useSnackbarStore } from '@/store/snackbar'
 import { usePostStore } from '@/store/post'
 import { useSearchStore } from '@/store/search'
 import { ref } from 'vue'
+import PostActions from '@/components/post/PostActions.vue'
 import AuthService from '@/composables/auth'
 import httpException from '@/composables/http-exception'
-import PostActions from '@/components/post/PostActions.vue'
-import PostForm from '@/components/post/PostForm.vue'
 import Post from '@/api/feed/post'
-import Constants from '@/config/constants'
+import PostForm from '@/components/post/PostForm.vue'
+import PostContent from '@/components/post/PostContent.vue'
 
 export default {
   name: 'PostItem',
@@ -318,11 +231,10 @@ export default {
       snackbarStore: useSnackbarStore(),
       postStore: usePostStore(),
       postForm,
-      searchStore: useSearchStore(),
-      Constants
+      searchStore: useSearchStore()
     }
   },
-  components: { PostActions, PostForm },
+  components: { PostActions, PostForm, PostContent },
   data () {
     return {
       item: {}

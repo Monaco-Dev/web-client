@@ -93,76 +93,81 @@
         </template>
 
         <v-card-text class="pa-0">
-          <v-sheet class="ma-3">
-            <v-chip-group
-              v-model="form.type"
-              color="primary"
-              mandatory="force"
+          <v-row class="ma-3">
+            <v-col
+              cols="12"
+              align-self="center"
             >
-              <v-chip
-                v-for="type in Object.keys(types)"
-                :key="type"
-                :value="type"
-                density="compact"
-                class="mx-2"
-                variant="outlined"
-              >
-                {{ type }}
-                <v-tooltip
-                  activator="parent"
-                  location="top"
-                >
-                  {{ types[type] }}
-                </v-tooltip>
-              </v-chip>
-            </v-chip-group>
-          </v-sheet>
-
-          <v-menu
-            v-model="tagMenu"
-            transition="scale-transition"
-            min-width="auto"
-            offset-y
-            :close-on-content-click="false"
-          >
-            <template #activator="{ props }">
-              <v-textarea
-                id="content"
-                v-model="form.content"
-                class="mx-2"
-                autofocus
-                auto-grow
-                hide-details="auto"
+              <v-select
                 flat
-                placeholder="Write something..."
-                rows="5"
-                variant="solo"
-                v-bind="props"
-                @input="onInput"
-                :max-errors="formErrors.content.length"
-                :error-messages="formErrors.content"
-                @blur="v$.form.content.$touch()"
+                variant="solo-filled"
+                density="comfortable"
+                :items="types"
+                hide-details="auto"
+                item-title="title"
+                item-value="value"
+                v-model="form.type"
+                mandatory
+                label="Category"
               />
-            </template>
+            </v-col>
+          </v-row>
 
-            <v-list>
-              <v-list-item
-                v-for="(tag, key) in tags"
-                :key="key"
-                link
-                two-line
-                @click="add(tag)"
+          <v-textarea
+            v-model="form.content"
+            class="mx-2"
+            auto-grow
+            hide-details="auto"
+            flat
+            placeholder="Write something..."
+            rows="5"
+            variant="solo"
+            :max-errors="formErrors.content.length"
+            :error-messages="formErrors.content"
+            @blur="v$.form.content.$touch()"
+          />
+
+          <v-row class="ma-3">
+            <v-col
+              cols="12"
+              align-self="center"
+            >
+              <v-combobox
+                v-model="form.tags"
+                :items="tags"
+                label="Hashtags"
+                chips
+                closable-chips
+                multiple
+                @input="searchTags"
+                hide-details="auto"
+                variant="solo-filled"
+                density="comfortable"
+                flat
+                :loading="fetching"
+                clearable
+                item-title="name"
+                item-value="name"
+                return-value="name"
+                :return-object="false"
               >
-                <v-list-item-title>
-                  {{ `#${tag.name.en}` }}
-                </v-list-item-title>
+                <template #chip="{ props, item }">
+                  <v-chip
+                    v-bind="props"
+                    :text="item.name"
+                  />
+                </template>
 
-                <v-list-item-subtitle>
-                  {{ tag.taggables_count }} posts
-                </v-list-item-subtitle>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+                <template #item="{ props, item }">
+                  <v-list-item
+                    v-bind="props"
+                    :subtitle="`${item.raw.taggables_count} posts`"
+                    :title="`#${item.raw.name}`"
+                  />
+                </template>
+              </v-combobox>
+            </v-col>
+          </v-row>
         </v-card-text>
 
         <v-card-actions class="pa-0 my-2 mx-3">
@@ -184,10 +189,9 @@ import { computed } from 'vue'
 import { usePostStore } from '@/store/post'
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
-import _ from 'lodash'
+import _, { uniq } from 'lodash'
 import Tag from '@/api/feed/tag'
 import AuthService from '@/composables/auth'
-import Constants from '@/config/constants'
 import Post from '@/api/feed/post'
 import httpException from '@/composables/http-exception'
 
@@ -224,18 +228,46 @@ export default {
   },
   data () {
     return {
+      fetching: false,
       dialog: false,
       tagMenu: false,
       form: {
         content: null,
-        type: null
+        type: 'FS',
+        tags: []
       },
       apiErrors: {
         type: [],
-        content: []
+        content: [],
+        tags: []
       },
-      tags: [],
-      word: ''
+      types: [
+        {
+          title: 'For sale (FS)',
+          value: 'FS'
+        },
+        {
+          title: 'For lease (FL)',
+          value: 'FL'
+        },
+        {
+          title: 'For rent (FR)',
+          value: 'FR'
+        },
+        {
+          title: 'Willing to buy (WTB)',
+          value: 'WTB'
+        },
+        {
+          title: 'Willing to lease (WTL)',
+          value: 'WTL'
+        },
+        {
+          title: 'Willing to rent (WTR)',
+          value: 'WTR'
+        }
+      ],
+      tags: []
     }
   },
   computed: {
@@ -247,9 +279,6 @@ export default {
     },
     user () {
       return AuthService.getUser()
-    },
-    types () {
-      return Constants.post.types
     }
   },
   watch: {
@@ -258,6 +287,12 @@ export default {
     },
     'form.content' () {
       delete this.apiErrors.content
+    },
+    dialog () {
+      if (this.dialog) this.searchTags({})
+    },
+    'form.tags' () {
+      this.form.tags = uniq(this.form.tags?.map((v) => (v[0] !== '#') ? `#${v}` : v))
     }
   },
   methods: {
@@ -267,12 +302,16 @@ export default {
 
       this.postStore.setLoading(true)
 
+      const form = { ...this.form }
+
+      form.tags = form.tags.map((v) => v.replace('#', ''))
+
       let action
 
       if (this.isEdit) {
-        action = Post.update(this.post.id, this.form)
+        action = Post.update(this.post.id, form)
       } else {
-        action = Post.store(this.form)
+        action = Post.store(form)
       }
 
       return action
@@ -305,6 +344,7 @@ export default {
     onEdit () {
       this.form.content = this.post.content.original_body
       this.form.type = this.post.content.type
+      this.form.tags = this.post.tags?.map((v) => v.name)
       this.dialog = true
     },
     reset () {
@@ -312,71 +352,59 @@ export default {
 
       this.postStore.setLoading(false)
 
+      this.fetching = false
       this.dialog = false
       this.tagMenu = false
       this.form = {
         content: null,
-        type: null
+        type: 'FS'
       }
       this.apiErrors = {
         content: [],
-        type: []
+        type: [],
+        tags: []
       }
+      this.types = [
+        {
+          title: 'For sale (FS)',
+          value: 'FS'
+        },
+        {
+          title: 'For lease (FL)',
+          value: 'FL'
+        },
+        {
+          title: 'For rent (FR)',
+          value: 'FR'
+        },
+        {
+          title: 'Willing to buy (WTB)',
+          value: 'WTB'
+        },
+        {
+          title: 'Willing to lease (WTL)',
+          value: 'WTL'
+        },
+        {
+          title: 'Willing to rent (WTR)',
+          value: 'WTR'
+        }
+      ]
       this.tags = []
-      this.word = ''
     },
-    async onInput () {
-      const textarea = document.getElementById('content')
-      const sentence = textarea.value
+    searchTags: _.debounce(function (val) {
+      this.fetching = true
 
-      let pos = textarea.selectionStart
+      let text = val.data ?? null
 
-      if (pos === undefined) {
-        pos = 0
-      }
+      if (text) text = text.replace('#', '')
 
-      const before = sentence.substr(0, pos)
-      const text = /\S+$/.exec(before)
-
-      this.word = text ? text[0] : ''
-
-      if (this.word.charAt(0) === '#') {
-        await this.searchTags()
-        this.tagMenu = true
-      } else {
-        this.tagMenu = false
-      }
-    },
-    add (tag) {
-      const insertText = `#${tag.name.en} `
-      if (!insertText.length) return
-
-      const textarea = document.getElementById('content')
-      const sentence = textarea.value
-      const len = sentence.length
-      let pos = textarea.selectionStart
-      if (pos === undefined) {
-        pos = 0
-      }
-
-      let before = sentence.substr(0, pos)
-      const after = sentence.substr(pos, len)
-
-      before = before.substring(0, before.lastIndexOf('#'))
-
-      this.form.content = before + insertText + after
-
-      this.$nextTick().then(() => {
-        textarea.focus()
-        textarea.selectionEnd = pos + insertText.length
-      })
-    },
-    searchTags: _.debounce(function () {
-      return Tag.search({ search: this.word.replace('#', '') })
+      return Tag.search({ search: text })
         .then(({ data }) => {
           this.tags = data.data
         })
         .catch(({ response }) => this.httpException(response))
+        .finally(() => { this.fetching = false })
     }, 500)
   },
   validations () {

@@ -17,6 +17,7 @@ export default {
   mapPost (post) {
     post.timestamp = this.mapTime(post.created_at)
     post.matches_count = KFormatter(post.matches_count ?? 0)
+    post.shares_count = KFormatter(post.shares_count ?? 0)
     post.loading = false
 
     if (post.is_shared) {
@@ -30,21 +31,10 @@ export default {
         post.shared_post.content.summary = summary + '...'
         post.shared_post.content.summary = post.shared_post.content.summary.replace(/\n/g, '<br/>')
         post.shared_post.content.expanded = false
-
-        const summaryTags = post.shared_post.content.summary.match(/#\w+/g) ?? []
-        summaryTags.forEach(tag => {
-          post.shared_post.content.summary = post.shared_post.content.summary.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
-        })
       }
 
       post.shared_post.content.original_body = post.shared_post.content.body
       post.shared_post.content.body = post.shared_post.content.body.replace(/\n/g, '<br/>')
-
-      const bodyTags = post.shared_post.content.body.match(/#\w+/g) ?? []
-
-      bodyTags.forEach(tag => {
-        post.shared_post.content.body = post.shared_post.content.body.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
-      })
     } else {
       post.content.hasSummary = false
 
@@ -55,21 +45,10 @@ export default {
         post.content.summary = summary + '...'
         post.content.summary = post.content.summary.replace(/\n/g, '<br/>')
         post.content.expanded = false
-
-        const summaryTags = post.content.summary.match(/#\w+/g) ?? []
-        summaryTags.forEach(tag => {
-          post.content.summary = post.content.summary.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
-        })
       }
 
       post.content.original_body = post.content.body
       post.content.body = post.content.body.replace(/\n/g, '<br/>')
-
-      const bodyTags = post.content.body.match(/#\w+/g) ?? []
-
-      bodyTags.forEach(tag => {
-        post.content.body = post.content.body.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
-      })
     }
 
     return post
