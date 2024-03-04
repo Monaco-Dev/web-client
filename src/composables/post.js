@@ -20,30 +20,30 @@ export default {
     post.loading = false
 
     if (post.is_shared) {
-      post.content.content.hasSummary = false
-      post.content.timestamp = this.mapTime(post.content.created_at)
+      post.shared_post.content.hasSummary = false
+      post.shared_post.timestamp = this.mapTime(post.shared_post.created_at)
 
-      const summary = post.content.content.body.slice(0, 500)
+      const summary = post.shared_post.content.body.slice(0, 500)
 
       if (summary.length === 500) {
-        post.content.content.hasSummary = true
-        post.content.content.summary = summary + '...'
-        post.content.content.summary = post.content.content.summary.replace(/\n/g, '<br/>')
-        post.content.content.expanded = false
+        post.shared_post.content.hasSummary = true
+        post.shared_post.content.summary = summary + '...'
+        post.shared_post.content.summary = post.shared_post.content.summary.replace(/\n/g, '<br/>')
+        post.shared_post.content.expanded = false
 
-        const summaryTags = post.content.content.summary.match(/#\w+/g) ?? []
+        const summaryTags = post.shared_post.content.summary.match(/#\w+/g) ?? []
         summaryTags.forEach(tag => {
-          post.content.content.summary = post.content.content.summary.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
+          post.shared_post.content.summary = post.shared_post.content.summary.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
         })
       }
 
-      post.content.content.original_body = post.content.content.body
-      post.content.content.body = post.content.content.body.replace(/\n/g, '<br/>')
+      post.shared_post.content.original_body = post.shared_post.content.body
+      post.shared_post.content.body = post.shared_post.content.body.replace(/\n/g, '<br/>')
 
-      const bodyTags = post.content.content.body.match(/#\w+/g) ?? []
+      const bodyTags = post.shared_post.content.body.match(/#\w+/g) ?? []
 
       bodyTags.forEach(tag => {
-        post.content.content.body = post.content.content.body.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
+        post.shared_post.content.body = post.shared_post.content.body.replace(tag, `<a href="?search=${tag}">${tag}</a>`)
       })
     } else {
       post.content.hasSummary = false

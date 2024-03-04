@@ -56,6 +56,11 @@ export const usePostStore = defineStore('post', {
         this.posts.map((val) => {
           if (val.id === post.id) return Post.mapPost(post)
 
+          if (val.is_shared && val.shared_post.id === post.id) {
+            val.shared_post = post
+            return Post.mapPost(val)
+          }
+
           return val
         }),
         'id'

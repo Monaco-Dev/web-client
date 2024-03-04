@@ -34,22 +34,22 @@
         class="text-body-1"
         @click.stop="viewUser(item.user.uuid)"
       >
-        {{ item.user.full_name }}
+        {{ item?.user?.full_name }}
       </span>
     </template>
 
     <template #subtitle>
       <span
         class="text-caption"
-        @click.stop="viewUser(item.user.uuid)"
+        @click.stop="viewUser(item?.user?.uuid)"
       >
-        {{ item.timestamp }} {{ item.is_edited ? '&bull; Edited' : null }}
+        {{ item?.timestamp }} {{ item?.is_edited ? '&bull; Edited' : null }}
       </span>
     </template>
 
     <template #append>
       <v-badge
-        v-if="item.pinned_at"
+        v-if="item?.pinned_at"
         color="secondary"
         icon="mdi-pin"
       >
@@ -77,31 +77,31 @@
     </template>
 
     <v-card-text @click.stop>
-      <div v-if="item.is_shared">
+      <div v-if="item?.is_shared">
         <v-card
           flat
           rounded
           border
           density="compact"
-          @click.stop="viewPost(item.content.uuid)"
+          @click.stop="viewPost(item?.shared_post?.uuid)"
           :ripple="false"
         >
           <template #prepend>
             <v-avatar
               color="grey"
-              @click.stop="viewUser(item.content.user.uuid)"
+              @click.stop="viewUser(item?.shared_post?.user.uuid)"
             >
               <v-img
-                v-if="item?.content?.user?.avatar_url"
-                :src="item?.content?.user?.avatar_url"
+                v-if="item?.shared_post?.user?.avatar_url"
+                :src="item?.shared_post?.user?.avatar_url"
                 cover
-                :alt="item?.content?.user?.full_name"
+                :alt="item?.shared_post?.user?.full_name"
               />
               <span
                 class="text-white"
                 v-else
               >
-                {{ item?.content?.user?.first_name?.charAt(0) }}{{ item?.content?.user?.last_name?.charAt(0) }}
+                {{ item?.shared_post?.user?.first_name?.charAt(0) }}{{ item?.shared_post?.user?.last_name?.charAt(0) }}
               </span>
             </v-avatar>
           </template>
@@ -109,18 +109,18 @@
           <template #title>
             <span
               class="text-body-1"
-              @click.stop="viewUser(item.content.user.uuid)"
+              @click.stop="viewUser(item?.shared_post?.user?.uuid)"
             >
-              {{ item.content.user.full_name }}
+              {{ item?.shared_post?.user?.full_name }}
             </span>
           </template>
 
           <template #subtitle>
             <span
               class="text-caption"
-              @click.stop="viewUser(post.content.user.uuid)"
+              @click.stop="viewUser(item?.shared_post?.user?.uuid)"
             >
-              {{ post.content.timestamp }} {{ item.content.is_edited ? '&bull; Edited' : null }}
+              {{ item?.shared_post?.timestamp }} {{ item?.shared_post?.is_edited ? '&bull; Edited' : null }}
             </span>
           </template>
 
@@ -134,45 +134,45 @@
               variant="outlined"
               color="primary"
             >
-              {{ item.content.content.type }}
+              {{ item?.shared_post?.content?.type }}
               <v-tooltip
                 activator="parent"
                 location="top"
               >
-                {{ Constants.post.types[item.content.content.type] }}
+                {{ Constants.post.types[item?.shared_post?.content?.type] }}
               </v-tooltip>
             </v-chip>
 
             <p
-              v-if="!item.content.content.hasSummary"
+              v-if="!item?.shared_post?.content?.hasSummary"
               class="ma-0"
-              v-html="item.content.content.body"
+              v-html="item?.shared_post?.content?.body"
             />
             <p
-              v-else-if="item.content.content.hasSummary && item.content.content.expanded"
+              v-else-if="item?.shared_post?.content?.hasSummary && item?.shared_post?.content?.expanded"
               class="ma-0"
-              v-html="item.content.content.body"
+              v-html="item?.shared_post?.content?.body"
             />
             <p
               v-else
               class="ma-0"
-              v-html="item.content.content.summary"
+              v-html="item?.shared_post?.content?.summary"
             />
 
             <div
               class="text-center"
-              v-if="item.content.content.hasSummary"
+              v-if="item?.shared_post?.content?.hasSummary"
             >
               <v-btn
                 size="small"
                 flat
                 variant="tonal"
                 class="text-none"
-                @click.stop="item.content.content.expanded = !item.content.content.expanded"
+                @click.stop="item.shared_post.content.expanded = !item.shared_post.content.expanded"
               >
-                See {{ item.content.content.expanded ? 'less' : 'more' }}
+                See {{ item?.shared_post?.content?.expanded ? 'less' : 'more' }}
                 <v-icon end>
-                  {{ item.content.content.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                  {{ item?.shared_post?.content?.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
                 </v-icon>
               </v-btn>
             </div>
@@ -190,34 +190,34 @@
           variant="outlined"
           color="primary"
         >
-          {{ item.content.type }}
+          {{ item?.content?.type }}
           <v-tooltip
             activator="parent"
             location="top"
           >
-            {{ Constants.post.types[item.content.type] }}
+            {{ Constants.post.types[item?.content?.type] }}
           </v-tooltip>
         </v-chip>
 
         <p
-          v-if="!item.content.hasSummary"
+          v-if="!item?.content?.hasSummary"
           class="ma-0"
-          v-html="item.content.body"
+          v-html="item?.content?.body"
         />
         <p
-          v-else-if="item.content.hasSummary && item.content.expanded"
+          v-else-if="item?.content?.hasSummary && item?.content.expanded"
           class="ma-0"
-          v-html="item.content.body"
+          v-html="item?.content?.body"
         />
         <p
           v-else
           class="ma-0"
-          v-html="item.content.summary"
+          v-html="item?.content?.summary"
         />
 
         <div
           class="text-center"
-          v-if="item.content.hasSummary"
+          v-if="item?.content?.hasSummary"
         >
           <v-btn
             size="small"
@@ -226,9 +226,9 @@
             class="text-none"
             @click.stop="item.content.expanded = !item.content.expanded"
           >
-            See {{ item.content.expanded ? 'less' : 'more' }}
+            See {{ item?.content?.expanded ? 'less' : 'more' }}
             <v-icon end>
-              {{ item.content.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+              {{ item?.content?.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
             </v-icon>
           </v-btn>
         </div>
@@ -237,12 +237,12 @@
 
     <v-divider
       class="mx-5"
-      v-if="!item.deleted_at"
+      v-if="!item?.deleted_at"
     />
 
     <v-card-actions
       class="mx-3"
-      v-if="!item.deleted_at"
+      v-if="!item?.deleted_at"
     >
       <v-btn
         size="small"
@@ -259,14 +259,14 @@
       <v-spacer />
 
       <v-btn
-        v-if="isAuthenticated && !item.is_shared"
+        v-if="isAuthenticated && !item?.is_shared"
         size="small"
         flat
         variant="tonal"
         color="primary"
         class="text-none"
       >
-        {{ item.matches_count }} Matches
+        {{ item?.matches_count }} Matches
       </v-btn>
     </v-card-actions>
 

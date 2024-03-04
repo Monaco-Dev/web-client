@@ -89,8 +89,8 @@ export default {
     unpin (data) {
       this.searchStore.updatePost(data)
     },
-    archive (id) {
-      this.searchStore.deletePost(id)
+    archive (data) {
+      this.searchStore.deletePost(data)
     }
   }
 }

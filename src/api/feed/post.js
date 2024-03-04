@@ -27,9 +27,9 @@ export default {
    * Update the specified resource in storage.
    *
    */
-  update (payload) {
+  update (id, payload) {
     return this.http(this.baseUrl)
-      .post(`${this.url}/update`, payload)
+      .post(`${this.url}/${id}/update`, payload)
   },
 
   searchWall (id, payload) {

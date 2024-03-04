@@ -83,11 +83,11 @@ export default {
         })
     },
 
-    unpin (post) {
-      this.postStore.deletePost(post.id)
+    unpin (data) {
+      this.postStore.deletePost(data)
     },
-    archive (post) {
-      this.postStore.deletePost(post.id)
+    archive (data) {
+      this.postStore.deletePost(data)
     }
   }
 }
