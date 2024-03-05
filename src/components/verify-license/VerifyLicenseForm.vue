@@ -7,6 +7,16 @@
       :disabled="loading"
     >
       <v-card-text class="pa-0 ma-3">
+        <v-alert
+          v-if="user?.license?.is_license_expired"
+          text="Your license is now expired. Please renew and re-submit your license for verification."
+          type="error"
+          flat
+          variant="tonal"
+        />
+
+        <br>
+
         <v-container
           fluid
           v-if="isVerifying"
@@ -14,7 +24,7 @@
           Your account is being verified. Please wait approximately 24 hours. We'll notify you when verification is complete.
         </v-container>
 
-        <v-row v-if="!isVerifying">
+        <v-row v-else>
           <v-col
             cols="5"
             align-self="center"
@@ -150,9 +160,9 @@ export default {
       return AuthService.getUser()
     },
     isVerifying () {
-      if (!this.user.license) return false
+      if (this.user?.license?.is_license_expired) return false
 
-      return !this.user.is_verified
+      return !this.user?.is_verified
     }
   },
   watch: {

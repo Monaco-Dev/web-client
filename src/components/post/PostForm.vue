@@ -140,6 +140,7 @@
                 closable-chips
                 multiple
                 @input="searchTags"
+                @update:modelValue="insertTag"
                 hide-details="auto"
                 variant="solo-filled"
                 density="comfortable"
@@ -238,8 +239,7 @@ export default {
       },
       apiErrors: {
         type: [],
-        content: [],
-        tags: []
+        content: []
       },
       types: [
         {
@@ -290,9 +290,6 @@ export default {
     },
     dialog () {
       if (this.dialog) this.searchTags({})
-    },
-    'form.tags' () {
-      this.form.tags = uniq(this.form.tags?.map((v) => (v[0] !== '#') ? `#${v}` : v))
     }
   },
   methods: {
@@ -361,8 +358,7 @@ export default {
       }
       this.apiErrors = {
         content: [],
-        type: [],
-        tags: []
+        type: []
       }
       this.types = [
         {
@@ -404,8 +400,13 @@ export default {
           this.tags = data.data
         })
         .catch(({ response }) => this.httpException(response))
-        .finally(() => { this.fetching = false })
-    }, 500)
+        .finally(() => {
+          this.fetching = false
+        })
+    }, 500),
+    insertTag () {
+      this.form.tags = uniq(this.form.tags?.map((v) => (v[0] !== '#') ? `#${v}` : v))
+    }
   },
   validations () {
     return {
