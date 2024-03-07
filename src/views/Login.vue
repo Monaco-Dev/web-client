@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { computed } from 'vue'
 import { useAppStore } from '@/store/app'
 import LoginForm from '@/components/login/LoginForm.vue'
 import AuthService from '@/composables/auth'
@@ -21,14 +20,15 @@ export default {
   components: { LoginForm },
   setup () {
     const appStore = useAppStore()
-    const loading = computed(() => appStore.loading)
 
-    return { appStore, loading, httpException }
+    return { appStore, httpException }
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
       if (vm.$cookies.isKey('token')) {
+        this.appStore.setLoading(true)
         await AuthService.setAuth(JSON.parse(atob(vm.$cookies.get('token'))))
+        this.appStore.setLoading(false)
         vm.$cookies.remove('token')
         vm.$router.replace({ name: 'Home' })
       }
