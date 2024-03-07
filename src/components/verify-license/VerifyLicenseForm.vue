@@ -19,7 +19,7 @@
 
         <v-container
           fluid
-          v-if="(!user?.license || user?.license?.is_license_expired) || !user?.is_verified"
+          v-if="isVerifying"
         >
           Your account is being verified. Please wait approximately 24 hours. We'll notify you when verification is complete.
         </v-container>
@@ -160,7 +160,7 @@ export default {
       return AuthService.getUser()
     },
     isVerifying () {
-      if (!this.user?.license || this.user?.license?.is_license_expired) return false
+      if (this.user?.license?.is_license_expired) return false
 
       return !this.user?.is_verified
     }
