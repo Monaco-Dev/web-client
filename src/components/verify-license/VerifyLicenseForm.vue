@@ -55,7 +55,7 @@
                   prepend-inner-icon="mdi-attachment"
                   prepend-icon=""
                   v-model="form.file"
-                  accept="image/*"
+                  accept="image/png, image/jpeg, image/jpg, image/heic"
                   :max-errors="formErrors.file.length"
                   :error-messages="formErrors.file"
                   @blur="v$.form.file.$touch()"
