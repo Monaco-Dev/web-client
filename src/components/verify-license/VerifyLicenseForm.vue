@@ -217,9 +217,6 @@ export default {
           switch (response.status) {
             case 422:
               this.apiErrors = response.data.errors
-              this.form.license_number = null
-              this.form.expiration_date = null
-              this.form.file = null
               break
 
             default:
