@@ -153,7 +153,7 @@ export default {
       return {
         license_number: this.v$.form.license_number.$errors.map(v => v.$message).concat(this.apiErrors.license_number).filter(Boolean),
         expiration_date: this.v$.form.expiration_date.$errors.map(v => v.$message).concat(this.apiErrors.expiration_date).filter(Boolean),
-        file: this.v$.form.file.$errors.map(v => v.$message).concat(this.apiErrors.file).filter(Boolean)
+        file: this.v$.form.file.$errors.map(v => v.$message).concat(this.apiErrors.file).concat(this.apiErrors.file).filter(Boolean)
       }
     },
     user () {
