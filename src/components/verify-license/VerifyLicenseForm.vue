@@ -160,6 +160,8 @@ export default {
       return AuthService.getUser()
     },
     isVerifying () {
+      if (!this.user.license) return false
+
       if (this.user?.license?.is_license_expired) return false
 
       return !this.user?.is_verified
