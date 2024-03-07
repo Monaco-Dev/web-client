@@ -26,9 +26,9 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
       if (vm.$cookies.isKey('token')) {
-        this.appStore.setLoading(true)
+        vm.appStore.setLoading(true)
         await AuthService.setAuth(JSON.parse(atob(vm.$cookies.get('token'))))
-        this.appStore.setLoading(false)
+        vm.appStore.setLoading(false)
         vm.$cookies.remove('token')
         vm.$router.replace({ name: 'Home' })
       }
