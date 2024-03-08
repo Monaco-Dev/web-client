@@ -48,9 +48,6 @@ export default {
     }
   },
   mounted () {
-    this.$gtag.set({
-      user_uuid: AuthService.getUser().uuid
-    })
     this.postStore.reset()
     this.init()
   },
@@ -81,12 +78,6 @@ export default {
 
           this.postStore.setPosts(data.data.map((v) => new Proxy(v, {})))
           this.postStore.setPage(data.meta.current_page + 1)
-
-          this.$gtag.event('Home', {
-            event_category: 'Search',
-            event_label: 'Searching posts',
-            value: this.posts.length
-          })
 
           return done('ok')
         })
