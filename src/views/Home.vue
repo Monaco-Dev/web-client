@@ -48,6 +48,9 @@ export default {
     }
   },
   mounted () {
+    this.$gtag.set({
+      user_uuid: AuthService.getUser().uuid
+    })
     this.postStore.reset()
     this.init()
   },
