@@ -12,6 +12,7 @@ import VueCookies from 'vue-cookies'
 import VueGtag from 'vue-gtag'
 
 export function registerPlugins (app) {
+  console.log(import.meta.env.VITE_APP_GTAG_PROPERTY_ID)
   app
     .use(vuetify)
     .use(pinia)
