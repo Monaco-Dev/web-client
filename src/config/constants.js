@@ -8,5 +8,6 @@ export default {
       WTL: 'Willing to lease',
       WTR: 'Willing to rent'
     }
-  }
+  },
+  test: import.meta.env.VITE_APP_GOOGLE_ANALYTICS_PROPERTY_ID
 }

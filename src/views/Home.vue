@@ -26,6 +26,7 @@ import PostList from '@/components/post/PostList.vue'
 import Post from '@/api/feed/post'
 import httpException from '@/composables/http-exception'
 import AuthService from '@/composables/auth'
+import Constants from '@/config/constants'
 
 export default {
   name: 'AppHome',
@@ -44,12 +45,14 @@ export default {
       httpException,
       postStore,
       posts,
-      loading
+      loading,
+      Constants
     }
   },
   mounted () {
     this.postStore.reset()
     this.init()
+    console.log(Constants.test)
     console.log(process.env.VITE_APP_GOOGLE_ANALYTICS_PROPERTY_ID)
     console.log(import.meta.env.VITE_APP_GOOGLE_ANALYTICS_PROPERTY_ID)
   },
