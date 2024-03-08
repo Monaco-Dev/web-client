@@ -21,7 +21,7 @@ export function registerPlugins (app) {
       appName: 'Realmate',
       pageTrackerScreenviewEnabled: true,
       config: {
-        id: 'G-BGEKT2QCSW'
+        id: import.meta.env.VITE_APP_GTAG_PROPERTY_ID
       }
     }, router)
 }
