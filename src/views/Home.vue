@@ -50,6 +50,8 @@ export default {
   mounted () {
     this.postStore.reset()
     this.init()
+    console.log(process.env.VITE_APP_GOOGLE_ANALYTICS_PROPERTY_ID)
+    console.log(import.meta.env.VITE_APP_GOOGLE_ANALYTICS_PROPERTY_ID)
   },
   methods: {
     onSearch () {

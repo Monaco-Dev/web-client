@@ -21,7 +21,7 @@ export function registerPlugins (app) {
       appName: 'Realmate',
       pageTrackerScreenviewEnabled: true,
       config: {
-        id: process.env.VITE_APP_GOOGLE_ANALYTICS_PROPERTY_ID
+        id: 'G-BGEKT2QCSW'
       }
     }, router)
 }
