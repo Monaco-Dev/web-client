@@ -135,8 +135,11 @@
                 v-for="(social, key) in form.socials"
                 :key="key"
               >
-                <v-row>
-                  <v-col cols="2">
+                <v-row no-gutters>
+                  <v-col
+                    cols="3"
+                    class="mr-6"
+                  >
                     <v-select
                       flat
                       variant="solo-filled"
@@ -169,7 +172,7 @@
                     </v-select>
                   </v-col>
 
-                  <v-col cols="9">
+                  <v-col cols="8">
                     <v-text-field-primary
                       placeholder="Link here"
                       v-model="social.url"
@@ -270,10 +273,15 @@ export default {
 
       if (this.v$.form.socials.$anyDirty) {
         this.form.socials.forEach((element, key) => {
-          socials.push({
-            provider: this.v$.form.socials.$each.$response.$errors[key].provider.map(v => v.$message),
-            url: this.v$.form.socials.$each.$response.$errors[key].url.map(v => v.$message)
-          })
+          const provider = this.v$.form.socials.$each.$response.$errors[key].provider.map(v => v.$message)
+          const url = this.v$.form.socials.$each.$response.$errors[key].url.map(v => v.$message)
+
+          if (provider.length || url.length) {
+            socials.push({
+              provider,
+              url
+            })
+          }
         })
       }
 
@@ -282,7 +290,7 @@ export default {
         last_name: this.v$.form.last_name.$errors.map(v => v.$message).concat(this.apiErrors.last_name).filter(Boolean),
         phone_number: this.v$.form.phone_number.$errors.map(v => v.$message).concat(this.apiErrors.phone_number).filter(Boolean),
         avatar: this.apiErrors.avatar,
-        socials
+        socials: socials.concat(this.apiErrors.socials).filter(Boolean)
       }
     },
     initials () {
@@ -356,12 +364,7 @@ export default {
         last_name: [],
         phone_number: [],
         avatar: [],
-        socials: [
-          {
-            provider: null,
-            url: null
-          }
-        ]
+        socials: []
       }
     },
     async submit () {
@@ -386,8 +389,24 @@ export default {
         .catch(({ response }) => {
           switch (response.status) {
             case 422:
-              this.apiErrors = response.data.errors
+            {
+              const errors = { ...response.data.errors }
+
+              errors.socials = []
+
+              for (let index = 0; index < Object.keys(response.data.errors).length; index++) {
+                const element = Object.keys(response.data.errors)[index]
+                const el = element.split('.')
+                if (el.length) {
+                  const v = errors[element].map(d => d.replace(element, 'field'))
+                  errors.socials.push({ url: v })
+                }
+              }
+
+              this.apiErrors = errors
+
               break
+            }
 
             default:
               this.httpException(response)
