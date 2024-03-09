@@ -268,12 +268,13 @@ export default {
 
       return Post.share(this.post.id)
         .then(({ data }) => {
-          this.postStore.addPost(data)
-
           this.snackbarStore.open({
             text: 'You have shared a post successfully.',
             color: 'success'
           })
+
+          this.postStore.addPost(data)
+          this.postStore.updatePost(data.shared_post)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false))
