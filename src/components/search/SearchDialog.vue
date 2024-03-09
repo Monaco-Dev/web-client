@@ -23,8 +23,6 @@
         </v-btn>
 
         <v-combobox
-          autofocus
-          focused
           hide-details
           prepend-inner-icon="mdi-magnify"
           menu-icon=""
