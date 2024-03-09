@@ -396,8 +396,6 @@ export default {
 
       if (text) text = text.replace('#', '')
 
-      console.log(text)
-
       return Tag.search({ search: text })
         .then(({ data }) => {
           this.tags = data.data
