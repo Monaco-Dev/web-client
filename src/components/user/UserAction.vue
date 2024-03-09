@@ -125,6 +125,7 @@
 <script>
 import { ref } from 'vue'
 import { useSnackbarStore } from '@/store/snackbar'
+import { useNetworkStore } from '@/store/network'
 import ConnectionInvitation from '@/api/auth/connection-invitation'
 import Connection from '@/api/auth/connection'
 import Follow from '@/api/auth/follow'
@@ -142,10 +143,13 @@ export default {
     }
   },
   setup () {
+    const networkStore = useNetworkStore()
+
     return {
       httpException,
       snackbarStore: useSnackbarStore(),
-      sendInvitationDialog: ref(null)
+      sendInvitationDialog: ref(null),
+      networkStore
     }
   },
   data () {
@@ -188,6 +192,8 @@ export default {
             ...this.item,
             ...data
           }
+
+          this.networkStore.updateUser(this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'connect'))
@@ -206,6 +212,8 @@ export default {
             ...this.item,
             ...data
           }
+
+          this.networkStore.updateUser(this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'disconnect'))
@@ -224,6 +232,8 @@ export default {
             ...this.item,
             ...data
           }
+
+          this.networkStore.updateUser(this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'follow'))
@@ -242,6 +252,8 @@ export default {
             ...this.item,
             ...data
           }
+
+          this.networkStore.updateUser(this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'unfollow'))
@@ -260,6 +272,8 @@ export default {
             ...this.item,
             ...data
           }
+
+          this.networkStore.updateUser(this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'accept'))
