@@ -64,7 +64,7 @@
           class="mx-1"
           variant="outlined"
         >
-          {{ tag.name }}
+          #{{ tag.name }}
         </v-chip>
       </v-slide-group-item>
     </v-slide-group>

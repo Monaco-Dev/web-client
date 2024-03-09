@@ -4,12 +4,17 @@
     persistent
     scrollable
     max-width="500px"
+    :loading="loading"
   >
-    <v-form @submit.prevent="submit">
+    <v-form
+      @submit.prevent="submit"
+      :loading="loading"
+    >
       <v-card
         flat
         rounded
         density="compact"
+        :loading="loading"
       >
         <template #prepend>
           <v-avatar color="grey">
@@ -39,6 +44,7 @@
             variant="tonal"
             size="x-small"
             @click="reset"
+            :disabled="loading"
           />
         </template>
 
@@ -61,6 +67,7 @@
             type="submit"
             variant="tonal"
             class="text-none"
+            :loading="loading"
           >
             Send invite
           </v-btn-primary>
@@ -78,6 +85,11 @@ export default {
       type: Object,
       default: Object,
       required: true
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+      required: true
     }
   },
   data () {
@@ -86,11 +98,6 @@ export default {
       form: {
         message: null
       }
-    }
-  },
-  watch: {
-    'form.message' () {
-      delete this.apiErrors.message
     }
   },
   methods: {

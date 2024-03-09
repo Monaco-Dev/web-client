@@ -89,6 +89,7 @@
             variant="tonal"
             size="x-small"
             @click="reset"
+            :disabled="loading"
           />
         </template>
 
@@ -141,6 +142,7 @@
                 multiple
                 @input="searchTags"
                 @update:modelValue="insertTag"
+                @click="searchTags"
                 hide-details="auto"
                 variant="solo-filled"
                 density="comfortable"
@@ -176,6 +178,7 @@
             type="submit"
             variant="tonal"
             class="text-none"
+            :loading="loading"
           >
             {{ isEdit ? 'Save changes' : 'Post' }}
           </v-btn-primary>
@@ -324,8 +327,6 @@ export default {
           this.$emit('click:submit', data)
         })
         .catch(({ response }) => {
-          this.loading = false
-
           switch (response.status) {
             case 422:
               this.apiErrors = response.data.errors
@@ -394,6 +395,8 @@ export default {
       let text = val.data ?? null
 
       if (text) text = text.replace('#', '')
+
+      console.log(text)
 
       return Tag.search({ search: text })
         .then(({ data }) => {

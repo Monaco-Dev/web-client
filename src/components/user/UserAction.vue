@@ -117,6 +117,7 @@
       ref="sendInvitationDialog"
       @connect="connect"
       :user="user"
+      :loading="loading"
     />
   </div>
 </template>
@@ -149,7 +150,8 @@ export default {
   },
   data () {
     return {
-      item: {}
+      item: {},
+      loading: false
     }
   },
   mounted () {
@@ -170,6 +172,7 @@ export default {
     setLoading (status, action) {
       this.item[`${action}_loading`] = status
       this.item.disabled = status
+      this.loading = status
     },
     connect (form) {
       this.setLoading(true, 'connect')
