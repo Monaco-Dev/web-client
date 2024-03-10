@@ -150,8 +150,6 @@
                       item-title="value"
                       v-model="social.provider"
                       placeholder="..."
-                      :max-errors="formErrors.socials[key]?.provider?.length"
-                      :error-messages="formErrors.socials[key]?.provider"
                       :prepend-icon="(!key) ? 'mdi-plus' : 'mdi-blank'"
                       @click:prepend="(!key) ? addSocial() : null"
                       menu-icon=""
@@ -178,8 +176,8 @@
                       v-model="social.url"
                       :append-icon="(form.socials.length === 1 && !social.url && !social.provider) ? '' : 'mdi-delete'"
                       @click:append="removeSocial(key)"
-                      :max-errors="formErrors.socials[key]?.url?.length"
-                      :error-messages="formErrors.socials[key]?.url"
+                      :max-errors="formErrors.socials[key]?.url?.length || formErrors.socials[key]?.provider?.length"
+                      :error-messages="formErrors.socials[key]?.url.concat(formErrors.socials[key]?.provider)"
                     />
                   </v-col>
                 </v-row>
@@ -436,9 +434,10 @@ export default {
         socials: {
           $each: helpers.forEach({
             provider: {
-              required: requiredIf(function (form, a) {
-                return !!a.url
-              })
+              required: helpers.withMessage('Select social account',
+                requiredIf(function (form, a) {
+                  return !!a.url
+                }))
             },
             url: {
               url,

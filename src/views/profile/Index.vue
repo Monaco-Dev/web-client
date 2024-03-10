@@ -3,8 +3,15 @@
     fluid
     :class="{'px-0': $vuetify.display.smAndDown}"
   >
-    <DesktopProfileInformation v-if="$vuetify.display.mdAndUp" />
-    <MobileProfileInformation v-else />
+    <v-skeleton-loader
+      v-if="loading"
+      boilerplate
+      type="avatar, article"
+    />
+    <template v-else>
+      <DesktopProfileInformation v-if="$vuetify.display.mdAndUp" />
+      <MobileProfileInformation v-else />
+    </template>
 
     <router-view :class="{'mt-4': $vuetify.display.smAndDown, 'mt-1': $vuetify.display.mdAndUp}" />
   </v-container>

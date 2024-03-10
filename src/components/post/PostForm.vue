@@ -140,9 +140,8 @@
                 chips
                 closable-chips
                 multiple
-                @input="searchTags"
+                @update:search="searchTags"
                 @update:modelValue="insertTag"
-                @click="searchTags"
                 hide-details="auto"
                 variant="solo-filled"
                 density="comfortable"
@@ -292,7 +291,7 @@ export default {
       delete this.apiErrors.content
     },
     dialog () {
-      if (this.dialog) this.searchTags({})
+      if (this.dialog) this.searchTags(null)
     }
   },
   methods: {
@@ -392,7 +391,7 @@ export default {
     searchTags: _.debounce(function (val) {
       this.fetching = true
 
-      let text = val.data ?? null
+      let text = val ?? null
 
       if (text) text = text.replace('#', '')
 

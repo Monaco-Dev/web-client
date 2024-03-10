@@ -58,10 +58,8 @@ export default {
       return AuthService.getUser()?.uuid === this.profile?.uuid
     }
   },
-  watch: {
-    profile () {
-      this.init()
-    }
+  created () {
+    this.init()
   },
   methods: {
     onSearch () {

@@ -1,12 +1,5 @@
 <template>
-  <v-skeleton-loader
-    v-if="loading || !Object.keys(profile).length"
-    boilerplate
-    type="avatar, article"
-  />
-
   <v-card
-    v-else
     flat
     rounded
     class="pa-0"
@@ -34,7 +27,7 @@
 
         <br>
 
-        <span class="text-h4">{{ profile.full_name }}</span>
+        <span class="text-h4">{{ profile?.full_name }}</span>
 
         <br>
 
@@ -43,11 +36,11 @@
             :to="auth ? `/networks/connections` : null"
             class="mr-3"
           >
-            {{ profile.connections_count }} Connections
+            {{ profile?.connections_count }} Connections
           </v-chip>
 
           <v-chip :to="auth ? `/networks/followers` : null">
-            {{ profile.followers_count }} Followers
+            {{ profile?.followers_count }} Followers
           </v-chip>
 
           <v-chip
@@ -55,14 +48,14 @@
             to="/networks/following"
             class="ml-3"
           >
-            {{ profile.following_count }} Following
+            {{ profile?.following_count }} Following
           </v-chip>
         </div>
 
         <div class="mt-3 ml-3">
-          <h3>{{ profile.license.license_type }}</h3>
+          <h3>{{ profile?.license?.license_type }}</h3>
           <p>
-            License no: {{ profile.license.license_number }}
+            License no: {{ profile?.license?.license_number }}
           </p>
         </div>
       </div>
@@ -76,7 +69,10 @@
             cols="12"
             md="6"
           >
-            <UserAction :user="profile" />
+            <UserAction
+              :user="profile"
+              @click:action="update"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -85,7 +81,7 @@
     <v-divider class="mt-5 mx-5" />
 
     <v-card-actions
-      v-if="auth || profile.is_connection"
+      v-if="auth || profile?.is_connection"
       class="pa-0 mt-3"
     >
       <v-tabs
@@ -94,7 +90,7 @@
         color="primary"
       >
         <v-tab
-          :to="`/profile/${profile.uuid}`"
+          :to="`/profile/${profile?.uuid}`"
           exact
           rounded="pill"
           class="text-none"
@@ -104,7 +100,7 @@
         </v-tab>
 
         <v-tab
-          :to="`/profile/${profile.uuid}/about`"
+          :to="`/profile/${profile?.uuid}/about`"
           rounded="pill"
           class="text-none"
           value="ProfileAbout"
@@ -185,7 +181,7 @@
                   color="primary"
                   link
                   nav
-                  :to="`/profile/${profile.uuid}/archive`"
+                  :to="`/profile/${profile?.uuid}/archive`"
                   density="compact"
                   @click="isActive.value = false"
                 >
@@ -231,12 +227,10 @@ export default {
     const profileStore = useProfileStore()
 
     const profile = computed(() => profileStore.profile)
-    const loading = computed(() => profileStore.loading)
 
     return {
       profileStore,
-      profile,
-      loading
+      profile
     }
   },
   data () {
@@ -257,6 +251,11 @@ export default {
       this.tab = null
       next()
     })
+  },
+  methods: {
+    update (item) {
+      this.profileStore.setProfile(item)
+    }
   }
 }
 </script>

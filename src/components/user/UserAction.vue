@@ -194,6 +194,7 @@ export default {
           }
 
           this.networkStore.updateUser(this.item)
+          this.$emit('click:action', this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'connect'))
@@ -214,6 +215,7 @@ export default {
           }
 
           this.networkStore.updateUser(this.item)
+          this.$emit('click:action', this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'disconnect'))
@@ -234,6 +236,7 @@ export default {
           }
 
           this.networkStore.updateUser(this.item)
+          this.$emit('click:action', this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'follow'))
@@ -254,6 +257,7 @@ export default {
           }
 
           this.networkStore.updateUser(this.item)
+          this.$emit('click:action', this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'unfollow'))
@@ -274,6 +278,7 @@ export default {
           }
 
           this.networkStore.updateUser(this.item)
+          this.$emit('click:action', this.item)
         })
         .catch(({ response }) => this.httpException(response))
         .finally(() => this.setLoading(false, 'accept'))

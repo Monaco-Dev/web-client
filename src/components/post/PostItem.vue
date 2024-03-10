@@ -167,7 +167,7 @@
         <v-icon start>
           mdi-share
         </v-icon>
-        {{ item?.shares_count }} Shares
+        {{ (!item?.is_shared) ? item?.shares_count : null }} Shares
       </v-btn>
 
       <v-spacer />
