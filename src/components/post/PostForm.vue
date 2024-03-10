@@ -152,6 +152,7 @@
                 item-value="name"
                 return-value="name"
                 :return-object="false"
+                :delimiters="[' ']"
               >
                 <template #chip="{ props, item }">
                   <v-chip
