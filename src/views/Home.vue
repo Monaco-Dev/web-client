@@ -26,6 +26,7 @@ import PostList from '@/components/post/PostList.vue'
 import Post from '@/api/feed/post'
 import httpException from '@/composables/http-exception'
 import AuthService from '@/composables/auth'
+import segment from '@/composables/segment.js'
 
 export default {
   name: 'AppHome',
@@ -50,6 +51,16 @@ export default {
   mounted () {
     this.postStore.reset()
     this.init()
+
+    segment.identify(AuthService.getUser().uuid, {
+      name: AuthService.getUser().full_name,
+      email: AuthService.getUser().email
+    })
+
+    segment.track('Login', {
+      uuid: AuthService.getUser().uuid,
+      email: AuthService.getUser().email
+    })
   },
   methods: {
     onSearch () {
