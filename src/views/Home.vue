@@ -52,15 +52,17 @@ export default {
     this.postStore.reset()
     this.init()
 
-    analytics.identify(AuthService.getUser().uuid, {
-      name: AuthService.getUser().full_name,
-      email: AuthService.getUser().email
-    })
+    if (AuthService.getUser()) {
+      analytics.identify(AuthService.getUser().uuid, {
+        name: AuthService.getUser().full_name,
+        email: AuthService.getUser().email
+      })
 
-    analytics.track('Login', {
-      uuid: AuthService.getUser().uuid,
-      email: AuthService.getUser().email
-    })
+      analytics.track('Login', {
+        uuid: AuthService.getUser().uuid,
+        email: AuthService.getUser().email
+      })
+    }
   },
   methods: {
     onSearch () {
