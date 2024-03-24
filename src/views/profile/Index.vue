@@ -13,7 +13,7 @@
       <MobileProfileInformation v-else />
     </template>
 
-    <router-view :class="{'mt-4': $vuetify.display.smAndDown, 'mt-1': $vuetify.display.mdAndUp}" />
+    <router-view :class="{'mt-4': $vuetify.display.smAndDown, 'mt-1': $vuetify.display.mdAndUp}" v-if="!loading"/>
   </v-container>
 </template>
 
@@ -22,6 +22,7 @@ import DesktopProfileInformation from '@/components/profile/desktop/ProfileInfor
 import MobileProfileInformation from '@/components/profile/mobile/ProfileInformation.vue'
 import { computed } from 'vue'
 import { useProfileStore } from '@/store/profile'
+import { usePostStore } from '@/store/post'
 import httpException from '@/composables/http-exception'
 import AuthService from '@/composables/auth'
 
@@ -33,12 +34,14 @@ export default {
   },
   setup () {
     const profileStore = useProfileStore()
+    const postStore = usePostStore()
 
     const profile = computed(() => profileStore.profile)
     const loading = computed(() => profileStore.loading)
 
     return {
       profileStore,
+      postStore,
       profile,
       loading,
       httpException
@@ -67,11 +70,14 @@ export default {
   },
   methods: {
     fetch (to) {
+      this.postStore.reset()
       this.profileStore.reset()
 
       const uuid = to.params.uuid
 
       if (!uuid) this.$router.replace({ name: 'PageNotFound' })
+
+      this.profileStore.setLoading(true)
 
       return this.profileStore.getProfile(uuid)
         .catch(({ response }) => {
@@ -81,6 +87,7 @@ export default {
             this.httpException(response)
           }
         })
+        .finally(() => this.profileStore.setLoading(false))
     }
   }
 }

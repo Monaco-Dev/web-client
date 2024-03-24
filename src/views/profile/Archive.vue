@@ -72,7 +72,7 @@ export default {
         .then(({ data }) => {
           if (!data.data.length) return done('empty')
 
-          this.postStore.setPosts(data.data.map((v) => new Proxy(v, {})))
+          this.postStore.addPosts(data.data.map((v) => new Proxy(v, {})))
           this.postStore.setPage(data.meta.current_page + 1)
 
           return done('ok')

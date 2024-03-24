@@ -151,7 +151,7 @@ export default {
         .then(({ data }) => {
           if (!data.data.length) return done('empty')
 
-          this.matchStore.setPosts(data.data.map((v) => new Proxy(v, {})))
+          this.matchStore.addPosts(data.data.map((v) => new Proxy(v, {})))
           this.matchStore.setPage(data.meta.current_page + 1)
 
           return done('ok')

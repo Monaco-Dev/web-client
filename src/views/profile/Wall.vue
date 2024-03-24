@@ -50,35 +50,34 @@ export default {
       loading
     }
   },
-  mounted () {
-    this.init()
+  beforeRouteEnter (to, from, next) {
+    next(async (vm) => {
+      if(vm.profile.id) await vm.init()
+    })
+  },
+  async beforeRouteUpdate (to, from) {
+    if(this.profile.id) await this.init()
   },
   computed: {
     auth () {
       return AuthService.getUser()?.uuid === this.profile?.uuid
     }
   },
-  created () {
-    this.init()
-  },
   methods: {
     onSearch () {
       return Post.searchWall(this.profile.id, { page: this.postStore.page })
         .catch(({ response }) => this.httpException(response))
-        .finally(() => {
-          this.postStore.setLoading(false)
-          this.profileStore.setLoading(false)
-        })
+        .finally(() => this.postStore.setLoading(false))
     },
     async init () {
+      this.postStore.reset()
+
       if (
         !AuthService.isAuthenticated() ||
         !Object.keys(this.profile).length
       ) return
 
-      this.postStore.reset()
       this.postStore.setLoading(true)
-      this.profileStore.setLoading(true)
 
       await this.onSearch().then(({ data }) => {
         if (!data.data.length) return
@@ -90,12 +89,12 @@ export default {
       })
     },
     async load ({ done }) {
-      if (!AuthService.isAuthenticated() || !Object.keys(this.profile).length) return done('empty')
+      if (!AuthService.isAuthenticated() || !this.postStore.posts.length) return done('empty')
 
       await this.onSearch().then(({ data }) => {
         if (!data.data.length) return done('empty')
 
-        this.postStore.setPosts(data.data.map((v) => new Proxy(v, {})))
+        this.postStore.addPosts(data.data.map((v) => new Proxy(v, {})))
         this.postStore.setPage(data.meta.current_page + 1)
 
         return done('ok')

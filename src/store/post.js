@@ -33,6 +33,15 @@ export const usePostStore = defineStore('post', {
      * @param {*} newPosts
      */
     setPosts (newPosts = []) {
+      this.posts = uniqBy(newPosts.map((v) => Post.mapPost(v)), 'id')
+    },
+
+    /**
+     * Add posts value
+     *
+     * @param {*} newPosts
+     */
+    addPosts (newPosts = []) {
       this.posts = uniqBy([...this.posts, ...newPosts.map((v) => Post.mapPost(v))], 'id')
     },
 

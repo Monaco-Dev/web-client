@@ -91,6 +91,15 @@ export const useSearchStore = defineStore('search', {
      * @param {*} posts
      */
     setPosts (posts = {}) {
+      this.posts = { ...posts, data: uniqBy(posts.data.map((v) => Post.mapPost(v)), 'id') }
+    },
+
+    /**
+     * Add posts value
+     *
+     * @param {*} posts
+     */
+    addPosts (posts = {}) {
       this.posts = { ...posts, data: uniqBy([...this.posts.data, ...posts.data.map((v) => Post.mapPost(v))], 'id') }
     },
 
