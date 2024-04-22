@@ -1,0 +1,5 @@
+{
+  "appId": "web.client",
+  "appName": "web-client",
+  "webDir": "dist"
+}

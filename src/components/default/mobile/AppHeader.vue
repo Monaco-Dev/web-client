@@ -1,8 +1,10 @@
 <template>
   <v-app-bar
-    elevation="1"
-    app
+    flat
     v-if="isAuth"
+    app
+    scroll-behavior="hide"
+    density="prominent"
   >
     <v-app-bar-title>
       <v-card
@@ -27,7 +29,19 @@
         icon
         variant="tonal"
         size="small"
+        @click="$emit('click:form')"
+      >
+        <v-icon size="x-large">
+          mdi-plus
+        </v-icon>
+      </v-btn>
+
+      <v-btn
+        icon
+        variant="tonal"
+        size="small"
         @click="searchStore.openDialog()"
+        class="mx-2"
       >
         <v-icon size="x-large">
           mdi-magnify
@@ -38,8 +52,7 @@
         icon
         variant="tonal"
         size="small"
-        :href="`/profile/${getUuid()}`"
-        class="ml-2"
+        :to="`/profile/${getUuid()}`"
       >
         <v-avatar color="grey">
           <v-img

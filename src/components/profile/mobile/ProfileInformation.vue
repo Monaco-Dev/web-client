@@ -78,7 +78,7 @@
       </v-container>
     </v-card-text>
 
-    <v-divider class="mt-5 mx-5" />
+    <v-divider class="mt-5 mx-5" v-if="auth || profile?.is_connection"/>
 
     <v-card-actions
       v-if="auth || profile?.is_connection"

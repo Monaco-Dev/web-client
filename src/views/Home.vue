@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid :class="{'px-0': $vuetify.display.smAndDown}">
     <AppGrid>
       <template #center>
         <PostForm />

@@ -1,51 +1,40 @@
 <template>
-  <v-bottom-navigation
-    color="primary"
-    grow
+  <v-app-bar
+    flat
     app
-    :mandatory="true"
-    elevation="1"
+    location="bottom"
+    scroll-behavior="hide"
   >
-    <v-btn
-      to="/"
-      exact
-      value="Home"
-      class="text-none"
-    >
-      <v-icon>mdi-home</v-icon>
-    </v-btn>
+    <v-tabs v-model="tab" align-tabs="center" fixed-tabs grow hide-slider :mandatory="true" :stacked="true" color="primary">
+      <v-tab value="Home" exact fixed to="/" variant="plain" class="text-none" :ripple="false">
+        <v-icon size="small">mdi-home</v-icon>
+        <small>Home</small>
+      </v-tab>
 
-    <v-btn
-      to="/networks"
-      value="Networks"
-      class="text-none"
-    >
-      <v-icon>mdi-account-group</v-icon>
-    </v-btn>
+      <v-tab value="Networks" fixed to="/networks" variant="plain" class="text-none" :ripple="false">
+        <v-icon size="small">mdi-account-group</v-icon>
+        <small>Networks</small>
+      </v-tab>
 
-    <v-avatar
-      color="primary"
-      class="mx-3"
-      size="large"
-      @click="$emit('click:form')"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-avatar>
+      <v-tab value="Pins" fixed to="/pins" variant="plain" class="text-none" :ripple="false">
+        <v-icon size="small">mdi-pin</v-icon>
+        <small>Pins</small>
+      </v-tab>
 
-    <v-btn
-      to="/pins"
-      value="Pins"
-      class="text-none"
-    >
-      <v-icon>mdi-pin</v-icon>
-    </v-btn>
-
-    <v-btn
-      to="/menu"
-      value="Menu"
-      class="text-none"
-    >
-      <v-icon>mdi-menu</v-icon>
-    </v-btn>
-  </v-bottom-navigation>
+      <v-tab value="Menu" fixed to="/menu" variant="plain" class="text-none" :ripple="false">
+        <v-icon size="small">mdi-menu</v-icon>
+        <small>Menu</small>
+      </v-tab>
+    </v-tabs>
+  </v-app-bar>
 </template>
+
+<script>
+export default {
+  data(){
+    return {
+      tab: null
+    }
+  }
+}
+</script>

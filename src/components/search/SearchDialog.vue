@@ -6,6 +6,7 @@
     transition="dialog-bottom-transition"
     persistent
   >
+  <!-- TODO: make content only scrollable -->
     <v-card
       flat
       tile

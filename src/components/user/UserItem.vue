@@ -6,6 +6,7 @@
     :subtitle="subtitle"
     :href="`/profile/${user.uuid}`"
   >
+  <!-- TODO: href -> to -->
     <template #prepend>
       <v-avatar color="grey">
         <v-img
