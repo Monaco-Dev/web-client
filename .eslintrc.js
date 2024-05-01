@@ -10,18 +10,8 @@ module.exports = {
     'plugin:vue/vue3-essential',
     'eslint:recommended',
     'plugin:vue/strongly-recommended',
+    'prettier',
     'plugin:prettier/recommended',
   ],
   plugins: ['vue'],
-  rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        singleQuote: true,
-        singleAttributePerLine: true,
-        semi: false,
-        vueIndentScriptAndStyle: true,
-      },
-    ],
-  },
 }
