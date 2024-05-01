@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import AppMenu from '@/components/default/AppMenu.vue'
+  import AppMenu from '@/components/default/AppMenu.vue'
 </script>

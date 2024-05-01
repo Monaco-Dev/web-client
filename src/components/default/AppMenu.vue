@@ -53,9 +53,7 @@
           />
         </template>
 
-        <v-list-item-title>
-          Dark mode
-        </v-list-item-title>
+        <v-list-item-title> Dark mode </v-list-item-title>
       </v-list-item>
     </v-list>
 
@@ -86,9 +84,7 @@
           />
         </template>
 
-        <v-list-item-title>
-          Settings
-        </v-list-item-title>
+        <v-list-item-title> Settings </v-list-item-title>
       </v-list-item>
 
       <v-list-item
@@ -105,61 +101,59 @@
           />
         </template>
 
-        <v-list-item-title>
-          Logout
-        </v-list-item-title>
+        <v-list-item-title> Logout </v-list-item-title>
       </v-list-item>
     </v-list>
   </v-card>
 </template>
 
 <script>
-import { useTheme } from 'vuetify'
-import { useAppStore } from '@/store/app'
-import Auth from '@/api/auth/auth'
-import AuthService from '@/composables/auth'
-import ThemeService from '@/composables/theme'
-import httpException from '@/composables/http-exception'
+  import { useTheme } from 'vuetify'
+  import { useAppStore } from '@/store/app'
+  import Auth from '@/api/auth/auth'
+  import AuthService from '@/composables/auth'
+  import ThemeService from '@/composables/theme'
+  import httpException from '@/composables/http-exception'
 
-export default {
-  name: 'AppMenu',
-  setup () {
-    return { httpException, theme: useTheme(), appStore: useAppStore() }
-  },
-  data () {
-    return {
-      darkMode: false
-    }
-  },
-  mounted () {
-    this.darkMode = !!this.theme.global.current.value?.dark
-  },
-  computed: {
-    user () {
-      return AuthService.getUser()
-    }
-  },
-  watch: {
-    darkMode () {
-      this.theme.global.name.value = this.darkMode ? 'dark' : 'light'
-      ThemeService.setTheme(this.theme.global.name.value)
-    }
-  },
-  methods: {
-    /**
-     * Perform logout and flush storage
-     */
-    logout () {
-      this.appStore.setLoading(true)
+  export default {
+    name: 'AppMenu',
+    setup() {
+      return { httpException, theme: useTheme(), appStore: useAppStore() }
+    },
+    data() {
+      return {
+        darkMode: false,
+      }
+    },
+    mounted() {
+      this.darkMode = !!this.theme.global.current.value?.dark
+    },
+    computed: {
+      user() {
+        return AuthService.getUser()
+      },
+    },
+    watch: {
+      darkMode() {
+        this.theme.global.name.value = this.darkMode ? 'dark' : 'light'
+        ThemeService.setTheme(this.theme.global.name.value)
+      },
+    },
+    methods: {
+      /**
+       * Perform logout and flush storage
+       */
+      logout() {
+        this.appStore.setLoading(true)
 
-      return Auth.logout()
-        .then(() => {
-          AuthService.flush()
-          this.$router.push({ name: 'Login' }).catch(() => {})
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.appStore.setLoading(false))
-    }
+        return Auth.logout()
+          .then(() => {
+            AuthService.flush()
+            this.$router.push({ name: 'Login' }).catch(() => {})
+          })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => this.appStore.setLoading(false))
+      },
+    },
   }
-}
 </script>

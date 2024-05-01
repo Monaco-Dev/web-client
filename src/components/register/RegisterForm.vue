@@ -173,201 +173,243 @@
 </template>
 
 <script>
-import { useVuelidate } from '@vuelidate/core'
-import {
-  required,
-  maxLength,
-  minLength,
-  numeric,
-  email,
-  sameAs,
-  helpers
-} from '@vuelidate/validators'
-import AuthService from '@/composables/auth'
-import Auth from '@/api/auth/auth'
-import httpException from '@/composables/http-exception'
-import Socialite from '@/components/login/Socialite.vue'
+  import { useVuelidate } from '@vuelidate/core'
+  import {
+    required,
+    maxLength,
+    minLength,
+    numeric,
+    email,
+    sameAs,
+    helpers,
+  } from '@vuelidate/validators'
+  import AuthService from '@/composables/auth'
+  import Auth from '@/api/auth/auth'
+  import httpException from '@/composables/http-exception'
+  import Socialite from '@/components/login/Socialite.vue'
 
-export default {
-  name: 'RegisterForm',
-  components: { Socialite },
-  setup () {
-    return {
-      v$: useVuelidate(),
-      httpException
-    }
-  },
-  data () {
-    return {
-      loading: false,
-      showPsw: false,
-      showPswConf: false,
-      form: {
-        first_name: null,
-        last_name: null,
-        phone_number: null,
-        email: null,
-        password: null,
-        password_confirmation: null,
-        agreement: false
-      },
-      apiErrors: {
-        first_name: [],
-        last_name: [],
-        phone_number: [],
-        email: [],
-        password: [],
-        password_confirmation: []
-      }
-    }
-  },
-  computed: {
-    formErrors () {
+  export default {
+    name: 'RegisterForm',
+    components: { Socialite },
+    setup() {
       return {
-        first_name: this.v$.form.first_name.$errors.map(v => v.$message).concat(this.apiErrors.first_name).filter(Boolean),
-        last_name: this.v$.form.last_name.$errors.map(v => v.$message).concat(this.apiErrors.last_name).filter(Boolean),
-        phone_number: this.v$.form.phone_number.$errors.map(v => v.$message).concat(this.apiErrors.phone_number).filter(Boolean),
-        email: this.v$.form.email.$errors.map(v => v.$message).concat(this.apiErrors.email).filter(Boolean),
-        password: this.v$.form.password.$errors.map(v => v.$message).concat(this.apiErrors.password).filter(Boolean),
-        password_confirmation: this.v$.form.password_confirmation.$errors.map(v => v.$message).concat(this.apiErrors.password_confirmation).filter(Boolean),
-        agreement: this.v$.form.agreement.$errors.map(v => v.$message).filter(Boolean)
-      }
-    }
-  },
-  watch: {
-    'form.first_name' () {
-      if (this.form.first_name) this.form.first_name = this.capitalize('first_name')
-
-      delete this.apiErrors.first_name
-    },
-    'form.last_name' () {
-      if (this.form.last_name) this.form.last_name = this.capitalize('last_name')
-
-      delete this.apiErrors.last_name
-    },
-    'form.phone_number' () {
-      if (this.form.phone_number) this.form.phone_number = this.form.phone_number.trim()
-
-      delete this.apiErrors.phone_number
-    },
-    'form.email' () {
-      if (this.form.email) this.form.email = this.form.email.trim()
-
-      delete this.apiErrors.email
-    },
-    'form.password' () {
-      if (this.form.password) this.form.password = this.form.password.trim()
-
-      delete this.apiErrors.password
-    },
-    'form.password_confirmation' () {
-      if (this.form.password_confirmation) this.form.password_confirmation = this.form.password_confirmation.trim()
-
-      delete this.apiErrors.password_confirmation
-    }
-  },
-  methods: {
-    capitalize (field) {
-      const arr = this.form[field].split(' ')
-
-      for (let i = 0; i < arr.length; i++) {
-        arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1)
-      }
-
-      return arr.join(' ')
-    },
-    reset () {
-      this.v$.$reset()
-
-      this.loading = false
-      this.showPsw = false
-      this.showPswConf = false
-      this.form = {
-        first_name: null,
-        last_name: null,
-        phone_number: null,
-        email: null,
-        password: null,
-        password_confirmation: null,
-        agreement: false
-      }
-      this.apiErrors = {
-        first_name: [],
-        last_name: [],
-        phone_number: [],
-        email: [],
-        password: [],
-        password_confirmation: []
+        v$: useVuelidate(),
+        httpException,
       }
     },
-    async submit () {
-      const result = await this.v$.$validate()
-      if (!result) return
-
-      this.loading = true
-
-      return Auth.register(this.form)
-        .then(({ data }) => {
-          AuthService.setUser(data)
-          AuthService.setAuth(data.token)
-          this.reset()
-          this.$router.push({ name: 'Home' }).catch(() => {})
-        })
-        .catch(({ response }) => {
-          switch (response.status) {
-            case 422:
-              this.apiErrors = response.data.errors
-              this.form.password = null
-              this.form.password_confirmation = null
-              this.form.agreement = false
-              break
-
-            default:
-              this.httpException(response)
-              break
-          }
-        })
-        .finally(() => { this.loading = false })
-    }
-  },
-  validations () {
-    return {
-      form: {
-        first_name: {
-          maxLength: maxLength(50),
-          required: helpers.withMessage('This field cannot be empty', required)
+    data() {
+      return {
+        loading: false,
+        showPsw: false,
+        showPswConf: false,
+        form: {
+          first_name: null,
+          last_name: null,
+          phone_number: null,
+          email: null,
+          password: null,
+          password_confirmation: null,
+          agreement: false,
         },
-        last_name: {
-          maxLength: maxLength(50),
-          required: helpers.withMessage('This field cannot be empty', required)
+        apiErrors: {
+          first_name: [],
+          last_name: [],
+          phone_number: [],
+          email: [],
+          password: [],
+          password_confirmation: [],
         },
-        phone_number: {
-          numeric,
-          maxLength: maxLength(11),
-          minLength: minLength(11),
-          required: helpers.withMessage('This field cannot be empty', required)
-        },
-        email: {
-          email,
-          required: helpers.withMessage('This field cannot be empty', required)
-        },
-        password: {
-          minLength: minLength(8),
-          maxLength: maxLength(16),
-          required: helpers.withMessage('This field cannot be empty', required)
-        },
-        password_confirmation: {
-          sameAsPassword: sameAs(this.form.password),
-          required: helpers.withMessage('This field cannot be empty', required)
-        },
-        agreement: {
-          sameAs: helpers.withMessage(
-            () => 'This is required',
-            sameAs(true)
-          )
+      }
+    },
+    computed: {
+      formErrors() {
+        return {
+          first_name: this.v$.form.first_name.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.first_name)
+            .filter(Boolean),
+          last_name: this.v$.form.last_name.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.last_name)
+            .filter(Boolean),
+          phone_number: this.v$.form.phone_number.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.phone_number)
+            .filter(Boolean),
+          email: this.v$.form.email.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.email)
+            .filter(Boolean),
+          password: this.v$.form.password.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.password)
+            .filter(Boolean),
+          password_confirmation: this.v$.form.password_confirmation.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.password_confirmation)
+            .filter(Boolean),
+          agreement: this.v$.form.agreement.$errors
+            .map((v) => v.$message)
+            .filter(Boolean),
         }
+      },
+    },
+    watch: {
+      'form.first_name'() {
+        if (this.form.first_name)
+          this.form.first_name = this.capitalize('first_name')
+
+        delete this.apiErrors.first_name
+      },
+      'form.last_name'() {
+        if (this.form.last_name)
+          this.form.last_name = this.capitalize('last_name')
+
+        delete this.apiErrors.last_name
+      },
+      'form.phone_number'() {
+        if (this.form.phone_number)
+          this.form.phone_number = this.form.phone_number.trim()
+
+        delete this.apiErrors.phone_number
+      },
+      'form.email'() {
+        if (this.form.email) this.form.email = this.form.email.trim()
+
+        delete this.apiErrors.email
+      },
+      'form.password'() {
+        if (this.form.password) this.form.password = this.form.password.trim()
+
+        delete this.apiErrors.password
+      },
+      'form.password_confirmation'() {
+        if (this.form.password_confirmation)
+          this.form.password_confirmation =
+            this.form.password_confirmation.trim()
+
+        delete this.apiErrors.password_confirmation
+      },
+    },
+    methods: {
+      capitalize(field) {
+        const arr = this.form[field].split(' ')
+
+        for (let i = 0; i < arr.length; i++) {
+          arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1)
+        }
+
+        return arr.join(' ')
+      },
+      reset() {
+        this.v$.$reset()
+
+        this.loading = false
+        this.showPsw = false
+        this.showPswConf = false
+        this.form = {
+          first_name: null,
+          last_name: null,
+          phone_number: null,
+          email: null,
+          password: null,
+          password_confirmation: null,
+          agreement: false,
+        }
+        this.apiErrors = {
+          first_name: [],
+          last_name: [],
+          phone_number: [],
+          email: [],
+          password: [],
+          password_confirmation: [],
+        }
+      },
+      async submit() {
+        const result = await this.v$.$validate()
+        if (!result) return
+
+        this.loading = true
+
+        return Auth.register(this.form)
+          .then(({ data }) => {
+            AuthService.setUser(data)
+            AuthService.setAuth(data.token)
+            this.reset()
+            this.$router.push({ name: 'Home' }).catch(() => {})
+          })
+          .catch(({ response }) => {
+            switch (response.status) {
+              case 422:
+                this.apiErrors = response.data.errors
+                this.form.password = null
+                this.form.password_confirmation = null
+                this.form.agreement = false
+                break
+
+              default:
+                this.httpException(response)
+                break
+            }
+          })
+          .finally(() => {
+            this.loading = false
+          })
+      },
+    },
+    validations() {
+      return {
+        form: {
+          first_name: {
+            maxLength: maxLength(50),
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+          last_name: {
+            maxLength: maxLength(50),
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+          phone_number: {
+            numeric,
+            maxLength: maxLength(11),
+            minLength: minLength(11),
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+          email: {
+            email,
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+          password: {
+            minLength: minLength(8),
+            maxLength: maxLength(16),
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+          password_confirmation: {
+            sameAsPassword: sameAs(this.form.password),
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+          agreement: {
+            sameAs: helpers.withMessage(() => 'This is required', sameAs(true)),
+          },
+        },
       }
-    }
+    },
   }
-}
 </script>

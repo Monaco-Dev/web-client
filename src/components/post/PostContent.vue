@@ -16,6 +16,17 @@
       </v-tooltip>
     </v-chip>
 
+    <v-chip
+      v-if="isSold"
+      density="compact"
+      class="ml-3 mb-3"
+      variant="tonal"
+      color="error"
+      label
+    >
+      Sold
+    </v-chip>
+
     <p
       v-if="!content?.hasSummary"
       class="ma-0"
@@ -52,7 +63,7 @@
 
     <v-slide-group
       show-arrows
-      class="mt-3"
+      class="my-3"
     >
       <v-slide-group-item
         v-for="tag in tags"
@@ -72,21 +83,25 @@
 </template>
 
 <script>
-import Constants from '@/config/constants'
+  import Constants from '@/config/constants'
 
-export default {
-  props: {
-    content: {
-      type: Object,
-      required: true
+  export default {
+    props: {
+      content: {
+        type: Object,
+        required: true,
+      },
+      tags: {
+        type: Array,
+        required: true,
+      },
+      isSold: {
+        type: Boolean,
+        default: false,
+      },
     },
-    tags: {
-      type: Array,
-      required: true
-    }
-  },
-  setup () {
-    return { Constants }
+    setup() {
+      return { Constants }
+    },
   }
-}
 </script>

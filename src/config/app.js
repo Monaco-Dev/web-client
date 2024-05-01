@@ -6,10 +6,10 @@ export default {
      * ===========================================
      */
     auth: {
-      url: import.meta.env.VITE_APP_AUTH_SERVICE_URL
+      url: import.meta.env.VITE_APP_AUTH_SERVICE_URL,
     },
     feed: {
-      url: import.meta.env.VITE_APP_FEED_SERVICE_URL
-    }
-  }
+      url: import.meta.env.VITE_APP_FEED_SERVICE_URL,
+    },
+  },
 }

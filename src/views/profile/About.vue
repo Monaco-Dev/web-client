@@ -2,9 +2,7 @@
   <AppGrid>
     <template #center>
       <v-list>
-        <v-list-subheader>
-          Contacts
-        </v-list-subheader>
+        <v-list-subheader> Contacts </v-list-subheader>
 
         <v-list-item>
           <template #prepend>
@@ -54,7 +52,8 @@
             <a
               :href="social.url"
               target="_blank"
-            >{{ social.url }}</a>
+              >{{ social.url }}</a
+            >
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -63,24 +62,24 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useProfileStore } from '@/store/profile'
-import AppGrid from '@/components/default/desktop/AppGrid.vue'
+  import { computed } from 'vue'
+  import { useProfileStore } from '@/store/profile'
+  import AppGrid from '@/components/default/desktop/AppGrid.vue'
 
-export default {
-  name: 'ProfileAbout',
-  components: { AppGrid },
-  setup () {
-    const profileStore = useProfileStore()
+  export default {
+    name: 'ProfileAbout',
+    components: { AppGrid },
+    setup() {
+      const profileStore = useProfileStore()
 
-    const profile = computed(() => profileStore.profile)
-    const loading = computed(() => profileStore.loading)
+      const profile = computed(() => profileStore.profile)
+      const loading = computed(() => profileStore.loading)
 
-    return {
-      profileStore,
-      profile,
-      loading
-    }
+      return {
+        profileStore,
+        profile,
+        loading,
+      }
+    },
   }
-}
 </script>

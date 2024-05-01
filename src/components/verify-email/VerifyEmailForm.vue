@@ -8,7 +8,9 @@
   >
     <v-card-text>
       <v-container fluid>
-        Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.
+        Thanks for signing up! Before getting started, could you verify your
+        email address by clicking on the link we just emailed to you? If you
+        didn't receive the email, we will gladly send you another.
       </v-container>
     </v-card-text>
 
@@ -41,49 +43,49 @@
 </template>
 
 <script>
-import { useSnackbarStore } from '@/store/snackbar'
-import httpException from '@/composables/http-exception'
-import AuthService from '@/composables/auth'
-import User from '@/api/auth/user'
-import Auth from '@/api/auth/auth'
+  import { useSnackbarStore } from '@/store/snackbar'
+  import httpException from '@/composables/http-exception'
+  import AuthService from '@/composables/auth'
+  import User from '@/api/auth/user'
+  import Auth from '@/api/auth/auth'
 
-export default {
-  name: 'VerifyEmailForm',
-  setup () {
-    return {
-      httpException,
-      snackbarStore: useSnackbarStore()
-    }
-  },
-  data () {
-    return {
-      loading: false
-    }
-  },
-  methods: {
-    resend () {
-      this.loading = true
-
-      return User.resendVerificationEmail()
-        .then(() => {
-          this.snackbarStore.open({
-            text: 'A new verification link has been sent to the email address you provided during registration.',
-            color: 'success'
-          })
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => {
-          this.loading = false
-        })
+  export default {
+    name: 'VerifyEmailForm',
+    setup() {
+      return {
+        httpException,
+        snackbarStore: useSnackbarStore(),
+      }
     },
-    logout () {
-      return Auth.logout()
-        .then(() => {
-          AuthService.flush()
-          this.$router.push({ name: 'Login' }).catch(() => {})
-        })
-        .catch(({ response }) => this.httpException(response))
-    }
+    data() {
+      return {
+        loading: false,
+      }
+    },
+    methods: {
+      resend() {
+        this.loading = true
+
+        return User.resendVerificationEmail()
+          .then(() => {
+            this.snackbarStore.open({
+              text: 'A new verification link has been sent to the email address you provided during registration.',
+              color: 'success',
+            })
+          })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => {
+            this.loading = false
+          })
+      },
+      logout() {
+        return Auth.logout()
+          .then(() => {
+            AuthService.flush()
+            this.$router.push({ name: 'Login' }).catch(() => {})
+          })
+          .catch(({ response }) => this.httpException(response))
+      },
+    },
   }
-}
 </script>

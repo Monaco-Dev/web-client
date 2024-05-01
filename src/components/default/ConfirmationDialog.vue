@@ -66,60 +66,60 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useDialogStore } from '@/store/dialog'
+  import { computed } from 'vue'
+  import { useDialogStore } from '@/store/dialog'
 
-export default {
-  name: 'ConfirmationDialog',
-  setup () {
-    const dialogStore = useDialogStore()
+  export default {
+    name: 'ConfirmationDialog',
+    setup() {
+      const dialogStore = useDialogStore()
 
-    const confirmationDialog = computed(() => dialogStore.confirmationDialog)
-    const title = computed(() => dialogStore.title)
-    const body = computed(() => dialogStore.body)
-    const action = computed(() => dialogStore.action)
-    const actionLabel = computed(() => dialogStore.actionLabel)
-    const cancel = computed(() => dialogStore.cancel)
-    const cancelLabel = computed(() => dialogStore.cancelLabel)
-    const color = computed(() => dialogStore.color)
+      const confirmationDialog = computed(() => dialogStore.confirmationDialog)
+      const title = computed(() => dialogStore.title)
+      const body = computed(() => dialogStore.body)
+      const action = computed(() => dialogStore.action)
+      const actionLabel = computed(() => dialogStore.actionLabel)
+      const cancel = computed(() => dialogStore.cancel)
+      const cancelLabel = computed(() => dialogStore.cancelLabel)
+      const color = computed(() => dialogStore.color)
 
-    return {
-      dialogStore,
-      confirmationDialog,
-      title,
-      body,
-      action,
-      actionLabel,
-      cancel,
-      cancelLabel,
-      color
-    }
-  },
-  computed: {
-    content () {
-      return this.body.split('\n')
-    }
-  },
-  methods: {
-    /**
-     * Hides the dialog and executes the action callback function.
-     *
-     */
-    closeAndAgree () {
-      this.dialogStore.closeDialog('confirmationDialog')
-
-      if (this.dialogStore.action) this.dialogStore.action()
+      return {
+        dialogStore,
+        confirmationDialog,
+        title,
+        body,
+        action,
+        actionLabel,
+        cancel,
+        cancelLabel,
+        color,
+      }
     },
+    computed: {
+      content() {
+        return this.body.split('\n')
+      },
+    },
+    methods: {
+      /**
+       * Hides the dialog and executes the action callback function.
+       *
+       */
+      closeAndAgree() {
+        this.dialogStore.closeDialog('confirmationDialog')
 
-    /**
-     * Hides the dialog and executes the cancel callback function.
-     *
-     */
-    closeAndDisagree () {
-      this.dialogStore.closeDialog('confirmationDialog')
+        if (this.dialogStore.action) this.dialogStore.action()
+      },
 
-      if (this.dialogStore.cancel) this.dialogStore.cancel()
-    }
+      /**
+       * Hides the dialog and executes the cancel callback function.
+       *
+       */
+      closeAndDisagree() {
+        this.dialogStore.closeDialog('confirmationDialog')
+
+        if (this.dialogStore.cancel) this.dialogStore.cancel()
+      },
+    },
   }
-}
 </script>

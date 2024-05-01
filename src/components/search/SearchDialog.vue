@@ -6,7 +6,7 @@
     transition="dialog-bottom-transition"
     persistent
   >
-  <!-- TODO: make content only scrollable -->
+    <!-- TODO: make content only scrollable -->
     <v-card
       flat
       tile
@@ -80,7 +80,7 @@
             <SearchAll
               ref="searchAll"
               :search="search"
-              @click:seeMore="tab='searchUsers'"
+              @click:seeMore="tab = 'searchUsers'"
               class="mt-3"
             />
           </v-window-item>
@@ -107,57 +107,57 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
-import { useSearchStore } from '@/store/search'
-import SearchAll from '@/components/search/SearchAll.vue'
-import SearchPosts from '@/components/search/SearchPosts.vue'
-import SearchUsers from '@/components/search/SearchUsers.vue'
+  import { ref, computed } from 'vue'
+  import { useSearchStore } from '@/store/search'
+  import SearchAll from '@/components/search/SearchAll.vue'
+  import SearchPosts from '@/components/search/SearchPosts.vue'
+  import SearchUsers from '@/components/search/SearchUsers.vue'
 
-export default {
-  name: 'SearchDialog',
-  components: {
-    SearchAll,
-    SearchPosts,
-    SearchUsers
-  },
-  setup () {
-    const searchStore = useSearchStore()
-
-    const dialog = computed(() => searchStore.dialog)
-
-    return {
-      searchStore,
-      dialog,
-      searchAll: ref(null)
-    }
-  },
-  data () {
-    return {
-      tab: null,
-      search: null
-    }
-  },
-  watch: {
-    dialog () {
-      if (this.dialog) {
-        this.search = this.searchStore.search ?? null
-        this.searchStore.reset()
-        this.applySearch()
-      } else {
-        this.searchStore.reset()
-      }
-    }
-  },
-  methods: {
-    applySearch () {
-      this.$nextTick(() => {
-        this.$refs[this.tab].applySearch()
-      })
+  export default {
+    name: 'SearchDialog',
+    components: {
+      SearchAll,
+      SearchPosts,
+      SearchUsers,
     },
-    close () {
-      this.$router.push({ query: {} })
-      this.searchStore.closeDialog()
-    }
+    setup() {
+      const searchStore = useSearchStore()
+
+      const dialog = computed(() => searchStore.dialog)
+
+      return {
+        searchStore,
+        dialog,
+        searchAll: ref(null),
+      }
+    },
+    data() {
+      return {
+        tab: null,
+        search: null,
+      }
+    },
+    watch: {
+      dialog() {
+        if (this.dialog) {
+          this.search = this.searchStore.search ?? null
+          this.searchStore.reset()
+          this.applySearch()
+        } else {
+          this.searchStore.reset()
+        }
+      },
+    },
+    methods: {
+      applySearch() {
+        this.$nextTick(() => {
+          this.$refs[this.tab].applySearch()
+        })
+      },
+      close() {
+        this.$router.push({ query: {} })
+        this.searchStore.closeDialog()
+      },
+    },
   }
-}
 </script>

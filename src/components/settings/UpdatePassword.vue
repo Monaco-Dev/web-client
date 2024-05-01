@@ -21,7 +21,9 @@
                   label="Current Password"
                   :type="showCurrentPsw ? 'text' : 'password'"
                   v-model="form.current_password"
-                  :append-inner-icon="showCurrentPsw ? 'mdi-eye-off' : 'mdi-eye'"
+                  :append-inner-icon="
+                    showCurrentPsw ? 'mdi-eye-off' : 'mdi-eye'
+                  "
                   @click:append-inner="showCurrentPsw = !showCurrentPsw"
                   :max-errors="formErrors.current_password.length"
                   :error-messages="formErrors.current_password"
@@ -80,144 +82,167 @@
 </template>
 
 <script>
-import { useVuelidate } from '@vuelidate/core'
-import {
-  required,
-  maxLength,
-  minLength,
-  sameAs,
-  helpers
-} from '@vuelidate/validators'
-import { useSnackbarStore } from '@/store/snackbar'
-import httpException from '@/composables/http-exception'
-import User from '@/api/auth/user'
-import AuthService from '@/composables/auth'
+  import { useVuelidate } from '@vuelidate/core'
+  import {
+    required,
+    maxLength,
+    minLength,
+    sameAs,
+    helpers,
+  } from '@vuelidate/validators'
+  import { useSnackbarStore } from '@/store/snackbar'
+  import httpException from '@/composables/http-exception'
+  import User from '@/api/auth/user'
+  import AuthService from '@/composables/auth'
 
-export default {
-  name: 'UpdatePassword',
-  setup () {
-    return {
-      v$: useVuelidate(),
-      httpException,
-      snackbarStore: useSnackbarStore()
-    }
-  },
-  data () {
-    return {
-      loading: false,
-      showCurrentPsw: false,
-      showPsw: false,
-      showPswConf: false,
-      form: {
-        email: null,
-        current_password: null,
-        password: null,
-        password_confirmation: null
-      },
-      apiErrors: {
-        current_password: [],
-        password: [],
-        password_confirmation: []
-      }
-    }
-  },
-  mounted () {
-    if (AuthService.isAuthenticated()) this.reset()
-  },
-  computed: {
-    formErrors () {
+  export default {
+    name: 'UpdatePassword',
+    setup() {
       return {
-        current_password: this.v$.form.current_password.$errors.map(v => v.$message).concat(this.apiErrors.current_password).filter(Boolean),
-        password: this.v$.form.password.$errors.map(v => v.$message).concat(this.apiErrors.password).filter(Boolean),
-        password_confirmation: this.v$.form.password_confirmation.$errors.map(v => v.$message).concat(this.apiErrors.password_confirmation).filter(Boolean)
-      }
-    }
-  },
-  watch: {
-    'form.current_password' () {
-      if (this.form.current_password) this.form.current_password = this.form.current_password.trim()
-
-      delete this.apiErrors.password
-    },
-    'form.password' () {
-      if (this.form.password) this.form.password = this.form.password.trim()
-
-      delete this.apiErrors.password
-    },
-    'form.password_confirmation' () {
-      if (this.form.password_confirmation) this.form.password_confirmation = this.form.password_confirmation.trim()
-
-      delete this.apiErrors.password_confirmation
-    }
-  },
-  methods: {
-    reset () {
-      this.v$.$reset()
-
-      this.loading = false
-      this.showCurrentPsw = false
-      this.showPsw = false
-      this.showPswConf = false
-      this.form = {
-        email: AuthService.getUser().email,
-        current_password: null,
-        password: null,
-        password_confirmation: null
-      }
-      this.apiErrors = {
-        current_password: [],
-        password: [],
-        password_confirmation: []
+        v$: useVuelidate(),
+        httpException,
+        snackbarStore: useSnackbarStore(),
       }
     },
-    async submit () {
-      const result = await this.v$.$validate()
-      if (!result) return
-
-      this.loading = true
-
-      return User.updatePassword(this.form)
-        .then(({ data }) => {
-          AuthService.setUser(data)
-          this.reset()
-          this.snackbarStore.open({
-            text: 'Your password has been updated successfully.',
-            color: 'success'
-          })
-        })
-        .catch(({ response }) => {
-          switch (response.status) {
-            case 422:
-              this.apiErrors = response.data.errors
-              break
-
-            default:
-              this.httpException(response)
-              break
-          }
-        })
-        .finally(() => { this.loading = false })
-    }
-  },
-  validations () {
-    return {
-      form: {
-        current_password: {
-          minLength: minLength(8),
-          maxLength: maxLength(16),
-          required: helpers.withMessage('This field cannot be empty', required)
+    data() {
+      return {
+        loading: false,
+        showCurrentPsw: false,
+        showPsw: false,
+        showPswConf: false,
+        form: {
+          email: null,
+          current_password: null,
+          password: null,
+          password_confirmation: null,
         },
-        password: {
-          minLength: minLength(8),
-          maxLength: maxLength(16),
-          required: helpers.withMessage('This field cannot be empty', required)
+        apiErrors: {
+          current_password: [],
+          password: [],
+          password_confirmation: [],
         },
-        password_confirmation: {
-          sameAsPassword: sameAs(this.form.password),
-          required: helpers.withMessage('This field cannot be empty', required)
+      }
+    },
+    mounted() {
+      if (AuthService.isAuthenticated()) this.reset()
+    },
+    computed: {
+      formErrors() {
+        return {
+          current_password: this.v$.form.current_password.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.current_password)
+            .filter(Boolean),
+          password: this.v$.form.password.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.password)
+            .filter(Boolean),
+          password_confirmation: this.v$.form.password_confirmation.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.password_confirmation)
+            .filter(Boolean),
         }
+      },
+    },
+    watch: {
+      'form.current_password'() {
+        if (this.form.current_password)
+          this.form.current_password = this.form.current_password.trim()
+
+        delete this.apiErrors.password
+      },
+      'form.password'() {
+        if (this.form.password) this.form.password = this.form.password.trim()
+
+        delete this.apiErrors.password
+      },
+      'form.password_confirmation'() {
+        if (this.form.password_confirmation)
+          this.form.password_confirmation =
+            this.form.password_confirmation.trim()
+
+        delete this.apiErrors.password_confirmation
+      },
+    },
+    methods: {
+      reset() {
+        this.v$.$reset()
+
+        this.loading = false
+        this.showCurrentPsw = false
+        this.showPsw = false
+        this.showPswConf = false
+        this.form = {
+          email: AuthService.getUser().email,
+          current_password: null,
+          password: null,
+          password_confirmation: null,
+        }
+        this.apiErrors = {
+          current_password: [],
+          password: [],
+          password_confirmation: [],
+        }
+      },
+      async submit() {
+        const result = await this.v$.$validate()
+        if (!result) return
+
+        this.loading = true
+
+        return User.updatePassword(this.form)
+          .then(({ data }) => {
+            AuthService.setUser(data)
+            this.reset()
+            this.snackbarStore.open({
+              text: 'Your password has been updated successfully.',
+              color: 'success',
+            })
+          })
+          .catch(({ response }) => {
+            switch (response.status) {
+              case 422:
+                this.apiErrors = response.data.errors
+                break
+
+              default:
+                this.httpException(response)
+                break
+            }
+          })
+          .finally(() => {
+            this.loading = false
+          })
+      },
+    },
+    validations() {
+      return {
+        form: {
+          current_password: {
+            minLength: minLength(8),
+            maxLength: maxLength(16),
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+          password: {
+            minLength: minLength(8),
+            maxLength: maxLength(16),
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+          password_confirmation: {
+            sameAsPassword: sameAs(this.form.password),
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+        },
       }
-    }
+    },
   }
-}
 </script>

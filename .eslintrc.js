@@ -3,15 +3,25 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    node: true
+    node: true,
   },
   extends: [
     'standard',
     'plugin:vue/vue3-essential',
     'eslint:recommended',
-    'plugin:vue/strongly-recommended'
+    'plugin:vue/strongly-recommended',
+    'plugin:prettier/recommended',
   ],
-  plugins: [
-    'vue'
-  ]
+  plugins: ['vue'],
+  rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        singleQuote: true,
+        singleAttributePerLine: true,
+        semi: false,
+        vueIndentScriptAndStyle: true,
+      },
+    ],
+  },
 }

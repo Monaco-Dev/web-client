@@ -31,7 +31,7 @@
       >
         <UserItem
           :user="user"
-          :class="{'mt-2': i > 0}"
+          :class="{ 'mt-2': i > 0 }"
         />
 
         <v-divider v-if="users.length > i + 1" />
@@ -41,27 +41,27 @@
 </template>
 
 <script>
-import UserItem from '@/components/user/UserItem.vue'
+  import UserItem from '@/components/user/UserItem.vue'
 
-export default {
-  name: 'UserList',
-  components: { UserItem },
-  props: {
-    users: {
-      type: Array,
-      default: Array,
-      required: false
+  export default {
+    name: 'UserList',
+    components: { UserItem },
+    props: {
+      users: {
+        type: Array,
+        default: Array,
+        required: false,
+      },
+      loading: {
+        type: Boolean,
+        default: false,
+        required: false,
+      },
     },
-    loading: {
-      type: Boolean,
-      default: false,
-      required: false
-    }
-  },
-  methods: {
-    load (e) {
-      this.$emit('load', e)
-    }
+    methods: {
+      load(e) {
+        this.$emit('load', e)
+      },
+    },
   }
-}
 </script>

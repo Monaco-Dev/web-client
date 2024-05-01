@@ -10,7 +10,7 @@ export default {
    *
    * @param data
    */
-  setTheme (data) {
+  setTheme(data) {
     localStorage.setItem('theme', data)
   },
   /**
@@ -18,7 +18,7 @@ export default {
    *
    * @return *
    */
-  getTheme () {
+  getTheme() {
     return localStorage.getItem('theme') ?? 'light'
-  }
+  },
 }

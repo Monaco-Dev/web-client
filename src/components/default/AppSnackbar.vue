@@ -16,39 +16,39 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useSnackbarStore } from '@/store/snackbar'
+  import { computed } from 'vue'
+  import { useSnackbarStore } from '@/store/snackbar'
 
-export default {
-  name: 'AppSnackbar',
-  setup () {
-    const snackbarStore = useSnackbarStore()
+  export default {
+    name: 'AppSnackbar',
+    setup() {
+      const snackbarStore = useSnackbarStore()
 
-    const snackbar = computed(() => snackbarStore.snackbar)
-    const text = computed(() => snackbarStore.text)
-    const timeout = computed(() => snackbarStore.timeout)
-    const color = computed(() => snackbarStore.color)
+      const snackbar = computed(() => snackbarStore.snackbar)
+      const text = computed(() => snackbarStore.text)
+      const timeout = computed(() => snackbarStore.timeout)
+      const color = computed(() => snackbarStore.color)
 
-    return {
-      snackbarStore,
-      snackbar,
-      text,
-      timeout,
-      color
-    }
-  },
-  data () {
-    return {
-      bool: this.snackbar
-    }
-  },
-  watch: {
-    snackbar () {
-      this.bool = this.snackbar
+      return {
+        snackbarStore,
+        snackbar,
+        text,
+        timeout,
+        color,
+      }
     },
-    bool () {
-      this.snackbarStore.snackbar = this.bool
-    }
+    data() {
+      return {
+        bool: this.snackbar,
+      }
+    },
+    watch: {
+      snackbar() {
+        this.bool = this.snackbar
+      },
+      bool() {
+        this.snackbarStore.snackbar = this.bool
+      },
+    },
   }
-}
 </script>

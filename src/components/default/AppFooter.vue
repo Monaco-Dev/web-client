@@ -28,21 +28,21 @@
 </template>
 
 <script>
-export default {
-  name: 'AppFooter',
-  data () {
-    return {
-      links: [
-        {
-          text: 'About Us',
-          url: 'https://realmate.ph/about-us'
-        },
-        {
-          text: 'Contact Us',
-          url: 'https://www.facebook.com/realmateph'
-        }
-      ]
-    }
+  export default {
+    name: 'AppFooter',
+    data() {
+      return {
+        links: [
+          {
+            text: 'About Us',
+            url: 'https://realmate.ph/about-us',
+          },
+          {
+            text: 'Contact Us',
+            url: 'https://www.facebook.com/realmateph',
+          },
+        ],
+      }
+    },
   }
-}
 </script>

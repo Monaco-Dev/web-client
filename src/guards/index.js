@@ -14,5 +14,5 @@ export default {
   unauthorized,
   registration,
   resetPassword,
-  verifyLicense
+  verifyLicense,
 }

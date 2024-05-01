@@ -4,13 +4,13 @@ import User from '@/api/auth/user'
 export const useProfileStore = defineStore('profile', {
   state: () => ({
     loading: false,
-    profile: {}
+    profile: {},
   }),
   actions: {
     /**
      * Reset profile store
      */
-    reset () {
+    reset() {
       this.loading = false
       this.profile = {}
     },
@@ -20,7 +20,7 @@ export const useProfileStore = defineStore('profile', {
      *
      * @param {*} profile
      */
-    setProfile (profile) {
+    setProfile(profile) {
       this.profile = profile
     },
 
@@ -30,7 +30,7 @@ export const useProfileStore = defineStore('profile', {
      * @param {*} status
      * @param {*} id
      */
-    setLoading (status, id = null) {
+    setLoading(status, id = null) {
       if (id) {
         this.posts.data = this.posts.data.map((post) => {
           if (post.id === id) post.loading = status
@@ -47,12 +47,12 @@ export const useProfileStore = defineStore('profile', {
      *
      * @param * uuid
      */
-    getProfile (uuid) {
+    getProfile(uuid) {
       this.setLoading(true)
 
       return User.show(uuid)
         .then(({ data }) => this.setProfile(data))
         .finally(() => this.setLoading(false))
-    }
-  }
+    },
+  },
 })

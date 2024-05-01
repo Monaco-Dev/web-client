@@ -6,13 +6,13 @@ export const useMatchStore = defineStore('match', {
   state: () => ({
     posts: [],
     loading: false,
-    page: 1
+    page: 1,
   }),
   actions: {
     /**
      * Reset post store
      */
-    reset () {
+    reset() {
       this.posts = []
       this.loading = false
       this.page = 1
@@ -23,7 +23,7 @@ export const useMatchStore = defineStore('match', {
      *
      * @param {*} page
      */
-    setPage (page = 1) {
+    setPage(page = 1) {
       this.page = page
     },
 
@@ -32,8 +32,11 @@ export const useMatchStore = defineStore('match', {
      *
      * @param {*} newPosts
      */
-    setPosts (newPosts = []) {
-      this.posts = uniqBy(newPosts.map((v) => Post.mapPost(v)), 'id')
+    setPosts(newPosts = []) {
+      this.posts = uniqBy(
+        newPosts.map((v) => Post.mapPost(v)),
+        'id',
+      )
     },
 
     /**
@@ -41,8 +44,11 @@ export const useMatchStore = defineStore('match', {
      *
      * @param {*} newPosts
      */
-    addPosts (newPosts = []) {
-      this.posts = uniqBy([...this.posts, ...newPosts.map((v) => Post.mapPost(v))], 'id')
+    addPosts(newPosts = []) {
+      this.posts = uniqBy(
+        [...this.posts, ...newPosts.map((v) => Post.mapPost(v))],
+        'id',
+      )
     },
 
     /**
@@ -50,7 +56,7 @@ export const useMatchStore = defineStore('match', {
      *
      * @param {*} post
      */
-    addPost (post) {
+    addPost(post) {
       this.posts.unshift(Post.mapPost(post))
       this.posts = uniqBy(this.posts, 'id')
     },
@@ -60,14 +66,14 @@ export const useMatchStore = defineStore('match', {
      *
      * @param {*} post
      */
-    updatePost (post) {
+    updatePost(post) {
       this.posts = uniqBy(
         this.posts.map((val) => {
           if (val.id === post.id) return Post.mapPost(post)
 
           return val
         }),
-        'id'
+        'id',
       )
     },
 
@@ -76,8 +82,11 @@ export const useMatchStore = defineStore('match', {
      *
      * @param {*} id
      */
-    deletePost (id) {
-      this.posts = uniqBy(this.posts.filter((post) => (post.id !== id)), 'id')
+    deletePost(id) {
+      this.posts = uniqBy(
+        this.posts.filter((post) => post.id !== id),
+        'id',
+      )
     },
 
     /**
@@ -86,7 +95,7 @@ export const useMatchStore = defineStore('match', {
      * @param {*} status
      * @param {*} id
      */
-    setLoading (status, id = null) {
+    setLoading(status, id = null) {
       if (id) {
         this.posts = uniqBy(
           this.posts.map((post) => {
@@ -94,11 +103,11 @@ export const useMatchStore = defineStore('match', {
 
             return post
           }),
-          'id'
+          'id',
         )
       } else {
         this.loading = status
       }
-    }
-  }
+    },
+  },
 })

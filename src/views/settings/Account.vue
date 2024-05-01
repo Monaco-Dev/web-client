@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import UpdateAccount from '@/components/settings/UpdateAccount.vue'
-import UpdatePassword from '@/components/settings/UpdatePassword.vue'
-import AccountManagement from '@/components/settings/AccountManagement.vue'
+  import UpdateAccount from '@/components/settings/UpdateAccount.vue'
+  import UpdatePassword from '@/components/settings/UpdatePassword.vue'
+  import AccountManagement from '@/components/settings/AccountManagement.vue'
 </script>

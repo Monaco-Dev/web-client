@@ -12,7 +12,9 @@
 
       <template #subtitle>
         <span class="text-wrap">
-          If you want to take a break from Realmate, you can temporarily deactivate this account. If you want to permanently delete your account, let us know.
+          If you want to take a break from Realmate, you can temporarily
+          deactivate this account. If you want to permanently delete your
+          account, let us know.
         </span>
       </template>
 
@@ -20,7 +22,7 @@
         <v-list
           lines="four"
           select-strategy="single-leaf"
-          v-model:selected="select"
+          v-model="select"
           :mandatory="true"
         >
           <v-list-item value="deactivate">
@@ -33,7 +35,9 @@
             <v-list-item-title>Deactivate account</v-list-item-title>
 
             <v-list-item-subtitle>
-              <strong>Deactivating your account is temporary.</strong> Your Account and profile will be deactivated and your name and posts will be removed from most things you've shared.
+              <strong>Deactivating your account is temporary.</strong> Your
+              Account and profile will be deactivated and your name and posts
+              will be removed from most things you've shared.
             </v-list-item-subtitle>
           </v-list-item>
 
@@ -47,7 +51,10 @@
             <v-list-item-title>Delete account</v-list-item-title>
 
             <v-list-item-subtitle>
-              <strong>Deleting your account is permanent.</strong> When you delete your Realmate account, you won't be able to retrieve the content or information you've shared on Realmate. Your profile will also be deleted.
+              <strong>Deleting your account is permanent.</strong> When you
+              delete your Realmate account, you won't be able to retrieve the
+              content or information you've shared on Realmate. Your profile
+              will also be deleted.
             </v-list-item-subtitle>
           </v-list-item>
         </v-list>
@@ -62,7 +69,7 @@
             <v-btn-danger
               type="submit"
               :disabled="!select.length"
-              @click="$refs.dialog.confirmationDialog=true"
+              @click="$refs.dialog.confirmationDialog = true"
               class="text-none"
             >
               Continue
@@ -76,7 +83,7 @@
             <v-btn
               block
               variant="tonal"
-              @click="select=[]"
+              @click="select = []"
               :disabled="!select.length"
               class="text-none"
             >
@@ -97,26 +104,26 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import AccountConfirmationDialog from '@/components/settings/AccountConfirmationDialog.vue'
-import AuthService from '@/composables/auth'
+  import { ref } from 'vue'
+  import AccountConfirmationDialog from '@/components/settings/AccountConfirmationDialog.vue'
+  import AuthService from '@/composables/auth'
 
-export default {
-  name: 'AccountManagement',
-  components: { AccountConfirmationDialog },
-  setup () {
-    return { dialog: ref(null) }
-  },
-  data () {
-    return {
-      select: []
-    }
-  },
-  methods: {
-    logout () {
-      AuthService.flush()
-      this.$router.push({ name: 'Login' }).catch(() => {})
-    }
+  export default {
+    name: 'AccountManagement',
+    components: { AccountConfirmationDialog },
+    setup() {
+      return { dialog: ref(null) }
+    },
+    data() {
+      return {
+        select: [],
+      }
+    },
+    methods: {
+      logout() {
+        AuthService.flush()
+        this.$router.push({ name: 'Login' }).catch(() => {})
+      },
+    },
   }
-}
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    :class="{'px-0': $vuetify.display.smAndDown}"
+    :class="{ 'px-0': $vuetify.display.smAndDown }"
   >
     <v-skeleton-loader
       v-if="loading"
@@ -13,82 +13,97 @@
       <MobileProfileInformation v-else />
     </template>
 
-    <router-view :class="{'mt-4': $vuetify.display.smAndDown, 'mt-1': $vuetify.display.mdAndUp}" v-if="!loading"/>
+    <router-view
+      :class="{
+        'mt-4': $vuetify.display.smAndDown,
+        'mt-1': $vuetify.display.mdAndUp,
+      }"
+      v-if="!loading"
+    />
   </v-container>
 </template>
 
 <script>
-import DesktopProfileInformation from '@/components/profile/desktop/ProfileInformation.vue'
-import MobileProfileInformation from '@/components/profile/mobile/ProfileInformation.vue'
-import { computed } from 'vue'
-import { useProfileStore } from '@/store/profile'
-import { usePostStore } from '@/store/post'
-import httpException from '@/composables/http-exception'
-import AuthService from '@/composables/auth'
+  import DesktopProfileInformation from '@/components/profile/desktop/ProfileInformation.vue'
+  import MobileProfileInformation from '@/components/profile/mobile/ProfileInformation.vue'
+  import { computed } from 'vue'
+  import { useProfileStore } from '@/store/profile'
+  import { usePostStore } from '@/store/post'
+  import httpException from '@/composables/http-exception'
+  import AuthService from '@/composables/auth'
 
-export default {
-  name: 'ProfileIndex',
-  components: {
-    DesktopProfileInformation,
-    MobileProfileInformation
-  },
-  setup () {
-    const profileStore = useProfileStore()
-    const postStore = usePostStore()
+  export default {
+    name: 'ProfileIndex',
+    components: {
+      DesktopProfileInformation,
+      MobileProfileInformation,
+    },
+    setup() {
+      const profileStore = useProfileStore()
+      const postStore = usePostStore()
 
-    const profile = computed(() => profileStore.profile)
-    const loading = computed(() => profileStore.loading)
+      const profile = computed(() => profileStore.profile)
+      const loading = computed(() => profileStore.loading)
 
-    return {
-      profileStore,
-      postStore,
-      profile,
-      loading,
-      httpException
-    }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(async (vm) => {
-      await vm.fetch(to)
-
-      if (to.name === 'ProfileAbout' && !vm.auth && !vm.profile.is_connection) {
-        vm.$router.replace({ name: 'PageNotFound' })
+      return {
+        profileStore,
+        postStore,
+        profile,
+        loading,
+        httpException,
       }
-    })
-  },
-  async beforeRouteUpdate (to, from) {
-    if (to.params.uuid !== from.params.uuid) await this.fetch(to)
+    },
+    beforeRouteEnter(to, from, next) {
+      next(async (vm) => {
+        await vm.fetch(to)
 
-    if (to.name === 'ProfileAbout' && !this.auth && !this.profile.is_connection) {
-      this.$router.replace({ name: 'PageNotFound' })
-    }
-  },
-  computed: {
-    auth () {
-      return AuthService.getUser().uuid === this.profile?.uuid
-    }
-  },
-  methods: {
-    fetch (to) {
-      this.postStore.reset()
-      this.profileStore.reset()
+        if (
+          to.name === 'ProfileAbout' &&
+          !vm.auth &&
+          !vm.profile.is_connection
+        ) {
+          vm.$router.replace({ name: 'PageNotFound' })
+        }
+      })
+    },
+    async beforeRouteUpdate(to, from) {
+      if (to.params.uuid !== from.params.uuid) await this.fetch(to)
 
-      const uuid = to.params.uuid
+      if (
+        to.name === 'ProfileAbout' &&
+        !this.auth &&
+        !this.profile.is_connection
+      ) {
+        this.$router.replace({ name: 'PageNotFound' })
+      }
+    },
+    computed: {
+      auth() {
+        return AuthService.getUser().uuid === this.profile?.uuid
+      },
+    },
+    methods: {
+      fetch(to) {
+        this.postStore.reset()
+        this.profileStore.reset()
 
-      if (!uuid) this.$router.replace({ name: 'PageNotFound' })
+        const uuid = to.params.uuid
 
-      this.profileStore.setLoading(true)
+        if (!uuid) this.$router.replace({ name: 'PageNotFound' })
 
-      return this.profileStore.getProfile(uuid)
-        .catch(({ response }) => {
-          if (response.status === 404) {
-            this.$router.replace({ name: 'PageNotFound' })
-          } else {
-            this.httpException(response)
-          }
-        })
-        .finally(() => this.profileStore.setLoading(false))
-    }
+        this.profileStore.setLoading(true)
+
+        return this.profileStore
+          .getProfile(uuid)
+          .catch(({ response }) => {
+            if (response.status === 404) {
+              this.$router.replace({ name: 'PageNotFound' })
+            } else {
+              this.httpException(response)
+            }
+          })
+          .finally(() => this.profileStore.setLoading(false))
+      },
+    },
   }
-}
 </script>

@@ -16,9 +16,9 @@ export const useNetworkStore = defineStore('network', {
     users: {
       data: [],
       meta: {
-        current_page: 1
-      }
-    }
+        current_page: 1,
+      },
+    },
   }),
   actions: {
     /**
@@ -26,7 +26,7 @@ export const useNetworkStore = defineStore('network', {
      *
      * @param {*} status
      */
-    setLoading (status) {
+    setLoading(status) {
       this.loading = status
     },
 
@@ -35,7 +35,7 @@ export const useNetworkStore = defineStore('network', {
      *
      * @param {*} page
      */
-    setUserPage (page = 1) {
+    setUserPage(page = 1) {
       this.users.meta.current_page = page
     },
 
@@ -44,7 +44,7 @@ export const useNetworkStore = defineStore('network', {
      *
      * @param {*} users
      */
-    setUsers (users = {}) {
+    setUsers(users = {}) {
       this.users = users
     },
 
@@ -53,7 +53,7 @@ export const useNetworkStore = defineStore('network', {
      *
      * @param {*} user
      */
-    updateUser (user) {
+    updateUser(user) {
       this.users.data = this.users.data.map((val) => {
         if (val.id === user.id) return user
 
@@ -64,14 +64,14 @@ export const useNetworkStore = defineStore('network', {
     /**
      * Reset all forms
      */
-    reset () {
+    reset() {
       this.loading = false
       this.users = {
         data: [],
         meta: {
-          current_page: 1
-        }
+          current_page: 1,
+        },
       }
-    }
-  }
+    },
+  },
 })

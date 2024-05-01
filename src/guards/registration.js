@@ -7,7 +7,7 @@ import AuthService from '@/composables/auth'
  * @param {*} next
  * @return next
  */
-export default async function registration (from, next) {
+export default async function registration(from, next) {
   /**
    * When user still authenticated and access_token is not expired retain current route
    */

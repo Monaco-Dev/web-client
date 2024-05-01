@@ -6,7 +6,7 @@ export default {
       FR: 'For rent',
       WTB: 'Willing to buy',
       WTL: 'Willing to lease',
-      WTR: 'Willing to rent'
-    }
-  }
+      WTR: 'Willing to rent',
+    },
+  },
 }

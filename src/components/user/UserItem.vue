@@ -6,7 +6,7 @@
     :subtitle="subtitle"
     :href="`/profile/${user.uuid}`"
   >
-  <!-- TODO: href -> to -->
+    <!-- TODO: href -> to -->
     <template #prepend>
       <v-avatar color="grey">
         <v-img
@@ -31,31 +31,31 @@
 </template>
 
 <script>
-import AuthService from '@/composables/auth'
-import UserAction from '@/components/user/UserAction.vue'
-import { useSearchStore } from '@/store/search'
+  import AuthService from '@/composables/auth'
+  import UserAction from '@/components/user/UserAction.vue'
+  import { useSearchStore } from '@/store/search'
 
-export default {
-  name: 'UserItem',
-  components: { UserAction },
-  props: {
-    user: {
-      type: Object,
-      default: Object,
-      required: true
-    }
-  },
-  setup () {
-    return { searchStore: useSearchStore() }
-  },
-  computed: {
-    subtitle () {
-      const a = `${this.user.connections_count} Connections`
-      return this.auth ? a : `${a} | ${this.user.mutuals_count} Mutuals`
+  export default {
+    name: 'UserItem',
+    components: { UserAction },
+    props: {
+      user: {
+        type: Object,
+        default: Object,
+        required: true,
+      },
     },
-    auth () {
-      return AuthService.getUser().id === this.user.id
-    }
+    setup() {
+      return { searchStore: useSearchStore() }
+    },
+    computed: {
+      subtitle() {
+        const a = `${this.user.connections_count} Connections`
+        return this.auth ? a : `${a} | ${this.user.mutuals_count} Mutuals`
+      },
+      auth() {
+        return AuthService.getUser().id === this.user.id
+      },
+    },
   }
-}
 </script>

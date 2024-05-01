@@ -1,13 +1,7 @@
 import api from '../index'
 import Config from '@/config/app'
 
-const {
-  http,
-  show,
-  store,
-  destroy,
-  search
-} = api
+const { http, show, store, destroy, search } = api
 
 /**
  * ===================
@@ -27,48 +21,53 @@ export default {
    * Update the specified resource in storage.
    *
    */
-  update (id, payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/${id}/update`, payload)
+  update(id, payload) {
+    return this.http(this.baseUrl).post(`${this.url}/${id}/update`, payload)
   },
 
-  searchWall (id, payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/search/wall/${id}`, payload)
+  searchWall(id, payload) {
+    return this.http(this.baseUrl).post(
+      `${this.url}/search/wall/${id}`,
+      payload,
+    )
   },
 
-  searchMatches (id, payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/search/${id}/matches`, payload)
+  searchMatches(id, payload) {
+    return this.http(this.baseUrl).post(
+      `${this.url}/search/${id}/matches`,
+      payload,
+    )
   },
 
-  searchPins (payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/search/pins`, payload)
+  searchPins(payload) {
+    return this.http(this.baseUrl).post(`${this.url}/search/pins`, payload)
   },
 
-  searchArchives (payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/search/archives`, payload)
+  searchArchives(payload) {
+    return this.http(this.baseUrl).post(`${this.url}/search/archives`, payload)
   },
 
-  share (id) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/${id}/share`)
+  share(id) {
+    return this.http(this.baseUrl).post(`${this.url}/${id}/share`)
   },
 
-  pin (id) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/${id}/pin`)
+  pin(id) {
+    return this.http(this.baseUrl).post(`${this.url}/${id}/pin`)
   },
 
-  unpin (id) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/${id}/unpin`)
+  unpin(id) {
+    return this.http(this.baseUrl).post(`${this.url}/${id}/unpin`)
   },
 
-  restore (id) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/${id}/restore`)
-  }
+  restore(id) {
+    return this.http(this.baseUrl).post(`${this.url}/${id}/restore`)
+  },
+
+  hide(id) {
+    return this.http(this.baseUrl).post(`${this.url}/${id}/hide`)
+  },
+
+  unhide(id) {
+    return this.http(this.baseUrl).post(`${this.url}/${id}/unhide`)
+  },
 }

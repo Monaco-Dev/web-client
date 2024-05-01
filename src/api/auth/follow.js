@@ -1,9 +1,7 @@
 import api from '../index'
 import Config from '@/config/app'
 
-const {
-  http
-} = api
+const { http } = api
 
 /**
  * ===================
@@ -19,35 +17,31 @@ export default {
    * Store a newly created resource in storage.
    *
    */
-  follow (id) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/${id}/follow`)
+  follow(id) {
+    return this.http(this.baseUrl).post(`${this.url}/${id}/follow`)
   },
 
   /**
    * Remove the specified resource from storage.
    *
    */
-  unfollow (id) {
-    return this.http(this.baseUrl)
-      .delete(`${this.url}/${id}/unfollow`)
+  unfollow(id) {
+    return this.http(this.baseUrl).delete(`${this.url}/${id}/unfollow`)
   },
 
   /**
    * Search for a specific resource in the database using POST.
    *
    */
-  searchFollowing (payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/search/following`, payload)
+  searchFollowing(payload) {
+    return this.http(this.baseUrl).post(`${this.url}/search/following`, payload)
   },
 
   /**
    * Search for a specific resource in the database using POST.
    *
    */
-  searchFollowers (payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/search/followers`, payload)
-  }
+  searchFollowers(payload) {
+    return this.http(this.baseUrl).post(`${this.url}/search/followers`, payload)
+  },
 }

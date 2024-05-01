@@ -140,59 +140,62 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useTabStore } from '@/store/tab'
-import { useSearchStore } from '@/store/search'
-import AppMenu from '@/components/default/AppMenu.vue'
-import AuthService from '@/composables/auth'
+  import { computed } from 'vue'
+  import { useTabStore } from '@/store/tab'
+  import { useSearchStore } from '@/store/search'
+  import AppMenu from '@/components/default/AppMenu.vue'
+  import AuthService from '@/composables/auth'
 
-export default {
-  name: 'AppHeader',
-  components: { AppMenu },
-  setup () {
-    const tabStore = useTabStore()
+  export default {
+    name: 'AppHeader',
+    components: { AppMenu },
+    setup() {
+      const tabStore = useTabStore()
 
-    const tab = computed(() => tabStore.tab)
+      const tab = computed(() => tabStore.tab)
 
-    return {
-      searchStore: useSearchStore(),
-      tabStore,
-      tab
-    }
-  },
-  data () {
-    return {
-      tabValue: null,
-      search: null
-    }
-  },
-  watch: {
-    tabValue () {
-      this.tabStore.setTab(this.tab)
-    },
-    tab () {
-      this.tabValue = this.tab
-    }
-  },
-  methods: {
-    getFullName () {
-      return AuthService.getUser()?.full_name
-    },
-    getAvatar () {
-      return AuthService.getUser()?.avatar_url
-    },
-    getInitials () {
-      return AuthService.getUser()?.first_name?.charAt(0) + AuthService.getUser()?.last_name?.charAt(0)
-    },
-    searchDialog () {
-      if (this.search) {
-        this.$router.push({ query: { search: this.search } })
-      } else {
-        this.$router.push({ query: {} })
-        this.searchStore.setSearch(null)
-        this.searchStore.openDialog()
+      return {
+        searchStore: useSearchStore(),
+        tabStore,
+        tab,
       }
-    }
+    },
+    data() {
+      return {
+        tabValue: null,
+        search: null,
+      }
+    },
+    watch: {
+      tabValue() {
+        this.tabStore.setTab(this.tab)
+      },
+      tab() {
+        this.tabValue = this.tab
+      },
+    },
+    methods: {
+      getFullName() {
+        return AuthService.getUser()?.full_name
+      },
+      getAvatar() {
+        return AuthService.getUser()?.avatar_url
+      },
+      getInitials() {
+        return (
+          AuthService.getUser()?.first_name?.charAt(0) +
+          AuthService.getUser()?.last_name?.charAt(0)
+        )
+      },
+      searchDialog() {
+        if (this.search) {
+          this.$router.push({ query: { search: this.search } })
+        } else {
+          this.$router.push({ query: {} })
+          this.searchStore.setSearch(null)
+          this.searchStore.openDialog()
+        }
+      },
+    },
   }
-}
 </script>

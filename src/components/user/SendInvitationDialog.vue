@@ -78,39 +78,39 @@
 </template>
 
 <script>
-export default {
-  name: 'SendInvitationDialog',
-  props: {
-    user: {
-      type: Object,
-      default: Object,
-      required: true
+  export default {
+    name: 'SendInvitationDialog',
+    props: {
+      user: {
+        type: Object,
+        default: Object,
+        required: true,
+      },
+      loading: {
+        type: Boolean,
+        default: false,
+        required: true,
+      },
     },
-    loading: {
-      type: Boolean,
-      default: false,
-      required: true
-    }
-  },
-  data () {
-    return {
-      dialog: false,
-      form: {
-        message: null
+    data() {
+      return {
+        dialog: false,
+        form: {
+          message: null,
+        },
       }
-    }
-  },
-  methods: {
-    submit () {
-      this.$emit('connect', this.form)
-      this.reset()
     },
-    reset () {
-      this.dialog = false
-      this.form = {
-        message: null
-      }
-    }
+    methods: {
+      submit() {
+        this.$emit('connect', this.form)
+        this.reset()
+      },
+      reset() {
+        this.dialog = false
+        this.form = {
+          message: null,
+        }
+      },
+    },
   }
-}
 </script>

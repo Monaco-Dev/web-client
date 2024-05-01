@@ -54,27 +54,27 @@
 </template>
 
 <script>
-import AuthService from '@/composables/auth'
+  import AuthService from '@/composables/auth'
 
-export default {
-  name: 'NetworkNavigation',
-  computed: {
-    auth () {
-      const user = AuthService.getUser()
+  export default {
+    name: 'NetworkNavigation',
+    computed: {
+      auth() {
+        const user = AuthService.getUser()
 
-      user.incoming_invites_count = this.parse(user.incoming_invites_count)
-      user.outgoing_invites_count = this.parse(user.outgoing_invites_count)
-      user.connections_count = this.parse(user.connections_count)
-      user.followers_count = this.parse(user.followers_count)
-      user.following_count = this.parse(user.following_count)
+        user.incoming_invites_count = this.parse(user.incoming_invites_count)
+        user.outgoing_invites_count = this.parse(user.outgoing_invites_count)
+        user.connections_count = this.parse(user.connections_count)
+        user.followers_count = this.parse(user.followers_count)
+        user.following_count = this.parse(user.following_count)
 
-      return user
-    }
-  },
-  methods: {
-    parse (value) {
-      return parseInt(value).toLocaleString()
-    }
+        return user
+      },
+    },
+    methods: {
+      parse(value) {
+        return parseInt(value).toLocaleString()
+      },
+    },
   }
-}
 </script>

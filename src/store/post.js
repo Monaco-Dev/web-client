@@ -6,13 +6,13 @@ export const usePostStore = defineStore('post', {
   state: () => ({
     posts: [],
     loading: false,
-    page: 1
+    page: 1,
   }),
   actions: {
     /**
      * Reset post store
      */
-    reset () {
+    reset() {
       this.posts = []
       this.loading = false
       this.page = 1
@@ -23,7 +23,7 @@ export const usePostStore = defineStore('post', {
      *
      * @param {*} page
      */
-    setPage (page = 1) {
+    setPage(page = 1) {
       this.page = page
     },
 
@@ -32,8 +32,11 @@ export const usePostStore = defineStore('post', {
      *
      * @param {*} newPosts
      */
-    setPosts (newPosts = []) {
-      this.posts = uniqBy(newPosts.map((v) => Post.mapPost(v)), 'id')
+    setPosts(newPosts = []) {
+      this.posts = uniqBy(
+        newPosts.map((v) => Post.mapPost(v)),
+        'id',
+      )
     },
 
     /**
@@ -41,8 +44,11 @@ export const usePostStore = defineStore('post', {
      *
      * @param {*} newPosts
      */
-    addPosts (newPosts = []) {
-      this.posts = uniqBy([...this.posts, ...newPosts.map((v) => Post.mapPost(v))], 'id')
+    addPosts(newPosts = []) {
+      this.posts = uniqBy(
+        [...this.posts, ...newPosts.map((v) => Post.mapPost(v))],
+        'id',
+      )
     },
 
     /**
@@ -50,7 +56,7 @@ export const usePostStore = defineStore('post', {
      *
      * @param {*} post
      */
-    addPost (post) {
+    addPost(post) {
       this.posts.unshift(Post.mapPost(post))
       this.posts = uniqBy(this.posts, 'id')
     },
@@ -60,19 +66,20 @@ export const usePostStore = defineStore('post', {
      *
      * @param {*} post
      */
-    updatePost (post) {
+    updatePost(post) {
       this.posts = uniqBy(
         this.posts.map((val) => {
           if (val.id === post.id) return Post.mapPost(post)
 
           if (val.is_shared && val.shared_post.id === post.id) {
             val.shared_post = post
+            console.log(val.shared_post.is_sold)
             return Post.mapPost(val)
           }
 
           return val
         }),
-        'id'
+        'id',
       )
     },
 
@@ -81,8 +88,11 @@ export const usePostStore = defineStore('post', {
      *
      * @param {*} id
      */
-    deletePost (id) {
-      this.posts = uniqBy(this.posts.filter((post) => (post.id !== id)), 'id')
+    deletePost(id) {
+      this.posts = uniqBy(
+        this.posts.filter((post) => post.id !== id),
+        'id',
+      )
     },
 
     /**
@@ -91,7 +101,7 @@ export const usePostStore = defineStore('post', {
      * @param {*} status
      * @param {*} id
      */
-    setLoading (status, id = null) {
+    setLoading(status, id = null) {
       if (id) {
         this.posts = uniqBy(
           this.posts.map((post) => {
@@ -99,11 +109,11 @@ export const usePostStore = defineStore('post', {
 
             return post
           }),
-          'id'
+          'id',
         )
       } else {
         this.loading = status
       }
-    }
-  }
+    },
+  },
 })

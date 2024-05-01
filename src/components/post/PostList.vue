@@ -19,7 +19,7 @@
         v-for="(post, i) in posts"
         :key="post.id"
       >
-        <div :class="{'mt-2': i > 0}">
+        <div :class="{ 'mt-2': i > 0 }">
           <PostItem
             :post="post"
             :border="border"
@@ -27,6 +27,8 @@
             @click:pin="$emit('click:pin', $event)"
             @click:unpin="$emit('click:unpin', $event)"
             @click:archive="$emit('click:archive', $event)"
+            @click:hide="$emit('click:hide', $event)"
+            @click:unhide="$emit('click:unhide', $event)"
             @click:restore="$emit('click:restore', $event)"
           />
         </div>
@@ -36,37 +38,37 @@
 </template>
 
 <script>
-import PostItem from './PostItem.vue'
+  import PostItem from './PostItem.vue'
 
-export default {
-  name: 'PostList',
-  components: { PostItem },
-  props: {
-    posts: {
-      type: Array,
-      default: Array,
-      required: false
+  export default {
+    name: 'PostList',
+    components: { PostItem },
+    props: {
+      posts: {
+        type: Array,
+        default: Array,
+        required: false,
+      },
+      loading: {
+        type: Boolean,
+        default: false,
+        required: false,
+      },
+      border: {
+        type: Boolean,
+        default: false,
+        required: false,
+      },
+      isArchived: {
+        type: Boolean,
+        default: false,
+        required: false,
+      },
     },
-    loading: {
-      type: Boolean,
-      default: false,
-      required: false
+    methods: {
+      load(e) {
+        this.$emit('load', e)
+      },
     },
-    border: {
-      type: Boolean,
-      default: false,
-      required: false
-    },
-    isArchived: {
-      type: Boolean,
-      default: false,
-      required: false
-    }
-  },
-  methods: {
-    load (e) {
-      this.$emit('load', e)
-    }
   }
-}
 </script>

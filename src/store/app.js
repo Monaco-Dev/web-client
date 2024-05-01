@@ -3,11 +3,11 @@ import { defineStore } from 'pinia'
 
 export const useAppStore = defineStore('app', {
   state: () => ({
-    loading: false
+    loading: false,
   }),
   actions: {
-    setLoading (state) {
+    setLoading(state) {
       this.loading = state
-    }
-  }
+    },
+  },
 })

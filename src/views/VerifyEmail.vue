@@ -10,5 +10,5 @@
 </template>
 
 <script setup>
-import VerifyEmailForm from '@/components/verify-email/VerifyEmailForm.vue'
+  import VerifyEmailForm from '@/components/verify-email/VerifyEmailForm.vue'
 </script>

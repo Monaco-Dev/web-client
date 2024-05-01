@@ -21,15 +21,16 @@
             class="text-white"
             v-else
           >
-            {{ profile?.first_name?.charAt(0) }}{{ profile?.last_name?.charAt(0) }}
+            {{ profile?.first_name?.charAt(0)
+            }}{{ profile?.last_name?.charAt(0) }}
           </span>
         </v-avatar>
 
-        <br>
+        <br />
 
         <span class="text-h4">{{ profile?.full_name }}</span>
 
-        <br>
+        <br />
 
         <div class="justify-center mt-3">
           <v-chip
@@ -54,9 +55,7 @@
 
         <div class="mt-3 ml-3">
           <h3>{{ profile?.license?.license_type }}</h3>
-          <p>
-            License no: {{ profile?.license?.license_number }}
-          </p>
+          <p>License no: {{ profile?.license?.license_number }}</p>
         </div>
       </div>
 
@@ -78,7 +77,10 @@
       </v-container>
     </v-card-text>
 
-    <v-divider class="mt-5 mx-5" v-if="auth || profile?.is_connection"/>
+    <v-divider
+      class="mt-5 mx-5"
+      v-if="auth || profile?.is_connection"
+    />
 
     <v-card-actions
       v-if="auth || profile?.is_connection"
@@ -172,9 +174,7 @@
                     />
                   </template>
 
-                  <v-list-item-title>
-                    Edit profile
-                  </v-list-item-title>
+                  <v-list-item-title> Edit profile </v-list-item-title>
                 </v-list-item>
 
                 <v-list-item
@@ -201,9 +201,7 @@
                     />
                   </template>
 
-                  <v-list-item-title>
-                    Archive
-                  </v-list-item-title>
+                  <v-list-item-title> Archive </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-card-text>
@@ -215,47 +213,47 @@
 </template>
 
 <script>
-import UserAction from '@/components/user/UserAction.vue'
-import AuthService from '@/composables/auth'
-import { computed } from 'vue'
-import { useProfileStore } from '@/store/profile'
+  import UserAction from '@/components/user/UserAction.vue'
+  import AuthService from '@/composables/auth'
+  import { computed } from 'vue'
+  import { useProfileStore } from '@/store/profile'
 
-export default {
-  name: 'MobileProfileInformation',
-  components: { UserAction },
-  setup () {
-    const profileStore = useProfileStore()
+  export default {
+    name: 'MobileProfileInformation',
+    components: { UserAction },
+    setup() {
+      const profileStore = useProfileStore()
 
-    const profile = computed(() => profileStore.profile)
+      const profile = computed(() => profileStore.profile)
 
-    return {
-      profileStore,
-      profile
-    }
-  },
-  data () {
-    return {
-      tab: null
-    }
-  },
-  computed: {
-    auth () {
-      return this.user.uuid === this.profile?.uuid
+      return {
+        profileStore,
+        profile,
+      }
     },
-    user () {
-      return AuthService.getUser()
-    }
-  },
-  created () {
-    this.$router.beforeEach((to, from, next) => {
-      this.tab = null
-      next()
-    })
-  },
-  methods: {
-    update (item) {
-      this.profileStore.setProfile(item)
-    }
+    data() {
+      return {
+        tab: null,
+      }
+    },
+    computed: {
+      auth() {
+        return this.user.uuid === this.profile?.uuid
+      },
+      user() {
+        return AuthService.getUser()
+      },
+    },
+    created() {
+      this.$router.beforeEach((to, from, next) => {
+        this.tab = null
+        next()
+      })
+    },
+    methods: {
+      update(item) {
+        this.profileStore.setProfile(item)
+      },
+    },
   }
-}
 </script>

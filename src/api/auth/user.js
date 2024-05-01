@@ -1,11 +1,7 @@
 import api from '../index'
 import Config from '@/config/app'
 
-const {
-  http,
-  show,
-  search
-} = api
+const { http, show, search } = api
 
 /**
  * ===================
@@ -23,11 +19,10 @@ export default {
    * Update the specified resource in storage.
    *
    */
-  update (id, payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/update/${id}`, payload, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
+  update(id, payload) {
+    return this.http(this.baseUrl).post(`${this.url}/update/${id}`, payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
   },
 
   /**
@@ -37,7 +32,7 @@ export default {
    * @param {*} params
    * @return {*} http
    */
-  verifyEmail (path, params) {
+  verifyEmail(path, params) {
     return this.http(this.baseUrl).get(path, params)
   },
 
@@ -46,9 +41,8 @@ export default {
    *
    * @return {*} http
    */
-  resendVerificationEmail () {
-    return this.http(this.baseUrl)
-      .post('auth/email/verification-notification')
+  resendVerificationEmail() {
+    return this.http(this.baseUrl).post('auth/email/verification-notification')
   },
 
   /**
@@ -57,7 +51,7 @@ export default {
    * @param {*} params
    * @return {*} http
    */
-  deactivate (params) {
+  deactivate(params) {
     return this.http(this.baseUrl).post('auth/deactivate', params)
   },
 
@@ -67,7 +61,7 @@ export default {
    * @param {*} params
    * @return {*} http
    */
-  destroy (params) {
+  destroy(params) {
     return this.http(this.baseUrl).post('auth/delete', params)
   },
 
@@ -77,7 +71,7 @@ export default {
    * @param {*} params
    * @return {*} http
    */
-  updatePassword (params) {
+  updatePassword(params) {
     return this.http(this.baseUrl).post('auth/update-password', params)
-  }
+  },
 }

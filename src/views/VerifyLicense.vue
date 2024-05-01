@@ -10,5 +10,5 @@
 </template>
 
 <script setup>
-import VerifyLicenseForm from '@/components/verify-license/VerifyLicenseForm.vue'
+  import VerifyLicenseForm from '@/components/verify-license/VerifyLicenseForm.vue'
 </script>

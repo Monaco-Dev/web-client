@@ -15,15 +15,14 @@ export const useSnackbarStore = defineStore('snackbar', {
     snackbar: false,
     text: null,
     timeout: 2000,
-    color: null
+    color: null,
   }),
   actions: {
-
     /**
      * Shows the snackbar.
      *
      */
-    open ({ text, color, timeout }) {
+    open({ text, color, timeout }) {
       this.text = text
       this.color = color
       this.timeout = timeout
@@ -34,11 +33,11 @@ export const useSnackbarStore = defineStore('snackbar', {
      * Close the snackbar in view.
      *
      */
-    close () {
+    close() {
       this.snackbar = false
       this.text = null
       this.color = null
       this.timeout = 2000
-    }
-  }
+    },
+  },
 })

@@ -7,7 +7,7 @@ import User from '@/api/auth/user'
  * @param next
  * @return next
  */
-export default async function unauthorized (to, from, next) {
+export default async function unauthorized(to, from, next) {
   let unauthenticated = false
   let verified = false
 
@@ -21,7 +21,9 @@ export default async function unauthorized (to, from, next) {
   if (AuthService.isAccessTokenExpired()) {
     await AuthService.refreshToken()
       .then(({ data }) => AuthService.setAuth(data))
-      .catch(() => { unauthenticated = true })
+      .catch(() => {
+        unauthenticated = true
+      })
 
     if (unauthenticated) {
       AuthService.flush()
@@ -38,7 +40,9 @@ export default async function unauthorized (to, from, next) {
         verified = true
       }
     })
-    .catch(() => { unauthenticated = true })
+    .catch(() => {
+      unauthenticated = true
+    })
 
   if (verified) return next(from.path)
 
@@ -53,8 +57,9 @@ export default async function unauthorized (to, from, next) {
 
   if (!path || !expires || !signature) return next()
 
-  await User.verifyEmail(path, { expires, signature })
-    .then(() => { verified = true })
+  await User.verifyEmail(path, { expires, signature }).then(() => {
+    verified = true
+  })
 
   if (verified) return next({ name: 'Home' })
 

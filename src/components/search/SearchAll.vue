@@ -33,7 +33,7 @@
             >
               <UserItem
                 :user="user"
-                :class="{'mt-2': i > 0}"
+                :class="{ 'mt-2': i > 0 }"
               />
 
               <v-divider v-if="users.data.length > i + 1" />
@@ -61,116 +61,127 @@
         @click:pin="pin"
         @click:unpin="unpin"
         @click:archive="archive"
+        @click:hide="hide"
+        @click:unhide="unhide"
       />
     </template>
   </AppGrid>
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useSearchStore } from '@/store/search'
-import AuthService from '@/composables/auth'
-import Post from '@/api/feed/post'
-import User from '@/api/auth/user'
-import httpException from '@/composables/http-exception'
-import UserItem from '@/components/user/UserItem.vue'
-import PostList from '@/components/post/PostList.vue'
-import AppGrid from '@/components/default/desktop/AppGrid.vue'
+  import { computed } from 'vue'
+  import { useSearchStore } from '@/store/search'
+  import AuthService from '@/composables/auth'
+  import Post from '@/api/feed/post'
+  import User from '@/api/auth/user'
+  import httpException from '@/composables/http-exception'
+  import UserItem from '@/components/user/UserItem.vue'
+  import PostList from '@/components/post/PostList.vue'
+  import AppGrid from '@/components/default/desktop/AppGrid.vue'
 
-export default {
-  name: 'SearchAll',
-  components: {
-    UserItem,
-    PostList,
-    AppGrid
-  },
-  props: {
-    search: {
-      type: [String, null],
-      default: String,
-      required: true
-    }
-  },
-  setup () {
-    const searchStore = useSearchStore()
-
-    const loading = computed(() => searchStore.loading)
-    const posts = computed(() => searchStore.posts)
-    const users = computed(() => searchStore.users)
-
-    return {
-      searchStore,
-      loading,
-      posts,
-      users,
-      httpException
-    }
-  },
-  methods: {
-    onSearchPosts () {
-      return Post.search({ search: this.search, page: this.posts.meta.current_page })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.searchStore.setLoading(false))
+  export default {
+    name: 'SearchAll',
+    components: {
+      UserItem,
+      PostList,
+      AppGrid,
     },
-    onSearchUsers () {
-      return User.search({
-        search: this.search,
-        page: this.users.meta.current_page,
-        limit: 3
-      })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.searchStore.setLoading(false))
+    props: {
+      search: {
+        type: [String, null],
+        default: String,
+        required: true,
+      },
     },
-    async applySearch () {
-      this.searchStore.reset()
-      this.searchStore.setSearch(this.search)
+    setup() {
+      const searchStore = useSearchStore()
 
-      this.searchStore.setLoading(true)
+      const loading = computed(() => searchStore.loading)
+      const posts = computed(() => searchStore.posts)
+      const users = computed(() => searchStore.users)
 
-      await this.onSearchPosts().then(({ data }) => {
-        const posts = data
-
-        posts.data = [...data.data.map((v) => new Proxy(v, {}))]
-
-        this.searchStore.setPosts(posts)
-        this.searchStore.setPostPage(data.meta.current_page + 1)
-      })
-
-      await this.onSearchUsers().then(({ data }) => {
-        const users = data
-
-        users.data = [...data.data.map((v) => new Proxy(v, {}))]
-
-        this.searchStore.setUsers(users)
-        this.searchStore.setUserPage(data.meta.current_page + 1)
-      })
+      return {
+        searchStore,
+        loading,
+        posts,
+        users,
+        httpException,
+      }
     },
-    async load ({ done }) {
-      if (!AuthService.isAuthenticated()) return done('empty')
+    methods: {
+      onSearchPosts() {
+        return Post.search({
+          search: this.search,
+          page: this.posts.meta.current_page,
+        })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => this.searchStore.setLoading(false))
+      },
+      onSearchUsers() {
+        return User.search({
+          search: this.search,
+          page: this.users.meta.current_page,
+          limit: 3,
+        })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => this.searchStore.setLoading(false))
+      },
+      async applySearch() {
+        this.searchStore.reset()
+        this.searchStore.setSearch(this.search)
 
-      await this.onSearchPosts().then(({ data }) => {
-        if (!data.data.length) return done('empty')
+        this.searchStore.setLoading(true)
 
-        const posts = data
+        await this.onSearchPosts().then(({ data }) => {
+          const posts = data
 
-        posts.data = [...data.data.map((v) => new Proxy(v, {}))]
+          posts.data = [...data.data.map((v) => new Proxy(v, {}))]
 
-        this.searchStore.addPosts(posts)
-        this.searchStore.setPostPage(data.meta.current_page + 1)
+          this.searchStore.setPosts(posts)
+          this.searchStore.setPostPage(data.meta.current_page + 1)
+        })
 
-        return done('ok')
-      })
+        await this.onSearchUsers().then(({ data }) => {
+          const users = data
+
+          users.data = [...data.data.map((v) => new Proxy(v, {}))]
+
+          this.searchStore.setUsers(users)
+          this.searchStore.setUserPage(data.meta.current_page + 1)
+        })
+      },
+      async load({ done }) {
+        if (!AuthService.isAuthenticated()) return done('empty')
+
+        await this.onSearchPosts().then(({ data }) => {
+          if (!data.data.length) return done('empty')
+
+          const posts = data
+
+          posts.data = [...data.data.map((v) => new Proxy(v, {}))]
+
+          this.searchStore.addPosts(posts)
+          this.searchStore.setPostPage(data.meta.current_page + 1)
+
+          return done('ok')
+        })
+      },
+
+      pin(data) {
+        this.searchStore.updatePost(data)
+      },
+      unpin(data) {
+        this.searchStore.updatePost(data)
+      },
+      archive(data) {
+        this.searchStore.deletePost(data)
+      },
+      hide(data) {
+        this.searchStore.deletePost(data)
+      },
+      unhide(data) {
+        this.searchStore.updatePost(data)
+      },
     },
-
-    pin (data) {
-      this.searchStore.updatePost(data)
-    },
-    unpin (data) {
-      this.searchStore.updatePost(data)
-    },
-    archive (data) {
-      this.searchStore.deletePost(data)
-    }
   }
-}
 </script>

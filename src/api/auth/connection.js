@@ -1,10 +1,7 @@
 import api from '../index'
 import Config from '@/config/app'
 
-const {
-  http,
-  search
-} = api
+const { http, search } = api
 
 /**
  * ===================
@@ -21,17 +18,15 @@ export default {
    * Store a newly created resource in storage.
    *
    */
-  connect (id) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/${id}/connect`)
+  connect(id) {
+    return this.http(this.baseUrl).post(`${this.url}/${id}/connect`)
   },
 
   /**
    * Remove the specified resource from storage.
    *
    */
-  disconnect (id) {
-    return this.http(this.baseUrl)
-      .delete(`${this.url}/${id}/disconnect`)
-  }
+  disconnect(id) {
+    return this.http(this.baseUrl).delete(`${this.url}/${id}/disconnect`)
+  },
 }

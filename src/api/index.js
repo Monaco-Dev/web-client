@@ -18,10 +18,10 @@ export default {
    * @param String baseUrl
    * @return {*} http
    */
-  http (baseUrl) {
+  http(baseUrl) {
     const http = axios.create({ baseURL: baseUrl })
 
-    http.interceptors.request.use(async config => {
+    http.interceptors.request.use(async (config) => {
       if (!AuthService.isAuthenticated()) return config
 
       /**
@@ -53,53 +53,47 @@ export default {
    * Display a list of the resource.
    *
    */
-  index (params = null) {
-    return this.http(this.baseUrl)
-      .get(this.url, { params })
+  index(params = null) {
+    return this.http(this.baseUrl).get(this.url, { params })
   },
 
   /**
    * Display the specified resource.
    *
    */
-  show (id, params = null) {
-    return this.http(this.baseUrl)
-      .get(`${this.url}/${id}`, { params })
+  show(id, params = null) {
+    return this.http(this.baseUrl).get(`${this.url}/${id}`, { params })
   },
 
   /**
    * Store a newly created resource in storage.
    *
    */
-  store (payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}`, payload)
+  store(payload) {
+    return this.http(this.baseUrl).post(`${this.url}`, payload)
   },
 
   /**
    * Update the specified resource in storage.
    *
    */
-  update (id, payload) {
-    return this.http(this.baseUrl)
-      .put(`${this.url}/${id}`, payload)
+  update(id, payload) {
+    return this.http(this.baseUrl).put(`${this.url}/${id}`, payload)
   },
 
   /**
    * Remove the specified resource from storage.
    *
    */
-  destroy (id) {
-    return this.http(this.baseUrl)
-      .delete(`${this.url}/${id}`)
+  destroy(id) {
+    return this.http(this.baseUrl).delete(`${this.url}/${id}`)
   },
 
   /**
    * Search for a specific resource in the database using POST.
    *
    */
-  search (payload) {
-    return this.http(this.baseUrl)
-      .post(`${this.url}/search`, payload)
-  }
+  search(payload) {
+    return this.http(this.baseUrl).post(`${this.url}/search`, payload)
+  },
 }

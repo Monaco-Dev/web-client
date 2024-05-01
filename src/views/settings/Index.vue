@@ -19,17 +19,17 @@
 </template>
 
 <script>
-import Navigation from '@/components/settings/Navigation.vue'
+  import Navigation from '@/components/settings/Navigation.vue'
 
-export default {
-  name: 'SettingsIndex',
-  components: { Navigation },
-  beforeRouteEnter (to, from, next) {
-    next((vm) => {
-      if (vm.$vuetify.display.mdAndUp && to.name === 'Settings') {
-        vm.$router.push({ name: 'SettingsProfile' })
-      }
-    })
+  export default {
+    name: 'SettingsIndex',
+    components: { Navigation },
+    beforeRouteEnter(to, from, next) {
+      next((vm) => {
+        if (vm.$vuetify.display.mdAndUp && to.name === 'Settings') {
+          vm.$router.push({ name: 'SettingsProfile' })
+        }
+      })
+    },
   }
-}
 </script>

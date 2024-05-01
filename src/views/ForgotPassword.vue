@@ -10,5 +10,5 @@
 </template>
 
 <script setup>
-import ForgotPasswordForm from '@/components/forgot-password/ForgotPasswordForm.vue'
+  import ForgotPasswordForm from '@/components/forgot-password/ForgotPasswordForm.vue'
 </script>

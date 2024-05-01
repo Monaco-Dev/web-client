@@ -20,37 +20,37 @@ export default createVuetify({
     VCheckboxPrimary: VCheckbox,
     VBtnPrimary: VBtn,
     VBtnDanger: VBtn,
-    VBtnError: VBtn
+    VBtnError: VBtn,
   },
   defaults: {
     VTextFieldPrimary: {
       flat: true,
       variant: 'solo-filled',
       hideDetails: 'auto',
-      density: 'comfortable'
+      density: 'comfortable',
     },
     VCheckboxPrimary: {
       density: 'compact',
-      hideDetails: 'auto'
+      hideDetails: 'auto',
     },
     VBtnPrimary: {
       block: true,
       color: 'primary',
       density: 'default',
-      variant: 'flat'
+      variant: 'flat',
     },
     VBtnDanger: {
       block: true,
       color: 'error',
       density: 'default',
-      variant: 'flat'
+      variant: 'flat',
     },
     VBtnError: {
       block: true,
       color: 'error',
       density: 'default',
-      variant: 'flat'
-    }
+      variant: 'flat',
+    },
   },
   theme: {
     defaultTheme: 'light',
@@ -58,14 +58,14 @@ export default createVuetify({
       light: {
         colors: {
           background: colors.grey.lighten4,
-          primary: '#32CD32'
-        }
+          primary: '#32CD32',
+        },
       },
       dark: {
         colors: {
-          primary: '#32CD32'
-        }
-      }
-    }
-  }
+          primary: '#32CD32',
+        },
+      },
+    },
+  },
 })

@@ -20,7 +20,7 @@ export default {
    *
    * @param data
    */
-  setAuth (data) {
+  setAuth(data) {
     data.expiration_date = DateTime.now().plus({ seconds: 31622400 }).toISO()
 
     localStorage.setItem('auth', JSON.stringify(data))
@@ -30,7 +30,7 @@ export default {
    *
    * @return * { token_type, access_token, refresh_token, expires_in, expiration_date }
    */
-  getAuth () {
+  getAuth() {
     return JSON.parse(localStorage.getItem('auth'))
   },
   /**
@@ -38,7 +38,7 @@ export default {
    *
    * @param data
    */
-  setUser (data) {
+  setUser(data) {
     localStorage.setItem('user', JSON.stringify(data))
   },
   /**
@@ -46,7 +46,7 @@ export default {
    *
    * @return {*}
    */
-  getUser () {
+  getUser() {
     return JSON.parse(localStorage.getItem('user'))
   },
   /**
@@ -54,7 +54,7 @@ export default {
    *
    * @return bool
    */
-  isAuthenticated () {
+  isAuthenticated() {
     return !!this.getAuth()
   },
   /**
@@ -62,7 +62,7 @@ export default {
    *
    * @return string
    */
-  getAccessToken () {
+  getAccessToken() {
     return this.getAuth() ? this.getAuth().access_token : null
   },
   /**
@@ -70,25 +70,25 @@ export default {
    *
    * @return string
    */
-  getRefreshToken () {
+  getRefreshToken() {
     return this.getAuth() ? this.getAuth().refresh_token : null
   },
   /**
    * Gets the expiration_date from auth.
    *
    */
-  getTokenExpiration () {
+  getTokenExpiration() {
     return this.getAuth() ? this.getAuth().expiration_date : null
   },
   /**
    * Removes auth and user from localStorage.
    *
    */
-  flush () {
+  flush() {
     localStorage.removeItem('auth')
     localStorage.removeItem('user')
     sessionStorage.clear()
-    getActivePinia()._s.forEach(store => store.$reset())
+    getActivePinia()._s.forEach((store) => store.$reset())
   },
   /**
    * Checks if token is expired.
@@ -97,44 +97,57 @@ export default {
    *
    * @return bool
    */
-  isAccessTokenExpired () {
-    return DateTime.now().plus({ minutes: 1 }) >= DateTime.fromISO(this.getTokenExpiration())
+  isAccessTokenExpired() {
+    return (
+      DateTime.now().plus({ minutes: 1 }) >=
+      DateTime.fromISO(this.getTokenExpiration())
+    )
   },
   /**
    * Sends an auth check request to Auth API.
    *
    * @return {*} http
    */
-  verifyAccessToken () {
+  verifyAccessToken() {
     const headers = {
       Accept: 'application/json',
-      Authorization: `Bearer ${this.getAccessToken()}`
+      Authorization: `Bearer ${this.getAccessToken()}`,
     }
 
-    return axios.get(`${Config.services.auth.url}/api/auth/verify-token`, { headers })
+    return axios.get(`${Config.services.auth.url}/api/auth/verify-token`, {
+      headers,
+    })
   },
   /**
    * Sends refresh token to Auth API.
    *
    * @return {*} http
    */
-  refreshToken () {
+  refreshToken() {
     const headers = { Accept: 'application/json' }
 
     const payload = { refresh_token: `${this.getRefreshToken()}` }
 
-    return axios.post(`${Config.services.auth.url}/api/auth/refresh-token`, payload, { headers })
+    return axios.post(
+      `${Config.services.auth.url}/api/auth/refresh-token`,
+      payload,
+      { headers },
+    )
   },
   /**
    * Sends refresh token to Auth API.
    *
    * @return {*} http
    */
-  socialite (id, driver) {
+  socialite(id, driver) {
     const headers = { Accept: 'application/json' }
 
     const payload = { id }
 
-    return axios.post(`${Config.services.auth.url}/api/auth/${driver}/login`, payload, { headers })
-  }
+    return axios.post(
+      `${Config.services.auth.url}/api/auth/${driver}/login`,
+      payload,
+      { headers },
+    )
+  },
 }

@@ -33,7 +33,8 @@
                 class="text-white"
                 v-else
               >
-                {{ user?.first_name?.charAt(0) }}{{ user?.last_name?.charAt(0) }}
+                {{ user?.first_name?.charAt(0)
+                }}{{ user?.last_name?.charAt(0) }}
               </span>
             </v-avatar>
           </template>
@@ -189,237 +190,251 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import { usePostStore } from '@/store/post'
-import { useVuelidate } from '@vuelidate/core'
-import { required, helpers } from '@vuelidate/validators'
-import _, { uniq } from 'lodash'
-import Tag from '@/api/feed/tag'
-import AuthService from '@/composables/auth'
-import Post from '@/api/feed/post'
-import httpException from '@/composables/http-exception'
+  import { computed } from 'vue'
+  import { usePostStore } from '@/store/post'
+  import { useVuelidate } from '@vuelidate/core'
+  import { required, helpers } from '@vuelidate/validators'
+  import _, { uniq } from 'lodash'
+  import Tag from '@/api/feed/tag'
+  import AuthService from '@/composables/auth'
+  import Post from '@/api/feed/post'
+  import httpException from '@/composables/http-exception'
 
-export default {
-  name: 'PostForm',
-  props: {
-    floating: {
-      type: Boolean,
-      default: false,
-      required: false
-    },
-    isEdit: {
-      type: Boolean,
-      default: false,
-      required: false
-    },
-    post: {
-      type: Object,
-      default: Object,
-      required: false
-    }
-  },
-  setup () {
-    const postStore = usePostStore()
-
-    const loading = computed(() => postStore.loading)
-
-    return {
-      postStore,
-      loading,
-      httpException,
-      v$: useVuelidate()
-    }
-  },
-  data () {
-    return {
-      fetching: false,
-      dialog: false,
-      tagMenu: false,
-      form: {
-        content: null,
-        type: 'FS',
-        tags: []
+  export default {
+    name: 'PostForm',
+    props: {
+      floating: {
+        type: Boolean,
+        default: false,
+        required: false,
       },
-      apiErrors: {
-        type: [],
-        content: []
+      isEdit: {
+        type: Boolean,
+        default: false,
+        required: false,
       },
-      types: [
-        {
-          title: 'For sale (FS)',
-          value: 'FS'
-        },
-        {
-          title: 'For lease (FL)',
-          value: 'FL'
-        },
-        {
-          title: 'For rent (FR)',
-          value: 'FR'
-        },
-        {
-          title: 'Willing to buy (WTB)',
-          value: 'WTB'
-        },
-        {
-          title: 'Willing to lease (WTL)',
-          value: 'WTL'
-        },
-        {
-          title: 'Willing to rent (WTR)',
-          value: 'WTR'
-        }
-      ],
-      tags: []
-    }
-  },
-  computed: {
-    formErrors () {
+      post: {
+        type: Object,
+        default: Object,
+        required: false,
+      },
+    },
+    setup() {
+      const postStore = usePostStore()
+
+      const loading = computed(() => postStore.loading)
+
       return {
-        type: this.v$.form.type.$errors.map(v => v.$message).concat(this.apiErrors.type).filter(Boolean),
-        content: this.v$.form.content.$errors.map(v => v.$message).concat(this.apiErrors.content).filter(Boolean)
+        postStore,
+        loading,
+        httpException,
+        v$: useVuelidate(),
       }
     },
-    user () {
-      return AuthService.getUser()
-    }
-  },
-  watch: {
-    'form.type' () {
-      delete this.apiErrors.type
-    },
-    'form.content' () {
-      delete this.apiErrors.content
-    },
-    dialog () {
-      if (this.dialog) this.searchTags(null)
-    }
-  },
-  methods: {
-    async submit () {
-      const result = await this.v$.$validate()
-      if (!result) return
-
-      this.postStore.setLoading(true)
-
-      const form = { ...this.form }
-
-      form.tags = form.tags.map((v) => v.replace('#', ''))
-
-      let action
-
-      if (this.isEdit) {
-        action = Post.update(this.post.id, form)
-      } else {
-        action = Post.store(form)
+    data() {
+      return {
+        fetching: false,
+        dialog: false,
+        tagMenu: false,
+        form: {
+          content: null,
+          type: 'FS',
+          tags: [],
+        },
+        apiErrors: {
+          type: [],
+          content: [],
+        },
+        types: [
+          {
+            title: 'For sale (FS)',
+            value: 'FS',
+          },
+          {
+            title: 'For lease (FL)',
+            value: 'FL',
+          },
+          {
+            title: 'For rent (FR)',
+            value: 'FR',
+          },
+          {
+            title: 'Willing to buy (WTB)',
+            value: 'WTB',
+          },
+          {
+            title: 'Willing to lease (WTL)',
+            value: 'WTL',
+          },
+          {
+            title: 'Willing to rent (WTR)',
+            value: 'WTR',
+          },
+        ],
+        tags: [],
       }
-
-      return action
-        .then(({ data }) => {
-          if (this.isEdit) {
-            this.postStore.updatePost(data)
-          } else {
-            this.postStore.addPost(data)
-          }
-
-          this.reset()
-
-          this.$emit('click:submit', data)
-        })
-        .catch(({ response }) => {
-          switch (response.status) {
-            case 422:
-              this.apiErrors = response.data.errors
-              break
-
-            default:
-              this.httpException(response)
-              break
-          }
-        })
-        .finally(() => this.postStore.setLoading(false))
     },
-    onEdit () {
-      this.form.content = this.post.content.original_body
-      this.form.type = this.post.content.type
-      this.form.tags = this.post.tags?.map((v) => v.name)
-      this.dialog = true
-    },
-    reset () {
-      this.v$.$reset()
-
-      this.postStore.setLoading(false)
-
-      this.fetching = false
-      this.dialog = false
-      this.tagMenu = false
-      this.form = {
-        content: null,
-        type: 'FS'
-      }
-      this.apiErrors = {
-        content: [],
-        type: []
-      }
-      this.types = [
-        {
-          title: 'For sale (FS)',
-          value: 'FS'
-        },
-        {
-          title: 'For lease (FL)',
-          value: 'FL'
-        },
-        {
-          title: 'For rent (FR)',
-          value: 'FR'
-        },
-        {
-          title: 'Willing to buy (WTB)',
-          value: 'WTB'
-        },
-        {
-          title: 'Willing to lease (WTL)',
-          value: 'WTL'
-        },
-        {
-          title: 'Willing to rent (WTR)',
-          value: 'WTR'
+    computed: {
+      formErrors() {
+        return {
+          type: this.v$.form.type.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.type)
+            .filter(Boolean),
+          content: this.v$.form.content.$errors
+            .map((v) => v.$message)
+            .concat(this.apiErrors.content)
+            .filter(Boolean),
         }
-      ]
-      this.tags = []
+      },
+      user() {
+        return AuthService.getUser()
+      },
     },
-    searchTags: _.debounce(function (val) {
-      this.fetching = true
+    watch: {
+      'form.type'() {
+        delete this.apiErrors.type
+      },
+      'form.content'() {
+        delete this.apiErrors.content
+      },
+      dialog() {
+        if (this.dialog) this.searchTags(null)
+      },
+    },
+    methods: {
+      async submit() {
+        const result = await this.v$.$validate()
+        if (!result) return
 
-      let text = val ?? null
+        this.postStore.setLoading(true)
 
-      if (text) text = text.replace('#', '')
+        const form = { ...this.form }
 
-      return Tag.search({ search: text })
-        .then(({ data }) => {
-          this.tags = data.data
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => {
-          this.fetching = false
-        })
-    }, 500),
-    insertTag () {
-      this.form.tags = uniq(this.form.tags?.map((v) => (v[0] !== '#') ? `#${v}` : v))
-    }
-  },
-  validations () {
-    return {
-      form: {
-        type: {
-          required: helpers.withMessage('This field cannot be empty', required)
-        },
-        content: {
-          required: helpers.withMessage('This field cannot be empty', required)
+        form.tags = form.tags.map((v) => v.replace('#', ''))
+
+        let action
+
+        if (this.isEdit) {
+          action = Post.update(this.post.id, form)
+        } else {
+          action = Post.store(form)
         }
+
+        return action
+          .then(({ data }) => {
+            if (this.isEdit) {
+              this.postStore.updatePost(data)
+            } else {
+              this.postStore.addPost(data)
+            }
+
+            this.reset()
+
+            this.$emit('click:submit', data)
+          })
+          .catch(({ response }) => {
+            switch (response.status) {
+              case 422:
+                this.apiErrors = response.data.errors
+                break
+
+              default:
+                this.httpException(response)
+                break
+            }
+          })
+          .finally(() => this.postStore.setLoading(false))
+      },
+      onEdit() {
+        this.form.content = this.post.content.original_body
+        this.form.type = this.post.content.type
+        this.form.tags = this.post.tags?.map((v) => v.name)
+        this.dialog = true
+      },
+      reset() {
+        this.v$.$reset()
+
+        this.postStore.setLoading(false)
+
+        this.fetching = false
+        this.dialog = false
+        this.tagMenu = false
+        this.form = {
+          content: null,
+          type: 'FS',
+        }
+        this.apiErrors = {
+          content: [],
+          type: [],
+        }
+        this.types = [
+          {
+            title: 'For sale (FS)',
+            value: 'FS',
+          },
+          {
+            title: 'For lease (FL)',
+            value: 'FL',
+          },
+          {
+            title: 'For rent (FR)',
+            value: 'FR',
+          },
+          {
+            title: 'Willing to buy (WTB)',
+            value: 'WTB',
+          },
+          {
+            title: 'Willing to lease (WTL)',
+            value: 'WTL',
+          },
+          {
+            title: 'Willing to rent (WTR)',
+            value: 'WTR',
+          },
+        ]
+        this.tags = []
+      },
+      searchTags: _.debounce(function (val) {
+        this.fetching = true
+
+        let text = val ?? null
+
+        if (text) text = text.replace('#', '')
+
+        return Tag.search({ search: text })
+          .then(({ data }) => {
+            this.tags = data.data
+          })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => {
+            this.fetching = false
+          })
+      }, 500),
+      insertTag() {
+        this.form.tags = uniq(
+          this.form.tags?.map((v) => (v[0] !== '#' ? `#${v}` : v)),
+        )
+      },
+    },
+    validations() {
+      return {
+        form: {
+          type: {
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+          content: {
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+        },
       }
-    }
+    },
   }
-}
 </script>

@@ -19,17 +19,17 @@
 </template>
 
 <script>
-import Navigation from '@/components/networks/Navigation.vue'
+  import Navigation from '@/components/networks/Navigation.vue'
 
-export default {
-  name: 'NetworkIndex',
-  components: { Navigation },
-  beforeRouteEnter (to, from, next) {
-    next((vm) => {
-      if (vm.$vuetify.display.mdAndUp && to.name === 'Networks') {
-        vm.$router.push({ name: 'NetworksIncomingInvites' })
-      }
-    })
+  export default {
+    name: 'NetworkIndex',
+    components: { Navigation },
+    beforeRouteEnter(to, from, next) {
+      next((vm) => {
+        if (vm.$vuetify.display.mdAndUp && to.name === 'Networks') {
+          vm.$router.push({ name: 'NetworksIncomingInvites' })
+        }
+      })
+    },
   }
-}
 </script>

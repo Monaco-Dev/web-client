@@ -60,83 +60,84 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useVuelidate } from '@vuelidate/core'
-import {
-  required,
-  email,
-  helpers
-} from '@vuelidate/validators'
-import { useSnackbarStore } from '@/store/snackbar'
-import AuthService from '@/composables/auth'
-import AccountConfirmationDialog from '@/components/settings/AccountConfirmationDialog.vue'
+  import { ref } from 'vue'
+  import { useVuelidate } from '@vuelidate/core'
+  import { required, email, helpers } from '@vuelidate/validators'
+  import { useSnackbarStore } from '@/store/snackbar'
+  import AuthService from '@/composables/auth'
+  import AccountConfirmationDialog from '@/components/settings/AccountConfirmationDialog.vue'
 
-export default {
-  name: 'UpdateAccount',
-  components: { AccountConfirmationDialog },
-  setup () {
-    return {
-      v$: useVuelidate(),
-      snackbarStore: useSnackbarStore(),
-      dialog: ref(null)
-    }
-  },
-  data () {
-    return {
-      form: {
-        email: null
-      }
-    }
-  },
-  mounted () {
-    if (AuthService.isAuthenticated()) this.reset()
-  },
-  computed: {
-    formErrors () {
+  export default {
+    name: 'UpdateAccount',
+    components: { AccountConfirmationDialog },
+    setup() {
       return {
-        email: this.v$.form.email.$errors.map(v => v.$message).filter(Boolean)
-      }
-    }
-  },
-  methods: {
-    reset () {
-      this.v$.$reset()
-
-      this.form = {
-        email: AuthService.getUser().email
+        v$: useVuelidate(),
+        snackbarStore: useSnackbarStore(),
+        dialog: ref(null),
       }
     },
-    async submit () {
-      await this.v$.form.email.$touch()
-
-      if (this.formErrors.email.length) return
-
-      this.$refs.dialog.confirmationDialog = true
-      this.$refs.dialog.form.email = this.form.email
-    },
-    async update (data) {
-      AuthService.setAuth(data.token)
-      delete data.token
-      AuthService.setUser(data)
-
-      this.reset()
-
-      if (!data.is_verified) {
-        setTimeout(() => {
-          this.$router.push({ name: 'VerifyEmail' }).catch(() => {})
-        }, 2000)
+    data() {
+      return {
+        form: {
+          email: null,
+        },
       }
-    }
-  },
-  validations () {
-    return {
-      form: {
-        email: {
-          email,
-          required: helpers.withMessage('This field cannot be empty', required)
+    },
+    mounted() {
+      if (AuthService.isAuthenticated()) this.reset()
+    },
+    computed: {
+      formErrors() {
+        return {
+          email: this.v$.form.email.$errors
+            .map((v) => v.$message)
+            .filter(Boolean),
         }
+      },
+    },
+    methods: {
+      reset() {
+        this.v$.$reset()
+
+        this.form = {
+          email: AuthService.getUser().email,
+        }
+      },
+      async submit() {
+        await this.v$.form.email.$touch()
+
+        if (this.formErrors.email.length) return
+
+        this.$refs.dialog.confirmationDialog = true
+        this.$refs.dialog.form.email = this.form.email
+      },
+      async update(data) {
+        AuthService.setAuth(data.token)
+        delete data.token
+        AuthService.setUser(data)
+
+        this.reset()
+
+        if (!data.is_verified) {
+          setTimeout(() => {
+            this.$router.push({ name: 'VerifyEmail' }).catch(() => {})
+          }, 2000)
+        }
+      },
+    },
+    validations() {
+      return {
+        form: {
+          email: {
+            email,
+            required: helpers.withMessage(
+              'This field cannot be empty',
+              required,
+            ),
+          },
+        },
       }
-    }
+    },
   }
-}
 </script>

@@ -20,7 +20,7 @@ let apiError
  *
  * @param error
  */
-export default function httpException (error) {
+export default function httpException(error) {
   if (!error) return criticalError()
 
   setError(error)
@@ -54,7 +54,7 @@ export default function httpException (error) {
  *
  * @param error
  */
-function setError (error) {
+function setError(error) {
   if (typeof error !== 'object') error.error = JSON.parse(error.error)
 
   apiError = error
@@ -64,10 +64,10 @@ function setError (error) {
  * Handles critical error without response.
  *
  */
-function criticalError () {
+function criticalError() {
   useDialogStore().openAlertDialog({
     title: 'Server Error',
-    body: 'We have encountered issues with our server, and our team is working on it. Apologies for any inconvenience this may have caused.'
+    body: 'We have encountered issues with our server, and our team is working on it. Apologies for any inconvenience this may have caused.',
   })
 }
 
@@ -75,10 +75,10 @@ function criticalError () {
  * Shows an alert dialog with the error status from response.
  *
  */
-function defaultError () {
+function defaultError() {
   useDialogStore().openAlertDialog({
     title: apiError.statusText,
-    body: apiError.message
+    body: apiError.message,
   })
 }
 
@@ -86,10 +86,10 @@ function defaultError () {
  * Shows an alert dialog with a status of 500.
  *
  */
-function internalServerError () {
+function internalServerError() {
   useDialogStore().openAlertDialog({
     title: 'Oops! Something went wrong.',
-    body: apiError.data.message
+    body: apiError.data.message,
   })
 }
 
@@ -97,10 +97,10 @@ function internalServerError () {
  * Shows an alert dialog with a status of 404.
  *
  */
-function notFound () {
+function notFound() {
   useDialogStore().openAlertDialog({
     title: 'The requested resource was not found.',
-    body: apiError.data.message
+    body: apiError.data.message,
   })
 }
 
@@ -108,7 +108,7 @@ function notFound () {
  * Shows an alert dialog with a status of 401.
  *
  */
-function unauthenticated () {
+function unauthenticated() {
   useDialogStore().openAlertDialog({
     title: 'Please log in to continue.',
     body: apiError.data.message,
@@ -116,7 +116,7 @@ function unauthenticated () {
       auth.flush()
       window.location.replace(`${window.location.origin}/login`)
       sessionStorage.clear()
-    }
+    },
   })
 }
 
@@ -124,10 +124,10 @@ function unauthenticated () {
  * Shows an alert dialog with a status of 403.
  *
  */
-function unauthorized () {
+function unauthorized() {
   useDialogStore().openAlertDialog({
     title: 'Forbidden',
-    body: apiError.data.message
+    body: apiError.data.message,
   })
 }
 
@@ -135,10 +135,10 @@ function unauthorized () {
  * Shows an alert dialog with a status of 422.
  *
  */
-function unprocessable () {
+function unprocessable() {
   useDialogStore().openAlertDialog({
     title: 'There was an error with your request.',
-    body: apiError.data.message
+    body: apiError.data.message,
   })
 }
 
@@ -146,9 +146,9 @@ function unprocessable () {
  * Shows an alert dialog with a status of 429.
  *
  */
-function tooManyRequestsError () {
+function tooManyRequestsError() {
   useDialogStore().openAlertDialog({
     title: 'Too many requests.',
-    body: apiError.data.message
+    body: apiError.data.message,
   })
 }

@@ -8,15 +8,15 @@ import Config from '@/config/app'
 import AuthService from '@/composables/auth'
 
 /**
-  * Initial config for http request
-  *
-  * @param String baseUrl
-  * @return {*} http
+ * Initial config for http request
+ *
+ * @param String baseUrl
+ * @return {*} http
  */
 const http = (baseUrl) => {
   const http = axios.create({ baseURL: baseUrl })
 
-  http.interceptors.request.use(async config => {
+  http.interceptors.request.use(async (config) => {
     config.headers.Accept = 'application/json'
     return config
   })
@@ -34,7 +34,7 @@ export default {
    * @param {*} params
    * @return {*} http
    */
-  login (params) {
+  login(params) {
     return http(this.baseUrl).post(`${this.endpoint}/login`, params)
   },
 
@@ -44,13 +44,17 @@ export default {
    * @param {*} params
    * @return {*} http
    */
-  logout () {
-    return http(this.baseUrl).post(`${this.endpoint}/logout`, {}, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${AuthService.getAccessToken()}`
-      }
-    })
+  logout() {
+    return http(this.baseUrl).post(
+      `${this.endpoint}/logout`,
+      {},
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${AuthService.getAccessToken()}`,
+        },
+      },
+    )
   },
 
   /**
@@ -59,7 +63,7 @@ export default {
    * @param {*} params
    * @return {*} http
    */
-  register (params) {
+  register(params) {
     return http(this.baseUrl).post(`${this.endpoint}/register`, params)
   },
 
@@ -69,7 +73,7 @@ export default {
    * @param {*} params
    * @return {*} http
    */
-  forgotPassword (params) {
+  forgotPassword(params) {
     return http(this.baseUrl).post(`${this.endpoint}/forgot-password`, params)
   },
 
@@ -79,7 +83,7 @@ export default {
    * @param {*} params
    * @return {*} http
    */
-  resetPassword (params) {
+  resetPassword(params) {
     return http(this.baseUrl).post(`${this.endpoint}/reset-password`, params)
-  }
+  },
 }

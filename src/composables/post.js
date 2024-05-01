@@ -14,7 +14,7 @@ export default {
    * @param {*} post
    * @return {*}
    */
-  mapPost (post) {
+  mapPost(post) {
     post.timestamp = this.mapTime(post.created_at)
     post.matches_count = KFormatter(post.matches_count ?? 0)
     post.shares_count = KFormatter(post.shares_count ?? 0)
@@ -29,12 +29,16 @@ export default {
       if (summary.length === 500) {
         post.shared_post.content.hasSummary = true
         post.shared_post.content.summary = summary + '...'
-        post.shared_post.content.summary = post.shared_post.content.summary.replace(/\n/g, '<br/>')
+        post.shared_post.content.summary =
+          post.shared_post.content.summary.replace(/\n/g, '<br/>')
         post.shared_post.content.expanded = false
       }
 
       post.shared_post.content.original_body = post.shared_post.content.body
-      post.shared_post.content.body = post.shared_post.content.body.replace(/\n/g, '<br/>')
+      post.shared_post.content.body = post.shared_post.content.body.replace(
+        /\n/g,
+        '<br/>',
+      )
     } else {
       post.content.hasSummary = false
 
@@ -54,8 +58,8 @@ export default {
     return post
   },
 
-  mapTime (time) {
+  mapTime(time) {
     const stamp = DateTime.fromISO(time).toRelative()
     return stamp === '0 seconds ago' ? 'Just now' : stamp
-  }
+  },
 }

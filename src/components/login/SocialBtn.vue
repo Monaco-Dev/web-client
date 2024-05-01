@@ -17,41 +17,41 @@
 </template>
 
 <script>
-export default {
-  props: {
-    icon: {
-      type: String,
-      default: '',
-      required: true
+  export default {
+    props: {
+      icon: {
+        type: String,
+        default: '',
+        required: true,
+      },
+      text: {
+        type: String,
+        default: '',
+        required: true,
+      },
     },
-    text: {
-      type: String,
-      default: '',
-      required: true
-    }
-  },
-  computed: {
-    src () {
-      switch (this.icon) {
-        case 'google':
-          return new URL('@/assets/icon-google.svg', import.meta.url).href
+    computed: {
+      src() {
+        switch (this.icon) {
+          case 'google':
+            return new URL('@/assets/icon-google.svg', import.meta.url).href
 
-        case 'linkedin':
-          return new URL('@/assets/icon-linkedin.svg', import.meta.url).href
+          case 'linkedin':
+            return new URL('@/assets/icon-linkedin.svg', import.meta.url).href
 
-        default:
-          return null
-      }
-    }
+          default:
+            return null
+        }
+      },
+    },
   }
-}
 </script>
 
 <style scoped>
-.social-logo {
-  width: 29px;
-  height: 29px;
-  top: 3px;
-  right: 3px;
-}
+  .social-logo {
+    width: 29px;
+    height: 29px;
+    top: 3px;
+    right: 3px;
+  }
 </style>

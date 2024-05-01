@@ -3,7 +3,11 @@
     <v-row no-gutters>
       <v-col
         class="pa-1"
-        v-if="!item.is_connection && !item.is_incoming_invite && !item.is_outgoing_invite"
+        v-if="
+          !item.is_connection &&
+          !item.is_incoming_invite &&
+          !item.is_outgoing_invite
+        "
       >
         <v-btn
           color="primary"
@@ -11,7 +15,7 @@
           density="compact"
           flat
           block
-          @click.prevent="$refs.sendInvitationDialog.dialog=true"
+          @click.prevent="$refs.sendInvitationDialog.dialog = true"
           :loading="item.connect_loading"
           :disabled="item.disabled"
           class="text-none"
@@ -123,166 +127,166 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useSnackbarStore } from '@/store/snackbar'
-import { useNetworkStore } from '@/store/network'
-import ConnectionInvitation from '@/api/auth/connection-invitation'
-import Connection from '@/api/auth/connection'
-import Follow from '@/api/auth/follow'
-import httpException from '@/composables/http-exception'
-import SendInvitationDialog from '@/components/user/SendInvitationDialog.vue'
+  import { ref } from 'vue'
+  import { useSnackbarStore } from '@/store/snackbar'
+  import { useNetworkStore } from '@/store/network'
+  import ConnectionInvitation from '@/api/auth/connection-invitation'
+  import Connection from '@/api/auth/connection'
+  import Follow from '@/api/auth/follow'
+  import httpException from '@/composables/http-exception'
+  import SendInvitationDialog from '@/components/user/SendInvitationDialog.vue'
 
-export default {
-  name: 'UserAction',
-  components: { SendInvitationDialog },
-  props: {
-    user: {
-      type: Object,
-      default: Object,
-      required: true
-    }
-  },
-  setup () {
-    const networkStore = useNetworkStore()
+  export default {
+    name: 'UserAction',
+    components: { SendInvitationDialog },
+    props: {
+      user: {
+        type: Object,
+        default: Object,
+        required: true,
+      },
+    },
+    setup() {
+      const networkStore = useNetworkStore()
 
-    return {
-      httpException,
-      snackbarStore: useSnackbarStore(),
-      sendInvitationDialog: ref(null),
-      networkStore
-    }
-  },
-  data () {
-    return {
-      item: {},
-      loading: false
-    }
-  },
-  mounted () {
-    this.init()
-  },
-  watch: {
-    user () {
+      return {
+        httpException,
+        snackbarStore: useSnackbarStore(),
+        sendInvitationDialog: ref(null),
+        networkStore,
+      }
+    },
+    data() {
+      return {
+        item: {},
+        loading: false,
+      }
+    },
+    mounted() {
       this.init()
-    }
-  },
-  created () {
-    this.init()
-  },
-  methods: {
-    init () {
-      this.item = { ...JSON.parse(JSON.stringify(this.user)) }
     },
-    setLoading (status, action) {
-      this.item[`${action}_loading`] = status
-      this.item.disabled = status
-      this.loading = status
+    watch: {
+      user() {
+        this.init()
+      },
     },
-    connect (form) {
-      this.setLoading(true, 'connect')
+    created() {
+      this.init()
+    },
+    methods: {
+      init() {
+        this.item = { ...JSON.parse(JSON.stringify(this.user)) }
+      },
+      setLoading(status, action) {
+        this.item[`${action}_loading`] = status
+        this.item.disabled = status
+        this.loading = status
+      },
+      connect(form) {
+        this.setLoading(true, 'connect')
 
-      return ConnectionInvitation.send(this.item.id, form)
-        .then(({ data }) => {
-          this.snackbarStore.open({
-            text: 'Your invite has been sent successfully.',
-            color: 'success'
+        return ConnectionInvitation.send(this.item.id, form)
+          .then(({ data }) => {
+            this.snackbarStore.open({
+              text: 'Your invite has been sent successfully.',
+              color: 'success',
+            })
+
+            this.item = {
+              ...this.item,
+              ...data,
+            }
+
+            this.networkStore.updateUser(this.item)
+            this.$emit('click:action', this.item)
           })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => this.setLoading(false, 'connect'))
+      },
+      disconnect() {
+        this.setLoading(true, 'disconnect')
 
-          this.item = {
-            ...this.item,
-            ...data
-          }
+        return Connection.disconnect(this.item.id)
+          .then(({ data }) => {
+            this.snackbarStore.open({
+              text: 'You disconnected a user successfully.',
+              color: 'success',
+            })
 
-          this.networkStore.updateUser(this.item)
-          this.$emit('click:action', this.item)
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.setLoading(false, 'connect'))
-    },
-    disconnect () {
-      this.setLoading(true, 'disconnect')
+            this.item = {
+              ...this.item,
+              ...data,
+            }
 
-      return Connection.disconnect(this.item.id)
-        .then(({ data }) => {
-          this.snackbarStore.open({
-            text: 'You disconnected a user successfully.',
-            color: 'success'
+            this.networkStore.updateUser(this.item)
+            this.$emit('click:action', this.item)
           })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => this.setLoading(false, 'disconnect'))
+      },
+      follow() {
+        this.setLoading(true, 'follow')
 
-          this.item = {
-            ...this.item,
-            ...data
-          }
+        return Follow.follow(this.item.id)
+          .then(({ data }) => {
+            this.snackbarStore.open({
+              text: 'You followed a user successfully.',
+              color: 'success',
+            })
 
-          this.networkStore.updateUser(this.item)
-          this.$emit('click:action', this.item)
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.setLoading(false, 'disconnect'))
-    },
-    follow () {
-      this.setLoading(true, 'follow')
+            this.item = {
+              ...this.item,
+              ...data,
+            }
 
-      return Follow.follow(this.item.id)
-        .then(({ data }) => {
-          this.snackbarStore.open({
-            text: 'You followed a user successfully.',
-            color: 'success'
+            this.networkStore.updateUser(this.item)
+            this.$emit('click:action', this.item)
           })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => this.setLoading(false, 'follow'))
+      },
+      unfollow() {
+        this.setLoading(true, 'unfollow')
 
-          this.item = {
-            ...this.item,
-            ...data
-          }
+        return Follow.unfollow(this.item.id)
+          .then(({ data }) => {
+            this.snackbarStore.open({
+              text: 'You unfollowed a user successfully.',
+              color: 'success',
+            })
 
-          this.networkStore.updateUser(this.item)
-          this.$emit('click:action', this.item)
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.setLoading(false, 'follow'))
-    },
-    unfollow () {
-      this.setLoading(true, 'unfollow')
+            this.item = {
+              ...this.item,
+              ...data,
+            }
 
-      return Follow.unfollow(this.item.id)
-        .then(({ data }) => {
-          this.snackbarStore.open({
-            text: 'You unfollowed a user successfully.',
-            color: 'success'
+            this.networkStore.updateUser(this.item)
+            this.$emit('click:action', this.item)
           })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => this.setLoading(false, 'unfollow'))
+      },
+      accept() {
+        this.setLoading(true, 'accept')
 
-          this.item = {
-            ...this.item,
-            ...data
-          }
+        return Connection.connect(this.item.id)
+          .then(({ data }) => {
+            this.snackbarStore.open({
+              text: 'You accepted an invited successfully.',
+              color: 'success',
+            })
 
-          this.networkStore.updateUser(this.item)
-          this.$emit('click:action', this.item)
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.setLoading(false, 'unfollow'))
-    },
-    accept () {
-      this.setLoading(true, 'accept')
+            this.item = {
+              ...this.item,
+              ...data,
+            }
 
-      return Connection.connect(this.item.id)
-        .then(({ data }) => {
-          this.snackbarStore.open({
-            text: 'You accepted an invited successfully.',
-            color: 'success'
+            this.networkStore.updateUser(this.item)
+            this.$emit('click:action', this.item)
           })
-
-          this.item = {
-            ...this.item,
-            ...data
-          }
-
-          this.networkStore.updateUser(this.item)
-          this.$emit('click:action', this.item)
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => this.setLoading(false, 'accept'))
-    }
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => this.setLoading(false, 'accept'))
+      },
+    },
   }
-}
 </script>

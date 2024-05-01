@@ -22,7 +22,7 @@ export const useDialogStore = defineStore('dialog', {
     cancel: null,
     cancelLabel: '',
     maxWidth: 500,
-    color: ''
+    color: '',
   }),
   actions: {
     /**
@@ -30,7 +30,7 @@ export const useDialogStore = defineStore('dialog', {
      *
      * @param config
      */
-    openAlertDialog ({ title, body, action, actionLabel, maxWidth }) {
+    openAlertDialog({ title, body, action, actionLabel, maxWidth }) {
       this.title = title
       this.body = body
       this.actionLabel = actionLabel || 'Got It!'
@@ -44,7 +44,15 @@ export const useDialogStore = defineStore('dialog', {
      *
      * @param config
      */
-    openConfirmationDialog ({ title, body, action, actionLabel, cancel, cancelLabel, color }) {
+    openConfirmationDialog({
+      title,
+      body,
+      action,
+      actionLabel,
+      cancel,
+      cancelLabel,
+      color,
+    }) {
       this.title = title
       this.body = body
       this.actionLabel = actionLabel
@@ -60,7 +68,7 @@ export const useDialogStore = defineStore('dialog', {
      *
      * @param config
      */
-    closeDialog (config) {
+    closeDialog(config) {
       this[config] = false
       this.title = false
       this.id = null
@@ -68,6 +76,6 @@ export const useDialogStore = defineStore('dialog', {
       this.body = ''
       this.actionLabel = ''
       this.cancelLabel = ''
-    }
-  }
+    },
+  },
 })

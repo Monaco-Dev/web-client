@@ -6,7 +6,7 @@ import AuthService from '@/composables/auth'
  * @param next
  * @return next
  */
-export default async function authorized (next) {
+export default async function authorized(next) {
   let unauthenticated = false
   let unverifiedEmail = false
   let unverified = false
@@ -21,7 +21,9 @@ export default async function authorized (next) {
   if (AuthService.isAccessTokenExpired()) {
     await AuthService.refreshToken()
       .then(({ data }) => AuthService.setAuth(data))
-      .catch(() => { unauthenticated = true })
+      .catch(() => {
+        unauthenticated = true
+      })
 
     if (unauthenticated) {
       AuthService.flush()
@@ -40,7 +42,9 @@ export default async function authorized (next) {
         unverified = true
       }
     })
-    .catch(() => { unauthenticated = true })
+    .catch(() => {
+      unauthenticated = true
+    })
 
   if (unauthenticated) {
     AuthService.flush()

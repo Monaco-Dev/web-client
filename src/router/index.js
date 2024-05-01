@@ -11,7 +11,7 @@ const routes = [
         path: '',
         name: 'Home',
         component: () => import('@/views/Home.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
+        beforeEnter: (to, from, next) => GuardService.authorized(next),
       },
       {
         path: 'networks',
@@ -23,45 +23,45 @@ const routes = [
             path: 'incoming-invites',
             name: 'NetworksIncomingInvites',
             component: () => import('@/views/networks/IncomingInvites.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
           },
           {
             path: 'outgoing-invites',
             name: 'NetworksOutgoingInvites',
             component: () => import('@/views/networks/OutgoingInvites.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
           },
           {
             path: 'connections',
             name: 'NetworksConnections',
             component: () => import('@/views/networks/Connections.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
           },
           {
             path: 'followers',
             name: 'NetworksFollowers',
             component: () => import('@/views/networks/Followers.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
           },
           {
             path: 'following',
             name: 'NetworksFollowing',
             component: () => import('@/views/networks/Following.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
-          }
-        ]
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
+          },
+        ],
       },
       {
         path: 'pins',
         name: 'Pins',
         component: () => import('@/views/Pins.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
+        beforeEnter: (to, from, next) => GuardService.authorized(next),
       },
       {
         path: 'posts/:uuid',
         name: 'PostView',
         component: () => import('@/views/PostView.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
+        beforeEnter: (to, from, next) => GuardService.authorized(next),
       },
       {
         path: 'profile/:uuid',
@@ -72,27 +72,27 @@ const routes = [
             path: '',
             name: 'ProfileWall',
             component: () => import('@/views/profile/Wall.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
           },
           {
             path: 'about',
             name: 'ProfileAbout',
             component: () => import('@/views/profile/About.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
           },
           {
             path: 'archive',
             name: 'ProfileArchive',
             component: () => import('@/views/profile/Archive.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
-          }
-        ]
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
+          },
+        ],
       },
       {
         path: 'menu',
         name: 'Menu',
         component: () => import('@/views/Menu.vue'),
-        beforeEnter: (to, from, next) => GuardService.authorized(next)
+        beforeEnter: (to, from, next) => GuardService.authorized(next),
       },
       {
         path: 'settings',
@@ -104,17 +104,17 @@ const routes = [
             path: 'profile',
             name: 'SettingsProfile',
             component: () => import('@/views/settings/Profile.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
           },
           {
             path: 'account',
             name: 'SettingsAccount',
             component: () => import('@/views/settings/Account.vue'),
-            beforeEnter: (to, from, next) => GuardService.authorized(next)
-          }
-        ]
-      }
-    ]
+            beforeEnter: (to, from, next) => GuardService.authorized(next),
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/',
@@ -124,49 +124,52 @@ const routes = [
         path: '/register',
         name: 'Register',
         component: () => import('@/views/Register.vue'),
-        beforeEnter: (to, from, next) => GuardService.registration(from, next)
+        beforeEnter: (to, from, next) => GuardService.registration(from, next),
       },
       {
         path: '/login',
         name: 'Login',
         component: () => import('@/views/Login.vue'),
-        beforeEnter: (to, from, next) => GuardService.registration(from, next)
+        beforeEnter: (to, from, next) => GuardService.registration(from, next),
       },
       {
         path: '/forgot-password',
         name: 'ForgotPassword',
-        component: () => import('@/views/ForgotPassword.vue')
+        component: () => import('@/views/ForgotPassword.vue'),
       },
       {
         path: '/reset-password',
         name: 'ResetPassword',
         component: () => import('@/views/ResetPassword.vue'),
-        beforeEnter: (to, from, next) => GuardService.resetPassword(to, from, next)
+        beforeEnter: (to, from, next) =>
+          GuardService.resetPassword(to, from, next),
       },
       {
         path: '/verify-email',
         name: 'VerifyEmail',
         component: () => import('@/views/VerifyEmail.vue'),
-        beforeEnter: (to, from, next) => GuardService.unauthorized(to, from, next)
+        beforeEnter: (to, from, next) =>
+          GuardService.unauthorized(to, from, next),
       },
       {
         path: '/verify-license',
         name: 'VerifyLicense',
         component: () => import('@/views/VerifyLicense.vue'),
-        beforeEnter: (to, from, next) => GuardService.verifyLicense(to, from, next)
-      }
-    ]
+        beforeEnter: (to, from, next) =>
+          GuardService.verifyLicense(to, from, next),
+      },
+    ],
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'PageNotFound',
-    component: () => import('@/views/PageNotFound.vue')
-  }
+    component: () => import('@/views/PageNotFound.vue'),
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
 export default router

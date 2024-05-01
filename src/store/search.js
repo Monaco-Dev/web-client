@@ -20,22 +20,22 @@ export const useSearchStore = defineStore('search', {
     posts: {
       data: [],
       meta: {
-        current_page: 1
-      }
+        current_page: 1,
+      },
     },
     users: {
       data: [],
       meta: {
-        current_page: 1
-      }
-    }
+        current_page: 1,
+      },
+    },
   }),
   actions: {
     /**
      * Shows the search dialog.
      *
      */
-    openDialog () {
+    openDialog() {
       this.dialog = true
     },
 
@@ -43,7 +43,7 @@ export const useSearchStore = defineStore('search', {
      * Close the dialog in view.
      *
      */
-    closeDialog () {
+    closeDialog() {
       this.dialog = false
       this.search = null
       this.reset()
@@ -54,7 +54,7 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} search
      */
-    setSearch (search) {
+    setSearch(search) {
       this.search = search
     },
 
@@ -63,7 +63,7 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} status
      */
-    setLoading (status) {
+    setLoading(status) {
       this.loading = status
     },
 
@@ -72,7 +72,7 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} page
      */
-    setPostPage (page = 1) {
+    setPostPage(page = 1) {
       this.posts.meta.current_page = page
     },
 
@@ -81,7 +81,7 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} page
      */
-    setUserPage (page = 1) {
+    setUserPage(page = 1) {
       this.users.meta.current_page = page
     },
 
@@ -90,8 +90,14 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} posts
      */
-    setPosts (posts = {}) {
-      this.posts = { ...posts, data: uniqBy(posts.data.map((v) => Post.mapPost(v)), 'id') }
+    setPosts(posts = {}) {
+      this.posts = {
+        ...posts,
+        data: uniqBy(
+          posts.data.map((v) => Post.mapPost(v)),
+          'id',
+        ),
+      }
     },
 
     /**
@@ -99,8 +105,14 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} posts
      */
-    addPosts (posts = {}) {
-      this.posts = { ...posts, data: uniqBy([...this.posts.data, ...posts.data.map((v) => Post.mapPost(v))], 'id') }
+    addPosts(posts = {}) {
+      this.posts = {
+        ...posts,
+        data: uniqBy(
+          [...this.posts.data, ...posts.data.map((v) => Post.mapPost(v))],
+          'id',
+        ),
+      }
     },
 
     /**
@@ -108,7 +120,7 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} users
      */
-    setUsers (users = {}) {
+    setUsers(users = {}) {
       this.users = users
     },
 
@@ -117,14 +129,14 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} post
      */
-    updatePost (post) {
+    updatePost(post) {
       this.posts.data = uniqBy(
         this.posts.data.map((val) => {
           if (val.id === post.id) return Post.mapPost(post)
 
           return val
         }),
-        'id'
+        'id',
       )
     },
 
@@ -133,14 +145,14 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} user
      */
-    updateUser (user) {
+    updateUser(user) {
       this.users.data = uniqBy(
         this.users.data.map((val) => {
           if (val.id === user.id) return user
 
           return val
         }),
-        'id'
+        'id',
       )
     },
 
@@ -149,28 +161,31 @@ export const useSearchStore = defineStore('search', {
      *
      * @param {*} id
      */
-    deletePost (id) {
-      this.posts.data = uniqBy(this.posts.data.filter((post) => (post.id !== id)), 'id')
+    deletePost(id) {
+      this.posts.data = uniqBy(
+        this.posts.data.filter((post) => post.id !== id),
+        'id',
+      )
     },
 
     /**
      * Reset all forms
      */
-    reset () {
+    reset() {
       this.search = null
       this.loading = false
       this.posts = {
         data: [],
         meta: {
-          current_page: 1
-        }
+          current_page: 1,
+        },
       }
       this.users = {
         data: [],
         meta: {
-          current_page: 1
-        }
+          current_page: 1,
+        },
       }
-    }
-  }
+    },
+  },
 })

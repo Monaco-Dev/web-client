@@ -31,9 +31,7 @@
         size="small"
         @click="$emit('click:form')"
       >
-        <v-icon size="x-large">
-          mdi-plus
-        </v-icon>
+        <v-icon size="x-large"> mdi-plus </v-icon>
       </v-btn>
 
       <v-btn
@@ -43,9 +41,7 @@
         @click="searchStore.openDialog()"
         class="mx-2"
       >
-        <v-icon size="x-large">
-          mdi-magnify
-        </v-icon>
+        <v-icon size="x-large"> mdi-magnify </v-icon>
       </v-btn>
 
       <v-btn
@@ -74,30 +70,33 @@
 </template>
 
 <script>
-import { useSearchStore } from '@/store/search'
-import AuthService from '@/composables/auth'
+  import { useSearchStore } from '@/store/search'
+  import AuthService from '@/composables/auth'
 
-export default {
-  name: 'AppHeader',
-  setup () {
-    return { searchStore: useSearchStore() }
-  },
-  methods: {
-    getFullName () {
-      return AuthService.getUser()?.full_name
+  export default {
+    name: 'AppHeader',
+    setup() {
+      return { searchStore: useSearchStore() }
     },
-    getAvatar () {
-      return AuthService.getUser()?.avatar_url
+    methods: {
+      getFullName() {
+        return AuthService.getUser()?.full_name
+      },
+      getAvatar() {
+        return AuthService.getUser()?.avatar_url
+      },
+      getInitials() {
+        return (
+          AuthService.getUser()?.first_name?.charAt(0) +
+          AuthService.getUser()?.last_name?.charAt(0)
+        )
+      },
+      getUuid() {
+        return AuthService.getUser()?.uuid
+      },
+      isAuth() {
+        return AuthService.isAuthenticated()
+      },
     },
-    getInitials () {
-      return AuthService.getUser()?.first_name?.charAt(0) + AuthService.getUser()?.last_name?.charAt(0)
-    },
-    getUuid () {
-      return AuthService.getUser()?.uuid
-    },
-    isAuth () {
-      return AuthService.isAuthenticated()
-    }
   }
-}
 </script>

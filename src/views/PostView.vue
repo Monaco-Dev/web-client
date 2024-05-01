@@ -16,6 +16,8 @@
             @click:pin="pin"
             @click:unpin="unpin"
             @click:archive="archive"
+            @click:hide="hide"
+            @click:unhide="unhide"
             @click:submit="getPost"
           />
 
@@ -54,128 +56,134 @@
 </template>
 
 <script>
-import AppGrid from '@/components/default/desktop/AppGrid.vue'
-import PostItem from '@/components/post/PostItem.vue'
-import PostList from '@/components/post/PostList.vue'
-import Post from '@/api/feed/post'
-import httpException from '@/composables/http-exception'
-import AuthService from '@/composables/auth'
-import PostService from '@/composables/post'
-import { computed } from 'vue'
-import { useMatchStore } from '@/store/match'
+  import AppGrid from '@/components/default/desktop/AppGrid.vue'
+  import PostItem from '@/components/post/PostItem.vue'
+  import PostList from '@/components/post/PostList.vue'
+  import Post from '@/api/feed/post'
+  import httpException from '@/composables/http-exception'
+  import AuthService from '@/composables/auth'
+  import PostService from '@/composables/post'
+  import { computed } from 'vue'
+  import { useMatchStore } from '@/store/match'
 
-export default {
-  name: 'PostView',
-  components: {
-    PostItem,
-    PostList,
-    AppGrid
-  },
-  setup () {
-    const matchStore = useMatchStore()
-
-    const matches = computed(() => matchStore.posts)
-
-    return {
-      matchStore,
-      matches,
-      httpException
-    }
-  },
-  data () {
-    return {
-      loading: false,
-      post: {},
-      panels: [0],
-      onlyPins: false
-    }
-  },
-  mounted () {
-    if (AuthService.isAuthenticated()) this.getPost()
-  },
-  computed: {
-    isAuthenticated () {
-      return AuthService.getUser().id === this.post.user_id
-    }
-  },
-  watch: {
-    onlyPins () {
-      this.getMatches()
-    }
-  },
-  methods: {
-    getPost () {
-      const uuid = this.$router.currentRoute.value.params.uuid
-
-      this.loading = true
-
-      return Post.show(uuid)
-        .then(async ({ data }) => {
-          this.post = PostService.mapPost(data)
-
-          if (this.isAuthenticated) await this.getMatches()
-        })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => {
-          this.loading = false
-        })
+  export default {
+    name: 'PostView',
+    components: {
+      PostItem,
+      PostList,
+      AppGrid,
     },
-    getMatches () {
-      this.matchStore.reset()
+    setup() {
+      const matchStore = useMatchStore()
 
-      this.loading = true
+      const matches = computed(() => matchStore.posts)
 
-      return Post.searchMatches(this.post.id,
-        {
+      return {
+        matchStore,
+        matches,
+        httpException,
+      }
+    },
+    data() {
+      return {
+        loading: false,
+        post: {},
+        panels: [0],
+        onlyPins: false,
+      }
+    },
+    mounted() {
+      if (AuthService.isAuthenticated()) this.getPost()
+    },
+    computed: {
+      isAuthenticated() {
+        return AuthService.getUser().id === this.post.user_id
+      },
+    },
+    watch: {
+      onlyPins() {
+        this.getMatches()
+      },
+    },
+    methods: {
+      getPost() {
+        const uuid = this.$router.currentRoute.value.params.uuid
+
+        this.loading = true
+
+        return Post.show(uuid)
+          .then(async ({ data }) => {
+            this.post = PostService.mapPost(data)
+
+            if (this.isAuthenticated) await this.getMatches()
+          })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => {
+            this.loading = false
+          })
+      },
+      getMatches() {
+        this.matchStore.reset()
+
+        this.loading = true
+
+        return Post.searchMatches(this.post.id, {
           page: this.matchStore.page,
-          only_pins: this.onlyPins
+          only_pins: this.onlyPins,
         })
-        .then(({ data }) => {
-          if (!data.data.length) return
+          .then(({ data }) => {
+            if (!data.data.length) return
 
-          this.matchStore.setPosts(data.data.map((v) => new Proxy(v, {})))
-          this.matchStore.setPage(data.meta.current_page + 1)
+            this.matchStore.setPosts(data.data.map((v) => new Proxy(v, {})))
+            this.matchStore.setPage(data.meta.current_page + 1)
+          })
+          .catch(({ response }) => this.httpException(response))
+          .finally(() => {
+            this.loading = false
+          })
+      },
+      load({ done }) {
+        if (!AuthService.isAuthenticated() || !Object.keys(this.post).length)
+          return done('empty')
+
+        return Post.searchMatches(this.post.id, {
+          page: this.matchStore.page,
+          only_pins: this.onlyPins,
         })
-        .catch(({ response }) => this.httpException(response))
-        .finally(() => {
-          this.loading = false
-        })
-    },
-    load ({ done }) {
-      if (!AuthService.isAuthenticated() || !Object.keys(this.post).length) return done('empty')
+          .then(({ data }) => {
+            if (!data.data.length) return done('empty')
 
-      return Post.searchMatches(this.post.id, {
-        page: this.matchStore.page,
-        only_pins: this.onlyPins
-      })
-        .then(({ data }) => {
-          if (!data.data.length) return done('empty')
+            this.matchStore.addPosts(data.data.map((v) => new Proxy(v, {})))
+            this.matchStore.setPage(data.meta.current_page + 1)
 
-          this.matchStore.addPosts(data.data.map((v) => new Proxy(v, {})))
-          this.matchStore.setPage(data.meta.current_page + 1)
+            return done('ok')
+          })
+          .catch(({ response }) => this.httpException(response))
+      },
 
-          return done('ok')
-        })
-        .catch(({ response }) => this.httpException(response))
-    },
+      pin(data) {
+        this.post = PostService.mapPost(data)
+      },
+      unpin(data) {
+        this.post = PostService.mapPost(data)
+      },
+      archive() {
+        this.$router.replace({ name: 'Home' })
+      },
+      hide() {
+        this.$router.replace({ name: 'Home' })
+      },
+      unhide(data) {
+        this.post = PostService.mapPost(data)
+      },
+      pinMatch(data) {
+        this.matchStore.updatePost(data)
+      },
+      unpinMatch(data) {
+        this.matchStore.updatePost(data)
 
-    pin (data) {
-      this.post = PostService.mapPost(data)
+        if (this.onlyPins) this.matchStore.deletePost(data.id)
+      },
     },
-    unpin (data) {
-      this.post = PostService.mapPost(data)
-    },
-    archive () {
-      this.$router.replace({ name: 'Home' })
-    },
-    pinMatch (data) {
-      this.matchStore.updatePost(data)
-    },
-    unpinMatch (data) {
-      this.matchStore.updatePost(data)
-
-      if (this.onlyPins) this.matchStore.deletePost(data.id)
-    }
   }
-}
 </script>
