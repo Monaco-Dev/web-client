@@ -58,7 +58,7 @@
         await vm.fetch(to)
 
         if (
-          to.name === 'ProfileAbout' &&
+          to.name === 'ProfileContact' &&
           !vm.auth &&
           !vm.profile.is_connection
         ) {
@@ -70,7 +70,7 @@
       if (to.params.uuid !== from.params.uuid) await this.fetch(to)
 
       if (
-        to.name === 'ProfileAbout' &&
+        to.name === 'ProfileContact' &&
         !this.auth &&
         !this.profile.is_connection
       ) {

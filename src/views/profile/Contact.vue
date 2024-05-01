@@ -2,7 +2,7 @@
   <AppGrid>
     <template #center>
       <v-list>
-        <v-list-subheader> Contacts </v-list-subheader>
+        <v-list-subheader> Contact Me </v-list-subheader>
 
         <v-list-item>
           <template #prepend>
@@ -40,20 +40,19 @@
           v-for="(social, key) in profile.socials"
           :key="key"
         >
-          <template #prepend>
-            <v-icon
-              :icon="`mdi-${social.provider}`"
-              start
-              size="small"
-            />
-          </template>
-
           <v-list-item-title>
             <a
               :href="social.url"
               target="_blank"
-              >{{ social.url }}</a
             >
+              <v-chip>
+                <v-icon
+                  :icon="`mdi-${social.provider}`"
+                  start
+                ></v-icon>
+                {{ social.url }}
+              </v-chip>
+            </a>
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -67,7 +66,7 @@
   import AppGrid from '@/components/default/desktop/AppGrid.vue'
 
   export default {
-    name: 'ProfileAbout',
+    name: 'ProfileContact',
     components: { AppGrid },
     setup() {
       const profileStore = useProfileStore()

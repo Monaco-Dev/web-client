@@ -102,12 +102,12 @@
         </v-tab>
 
         <v-tab
-          :to="`/profile/${profile?.uuid}/about`"
+          :to="`/profile/${profile?.uuid}/contact-me`"
           rounded="pill"
           class="text-none"
-          value="ProfileAbout"
+          value="ProfileContact"
         >
-          About
+          Contact Me
         </v-tab>
       </v-tabs>
 

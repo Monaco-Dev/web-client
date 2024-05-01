@@ -75,9 +75,9 @@ const routes = [
             beforeEnter: (to, from, next) => GuardService.authorized(next),
           },
           {
-            path: 'about',
-            name: 'ProfileAbout',
-            component: () => import('@/views/profile/About.vue'),
+            path: 'contact-me',
+            name: 'ProfileContact',
+            component: () => import('@/views/profile/Contact.vue'),
             beforeEnter: (to, from, next) => GuardService.authorized(next),
           },
           {
