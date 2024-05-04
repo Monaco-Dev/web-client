@@ -40,7 +40,6 @@
       <v-card-text class="pa-0">
         <v-tabs
           v-model="tab"
-          centered
           center-active
           color="primary"
           align-tabs="center"

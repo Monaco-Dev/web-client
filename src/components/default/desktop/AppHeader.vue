@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    elevation="1"
+    flat
     app
   >
     <v-row no-gutters>
@@ -37,7 +37,6 @@
       <v-col cols="4">
         <v-tabs
           v-model="tabValue"
-          centered
           center-active
           align-tabs="center"
           :mandatory="true"

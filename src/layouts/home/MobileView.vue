@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <!-- <v-system-bar window class="test" color="surface" v-if="device != 'web'"/> -->
+    <!-- TODO: <v-system-bar window class="test" color="surface" v-if="device != 'web'"/> -->
     <AppHeader @click:form="openForm" />
 
     <v-main>
@@ -60,7 +60,7 @@
 
       this.device = info.platform
 
-      if (this.device != 'web') {
+      if (this.device !== 'web') {
         await ScreenOrientation.lock({ orientation: 'portrait' })
       }
     },
@@ -72,46 +72,47 @@
   }
 </script>
 
+<!-- TODO: -->
 <style>
-  :root {
+  /* :root {
     --inset-top: env(safe-area-inset-top);
     --inset-bottom: env(safe-area-inset-bottom);
-  }
+  } */
 
   /* body, */
-  .v-navigation-drawer,
+  /* .v-navigation-drawer,
   .v-overlay__content > .v-card {
     padding-top: var(--inset-top) !important;
     padding-bottom: var(--inset-bottom) !important;
-    /* border: 1px solid green; */
-  }
+    border: 1px solid green;
+  } */
 
-  .v-app-bar:not(.v-app-bar--bottom) {
-    /* padding-top: var(--inset-top) !important; */
-    /* border: 1px solid red; */
-  }
-
-  .v-app-bar--bottom {
-    padding-bottom: var(--inset-bottom) !important;
-    /* border: 1px solid red; */
-  }
-
-  .test {
+  /* .v-app-bar:not(.v-app-bar--bottom) {
     padding-top: var(--inset-top) !important;
-    /* height: var(--inset-top) !important; */
+    border: 1px solid red;
+  } */
+
+  /* .v-app-bar--bottom {
+    padding-bottom: var(--inset-bottom) !important;
+    border: 1px solid red;
+  } */
+
+  /* .test {
+    padding-top: var(--inset-top) !important;
+    height: var(--inset-top) !important;
     border: 1px solid blue;
-  }
+  } */
 
-  main {
-    /* margin-top: var(--inset-top) !important;
-  margin-bottom: var(--inset-bottom) !important;
-  padding-top: var(--inset-top) !important;
-  padding-bottom: var(--inset-bottom) !important; */
-    /* border: 1px solid yellow; */
-  }
+  /* main {
+    margin-top: var(--inset-top) !important;
+    margin-bottom: var(--inset-bottom) !important;
+    padding-top: var(--inset-top) !important;
+    padding-bottom: var(--inset-bottom) !important;
+    border: 1px solid yellow;
+  } */
 
-  .view {
-    /* margin-bottom: var(--inset-bottom) !important; */
-    /* border: 1px solid violet; */
-  }
+  /* .view {
+    margin-bottom: var(--inset-bottom) !important;
+    border: 1px solid violet;
+  } */
 </style>

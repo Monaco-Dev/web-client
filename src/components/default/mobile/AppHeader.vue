@@ -1,10 +1,10 @@
 <template>
+  <!-- TODO: density="prominent" -->
   <v-app-bar
     flat
     v-if="isAuth"
     app
     scroll-behavior="hide"
-    density="prominent"
   >
     <v-app-bar-title>
       <v-card
